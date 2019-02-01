@@ -1,0 +1,9 @@
+git status
+git add see.py
+git commit "websiteC" "see.py"
+git push origin master
+
+
+
+getway:git pull origin master
+
