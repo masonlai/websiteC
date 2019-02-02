@@ -5,5 +5,21 @@ git push origin master
 
 
 
+
+    git add -A stages all changes
+
+    git add . stages new files and modifications, without deletions
+
+    git add -u stages modifications and deletions, without new files
+
+
+
 getway:git pull origin master
 
+
+
+
+set FLASK_APP=flaskr
+set FLASK_ENV=development
+flask init-db
+flask run
