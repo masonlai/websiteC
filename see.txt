@@ -12,7 +12,7 @@ git push origin master
 
     git add -u stages modifications and deletions, without new files
 
-
+git commit -m "message"
 
 getway:git pull origin master
 
