@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test</title>
+	<meta charset="utf-8"/>
+	<link rel="stylesheet" href="css/test.css">
+</head>
+<body>
+	<section></section>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.js"
+	integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+	crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		$(window).scroll(function(){
+		var scroll_postion = $(window).scrollTop()/2;
+		$('section').css({
+			'background-position-x': - scroll_postion + 'px',
+		})
+	})
+	</script>
+
+</body>
+</html>
