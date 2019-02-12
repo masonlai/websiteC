@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}">
+  <link href='https://fonts.googleapis.com/css?family=ZCOOL KuaiLe' rel='stylesheet'>
+  <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display" rel="stylesheet"> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="{{ url_for('static', filename='first_page.js') }}"></script>
+
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+  <a class="navbar-brand" id="Web_name" href="#">Nonamela</a>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" href="#section1">About us</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#section2">How to use</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#section3">Why choose us</a>
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+        Membership
+      </a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="#section41">Author</a>
+        <a class="dropdown-item" href="#section42">Reader</a>
+      </div>
+    </li>
+  </ul>
+  <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+    <ul class="navbar-nav">
+      {% if g.user %}
+      <li class="nav-item"><h5><span>welcome&nbsp;{{ g.user['username'] }}&nbsp;&nbsp;&nbsp;</span></h5></li>
+      <li class="nav-item"><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+
+</nav>
+
+<div class="guide"><h3><b>Please scroll down</b></h3></div>
+
+<section></section>
+
+<div id="section1" class="container-fluid">
+  <h1>About us</h1>
+  <p>"An illustration is a decoration, interpretation or visual explanation of a text, concept or process,[1] designed for integration in published media, such as posters, flyers, magazines, books, teaching materials, animations, video games and films.</p>
+
+<p>The origin of the word “illustration” is late Middle English (in the sense ‘illumination; spiritual or intellectual enlightenment’): via Old French from Latin illustratio(n- ), from the verb illustrate.</p>
+  <p>From Wikipedia, the free encyclopedia</p>
+</div>
+<div id="section2" class="container-fluid">
+  <h1>How to use?</h1>
+  <p>You can see the login button at the right corner. Click it and login.</p>
+  <p>If you are not our member. Don't worry. Click it and Register</p>
+</div>
+<div id="section3" class="container-fluid">
+  <h1>Why choose us?</h1>
+  <p>Actually I have no idea.</p>
+  <p>But I think the index page is beaetiful. It may a reason for someone.</p>
+</div>
+<div id="section41" class="container-fluid">
+  <h1>Author</h1>
+  <p>You can up load your illustration on our server</p>
+  <p>An author is the creator or originator of any written work such as a book or play, and is thus also a writer. More broadly defined, an author is "the person who originated or gave existence to anything" and whose authorship determines responsibility for what was created.</p>
+  <p>From Wikipedia, the free encyclopedia</p>
+</div>
+<div id="section42" class="container-fluid">
+  <h1>Reader</h1>
+  <p>You can search depend on your interest</p>
+  <p>The Reader is a 2008 German-American romantic drama film directed by Stephen Daldry and written by David Hare, based on the 1995 German novel of the same name by Bernhard Schlink. Ralph Fiennes and Kate Winslet star along with the young actor David Kross. It was the last film for producers Anthony Minghella and Sydney Pollack, both of whom died prior to its release. Production began in Germany in September 2007, and the film opened in limited release on December 10, 2008. </p>
+  <p>From Wikipedia, the free encyclopedia</p>
+</div>
+
+</body>
+</html>
