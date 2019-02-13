@@ -23,3 +23,5 @@ export FLASK_APP=flaskr
 export FLASK_ENV=development
 flask init-db
 flask run
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
