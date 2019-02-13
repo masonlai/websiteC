@@ -31,6 +31,34 @@ def load_logged_in_user():
     else:
     	connect = Database()
 		connect.Connect_to_db()
-		user_name = connect.select_func( """SELECT username, password FROM user WHERE username = """+user_id+""" """)
+		user = connect.select_func( 'SELECT user_name, password FROM user WHERE user_name = ?', (user_id,))
         .fetchone()
-        g.user = user_name
+        g.user = user
+
+
+@bp.route('/login', methods=('GET', 'POST'))
+def login():
+    """Log in a registered user by adding the user id to the session."""
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        error = None
+        connect = Database()
+        connect.Connect_to_db()
+        user = connect.select_func( 'SELECT user_name, password FROM user WHERE user_name = ?', (user_id,))
+        .fetchone()
+
+        if user is None:
+            error = 'Incorrect username.'
+        elif not check_password_hash(user['password'], password):
+            error = 'Incorrect password.'
+
+        if error is None:
+            # store the user id in a new session and return to the index
+            session.clear()
+            session['user_id'] = user['id']
+            return redirect(url_for('index'))
+
+        flash(error)
+
+    return render_template('login/login.html')
