@@ -21,29 +21,23 @@ class Database:
 
     def Connect_to_db(self):
         self.connection = pymysql.Connection(host=self.get_host(),
-                user=self.get_user(),password=self.get_pwd(),database=self.get_db())
+                user=self.get_user(),password=self.get_pwd(),database=self.get_db(),cursorclass=pymysql.cursors.DictCursor)
         cursor = self.connection.cursor()
         return cursor
 
-    def return_db(self):
-        self.connection = pymysql.Connection(host=self.get_host(),
-                user=self.get_user(),password=self.get_pwd(),database=self.get_db())
-        db = self.connection
-        return db
+    def select_funcOne(self,sql):
 
-    def select_func(self,sql):
+        cursor = self.Connect_to_db()
+        cursor.execute(sql)
+        resList = cursor.fetchone()
+        self.connection.close()
+        return resList
+
+    def select_funcALL(self,sql):
 
         cursor = self.Connect_to_db()
         cursor.execute(sql)
         resList = cursor.fetchall()
-        self.connection.close()
-        return resList
-
-    def select_func2(self,sql):
-
-        cursor = self.Connect_to_db()
-        cursor.execute(sql)
-        resList = cursor.description
         self.connection.close()
         return resList
 
@@ -58,8 +52,3 @@ class Database:
         RB.rollback()
         RB.close()
 
-
-connect = Database()
-connect.Connect_to_db()
-run = connect.select_func( """SELECT * FROM `user` WHERE `id` = '1' """)
-print(run[0][0])

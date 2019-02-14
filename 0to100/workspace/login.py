@@ -14,7 +14,7 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('login.login'))
 
         return view(**kwargs)
 
@@ -39,13 +39,13 @@ def load_logged_in_user():
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     """Log in a registered user by adding the user id to the session."""
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    if request.method == 'POST'and request.form['first_name'] == None:
+        username = request.form['username_login']
+        password = request.form['password_login']
         error = None
         connect = Database()
         connect.Connect_to_db()
-        user = connect.select_func( 'SELECT user_name, password FROM user WHERE user_name = ?', (user_id,))
+        user = connect.select_func( 'SELECT * FROM user WHERE user_name = ?', (username_login,))
         .fetchone()
 
         if user is None:
@@ -58,6 +58,40 @@ def login():
             session.clear()
             session['user_id'] = user['id']
             return redirect(url_for('index'))
+
+        flash(error)
+
+
+    if request.method == 'POST' and request.form['username_login'] == None :
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        username = request.form['username_sigup']
+        email = request.form['email']
+        email_cf = request.form['email_confirm']
+        password = request.form['password_signup']
+        password_cf = request.form['password_confirm']
+        connect = Database()
+        connect.Connect_to_db()
+        error = None
+
+        if not username:
+            error = 'Username is required.'
+        elif not password:
+            error = 'Password is required.'
+        elif db.execute(
+            'SELECT id FROM user WHERE username = ?', (username_sigup,)
+        ).fetchone() is not None:
+            error = 'User {0} is already registered.'.format(username)
+
+        if error is None:
+            # the name is available, store it in the database and go to
+            # the login page
+            run = connect.Non_select(
+                'INSERT INTO user (username, password, first_name, last_name, gender, birthday) VALUES (?, ?)',
+                (username, generate_password_hash(password), first_name, last_name, gender, birthday)
+            )
+            db.commit()
+            return redirect(url_for('auth.login'))
 
         flash(error)
 
