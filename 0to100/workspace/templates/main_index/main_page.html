@@ -1,0 +1,69 @@
+{% extends 'top_bar.html' %}
+
+{% block link %}
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='main_page.css') }}">
+{% endblock %}
+
+
+
+{% block contentA %}
+<div id="AD" class="carousel slide" data-ride="carousel" style="margin: 55px 200px;">
+ 
+  <!-- 指示符 -->
+  <ul class="carousel-indicators">
+    <li data-target="#AD" data-slide-to="0" class="active"></li>
+    <li data-target="#AD" data-slide-to="1"></li>
+    <li data-target="#AD" data-slide-to="2"></li>
+  </ul>
+ 
+  <!-- 轮播图片 -->
+  <div class="carousel-inner" >
+    <div class="carousel-item active">
+      <img src="http://static.runoob.com/images/mix/img_fjords_wide.jpg">
+      <div class="carousel-caption">
+        <h3>第一张图片描述标题</h3>
+        <p>描述文字!</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="http://static.runoob.com/images/mix/img_nature_wide.jpg">
+      <div class="carousel-caption">
+        <h3>第二张图片描述标题</h3>
+        <p>描述文字!</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="http://static.runoob.com/images/mix/img_mountains_wide.jpg">
+      <div class="carousel-caption">
+        <h3>第三张图片描述标题</h3>
+        <p>描述文字!</p>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- 左右切换按钮 -->
+  <a class="carousel-control-prev" href="#AD" data-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+  <a class="carousel-control-next" href="#AD" data-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </a>
+ 
+</div>
+
+
+<div id="main_form" style="margin: 30px 300px;box-shadow: 10px 10px 10px 10px #888888;">
+    Discover<hr>
+    <p>Suggest user:</p>
+    <br> <!--using for icon of pop user-->
+    <hr>
+    <a href="#">New &nbsp;</a>
+    <a href="#">popular &nbsp;</a>
+    <a href="#">classification &nbsp;</a>
+</div>
+
+
+{% endblock %}

@@ -5,21 +5,16 @@
   <meta charset="UTF-8">
   <title>{% block title %}{% endblock %} - NNL</title>
 
-      <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css'>
-      <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js'></script>
-
       <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
       <link href='https://fonts.googleapis.com/css?family=ZCOOL KuaiLe' rel='stylesheet'>
-      <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display" rel="stylesheet"> 
+      {% block link %}{% endblock %}
+      
 
-
-
-  
 </head>
 
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-  <a class="navbar-brand" id="Web_name" href="#">Nonamela</a>
+  <a class="navbar-brand" id="Web_name" href="#" style="font-family: ZCOOL KuaiLe">Nonamela</a>
   <ul class="navbar-nav">
     <li class="nav-item">
       <a class="nav-link" href="#">About us</a>
@@ -43,8 +38,8 @@
   <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
     <ul class="navbar-nav">
       {% if g.user %}
-      <li class="nav-item"><h5><span>welcome&nbsp;{{ g.user['username'] }}&nbsp;&nbsp;&nbsp;</span></h5></li>
-      <li class="nav-item"><a href="{{ url_for('login_app.logout') }}">Log Out</a></li>
+      <li class="nav-item"><span style="color: #ffffff; font-size: 15pt;">welcome&nbsp;{{ g.user['username'] }}&nbsp;&nbsp;&nbsp;</span>
+      <a href="{{ url_for('login_app.logout') }}">Log Out</a></li>
       {% else %}
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('login_app.login') }}">Login</a>
@@ -53,5 +48,5 @@
     </ul>
   </div>
 </nav>
-{% block content %}{% endblock %}
+{% block contentA %}{% endblock %}
 </body></html>

@@ -25,8 +25,11 @@ def create_app(test_config=None):
     from workspace import first_page
     app.register_blueprint(first_page.bp)
 
-    from workspace import login_app
+    from workspace import login_app, main_index
     app.register_blueprint(login_app.bp)
+    app.register_blueprint(main_index.bp)
+
+
 
     app.add_url_rule('/', endpoint='index')
 

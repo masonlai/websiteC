@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Bootstrap Example</title>
+  <title>welcom Nonamela</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='first_page.css') }}">
   <link href='https://fonts.googleapis.com/css?family=ZCOOL KuaiLe' rel='stylesheet'>
   <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display" rel="stylesheet"> 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -44,8 +44,8 @@
   <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
     <ul class="navbar-nav">
       {% if g.user %}
-      <li class="nav-item"><h5><span>welcome&nbsp;{{ g.user['username'] }}&nbsp;&nbsp;&nbsp;</span></h5></li>
-      <li class="nav-item"><a href="{{ url_for('login_app.logout') }}">Log Out</a></li>
+      <li class="nav-item"><span style="font-size: 17px; color: #ffffff;">welcome&nbsp;{{ g.user['username'] }}&nbsp;&nbsp;&nbsp;</span>
+      <a href="{{ url_for('login_app.logout') }}">Log Out</a></li>
       {% else %}
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('login_app.login') }}">Login</a>
