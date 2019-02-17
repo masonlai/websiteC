@@ -23,7 +23,16 @@
 .form .register-form {
   display: none;
 }
-
+#Web_name{
+  font-family: 'ZCOOL KuaiLe';
+  color: #009900;
+ }
+.navbar {
+    margin-bottom: 0px;
+  }
+h5{
+  color:#F4F0F0;
+}
 
 body
 {

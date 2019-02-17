@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Flat HTML5/CSS3 Login Form</title>
+  
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}">
+  <link href='https://fonts.googleapis.com/css?family=ZCOOL KuaiLe' rel='stylesheet'>
+  <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display" rel="stylesheet"> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="{{ url_for('static', filename='first_page.js') }}"></script>
+
+
+      <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+      <link href='https://fonts.googleapis.com/css?family=ZCOOL KuaiLe' rel='stylesheet'>
+      <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display" rel="stylesheet"> 
+  
+  
+      <link rel="stylesheet" href="{{ url_for('static', filename='login_page.css') }}">
+      <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css'>
+
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js'></script>
+
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+  <a class="navbar-brand" id="Web_name" href="#">Nonamela</a>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" href="#">About us</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">How to use</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Why choose us</a>
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+        Membership
+      </a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="#">Author</a>
+        <a class="dropdown-item" href="#">Reader</a>
+      </div>
+    </li>
+  </ul>
+  <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+    <ul class="navbar-nav">
+      {% if g.user %}
+      <li class="nav-item"><h5><span>welcome&nbsp;{{ g.user['username'] }}&nbsp;&nbsp;&nbsp;</span></h5></li>
+      <li class="nav-item"><a href="{{ url_for('login_app.logout') }}">Log Out</a></li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('login_app.login') }}">Login</a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
+
+  <div class="login-page">
+  <div class="form">
+
+
+
+    <form class="register-form" method="post">
+
+
+  <div id="register" class="col s12">
+    <form class="col s12">
+      <div class="form-container">
+        <h4 id="Web_name">Sign UP</h4>
+          {% for message in get_flashed_messages() %}
+          <div class="flash alert alert-warning">{{ message }}</div>
+          {% endfor %}
+
+        <div class="row">
+          <div class="input-field col s6">
+            <input id="last_name" type="text" class="validate" name="first_name"required>
+            <label for="last_name">First Name</label>
+          </div>
+          <div class="input-field col s6">
+            <input id="last_name" type="text" class="validate" name="last_name" required>
+            <label for="last_name">Last Name</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="last_name" type="text" class="validate" name="username_signup" required>
+            <label for="username">User Name</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="email" type="email" class="validate" name="email" required>
+            <label for="email">Email</label>
+          </div>
+        
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="password" type="password" class="validate" name="password_signup" required>
+            <label for="password">Password</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="password-confirm" type="password" class="validate" name="password_confirm" required>
+            <label for="password-confirm">Password Confirmation</label>
+          </div>
+        </div>
+        <center>
+          <button class="btn waves-effect waves-light teal" type="submit" name="action" value="register">Submit</button>
+          <p class="message">Already registered? <a href="#">Sign In</a></p>
+        </center>
+      </div>
+    </form>
+  </div>
+
+
+
+
+
+      
+    </form>
+
+
+
+
+    <form class="login-form" method="post">
+
+
+
+
+  <div id="login" class="col s12">
+    <form class="col s12">
+      <div class="form-container">
+        <h4 id="Web_name">Nonamela</h4>
+          {% for message in get_flashed_messages() %}
+            <div class="flash alert alert-warning">{{ message }}</div>
+          {% endfor %}
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="last_name" type="text" class="validate" name="username_login" required>
+            <label for="username">User Name</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="password" type="password" class="validate" name="password_login" required>
+            <label for="password">Password</label>
+          </div>
+        </div>
+        </div>
+        <br>
+        <center>
+          <button class="btn waves-effect waves-light teal" type="submit" name="action" value="login">Connect</button>
+          <br>
+          <br>
+          <p class="message">Not registered? <a href="#">Create an account</a></p>
+        </center>
+      </div>
+    </form>
+  </div>
+    </form>
+
+
+
+
+  </div>
+</div>
+
+
+
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>  
+  <script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js'></script>
+
+  
+
+  <script type="text/javascript" src="{{ url_for('static', filename='login.js') }}"></script>
+
+
+
+
+</body>
+
+</html>
