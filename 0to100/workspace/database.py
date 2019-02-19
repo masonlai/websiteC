@@ -52,3 +52,9 @@ class Database:
         RB.rollback()
         RB.close()
 
+
+connect = Database()
+connect.Connect_to_db()
+username = '21321321123'
+run2 = connect.select_funcOne("""SELECT ID FROM user where username = '%s'""" %username)
+print(run2['ID'])

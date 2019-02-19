@@ -25,9 +25,10 @@ def create_app(test_config=None):
     from workspace import first_page
     app.register_blueprint(first_page.bp)
 
-    from workspace import login_app, main_index
+    from workspace import login_app, main_index, profile
     app.register_blueprint(login_app.bp)
     app.register_blueprint(main_index.bp)
+    app.register_blueprint(profile.bp)
 
 
 

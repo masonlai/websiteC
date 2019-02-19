@@ -80,7 +80,17 @@ def login():
             run = connect.Non_select("""INSERT INTO `user` (`username`, `password`, 
             `first_name`, `last_name`, `email`) VALUES ('%s', '%s', '%s', '%s', '%s');"""
             %(username,password,first_name,last_name,email))
+
+
+            run2 = connect.select_funcOne("""SELECT ID FROM user where username = '%s'""" %username)
+
+            run3 = connect.Non_select("""INSERT INTO `Profile` (`ID`, `nick_name`, `gender`, `country`, `time_zone`, `status`) 
+                VALUES ('%s', NULL, NULL, NULL, NULL, NULL);"""%run2['ID'])
+
+
             return redirect(url_for('login_app.login'))
+
+
 
         flash(error)
 
