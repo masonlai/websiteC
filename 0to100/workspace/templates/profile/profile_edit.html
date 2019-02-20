@@ -6,15 +6,15 @@
 <div class="container" style="padding-top: 60px;">
   <h1 class="page-header">Edit Profile</h1>
   <div class="row">
-    <!-- left column -->
     <div class="col-md-4 col-sm-6 col-xs-12">
+        <form method="post" enctype="multipart/form-data" >
       <div class="text-center user_icon">
         <img src="{{ url_for('static', filename='user_icon.png') }}" alt="avatar">
-        <h6>Upload a different photo...</h6>
-        <input type="file" class="text-center center-block well well-sm">
+        <h6>Upload your icon</h6>
+        <input type="file" class="text-center center-block well well-sm" name="file">
       </div>
     </div>
-    <!-- edit form column -->
+    
     <div class="col-md-8 col-sm-6 col-xs-12 personal-info">
 
       <h3>Personal Profile</h3>
@@ -409,7 +409,7 @@
         <div class="form-group">
           <label class="col-md-3 control-label"></label>
           <div class="col-md-8">
-            <input class="btn btn-primary" value="Save Changes" type="button">
+            <input class="btn btn-primary" value="Save Changes" type="submit">
             <span></span>
             <input class="btn btn-default" value="Cancel" type="reset">
           </div>

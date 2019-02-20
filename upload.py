@@ -1,4 +1,10 @@
-import pymysql 
+import os
+from flask import Flask, render_template, request
+import sys
+import pymysql
+from PIL import Image
+from io import BytesIO
+import base64
 
 class Database:
     def __init__(self):
@@ -51,3 +57,37 @@ class Database:
         RB = self.return_db()
         RB.rollback()
         RB.close()
+
+
+def image_to_base64(image_path):
+    '''
+    convert image to base64.
+    It is beacuse database save picture in string form
+    '''
+    img = Image.open(image_path).convert('RGB')
+    output_buffer = BytesIO()
+    img.save(output_buffer, format='JPEG')
+    byte_data = output_buffer.getvalue()
+    base64_str = base64.b64encode(byte_data)
+    return base64_str
+
+
+app = Flask(__name__)
+
+UPLOAD_FOLDER = os.path.basename('uploads')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+@app.route('/', methods=['GET', 'POST'])
+def hello_world():
+    return render_template('index.html')
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    connect = Database()
+    connect.Connect_to_db()
+    
+
+
+    base64_pic = image_to_base64(request.files['image'])
+
+    return base64_pic
