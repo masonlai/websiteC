@@ -3,6 +3,9 @@ from flask import Flask, render_template, request
 import sys
 import pymysql
 from PIL import Image
+import base64
+from io import BytesIO
+
 
 class Database:
     def __init__(self):
@@ -84,6 +87,8 @@ def upload_file():
     connect = Database()
     connect.Connect_to_db()
     file = request.files['image']
-    base64_pic = image_to_base64(img)
+    base64_pic = image_to_base64(file)
+    connect.Non_select("""UPDATE `Profile` SET `nick_name` = '123321', `gender` = '123', `country` = '123123', `company` = '312No_show', 
+        `time_zone` = '312', `status` = '213', `icon` = '"""+bytes.decode(base64_pic)+"""' WHERE `Profile`.`ID` = 9""")
 
     return base64_pic

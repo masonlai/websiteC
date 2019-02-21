@@ -27,6 +27,11 @@ def image_to_base64(image_path):
 
 bp = Blueprint('profile', __name__,url_prefix='/profile')
 
+
+@bp.route('/profile', methods=('GET', 'POST'))
+def profile():
+    return render_template('profile/profile.html')
+
 @bp.route('/profile_edit', methods=('GET', 'POST'))
 def profile_edit():
     connect = Database()
@@ -55,7 +60,7 @@ def profile_edit():
 
         run = connect.Non_select("""UPDATE `Profile` SET `nick_name` = '%s', `gender` = '%s', `country` = '%s', 
             `company` = '%s', `time_zone` = '%s', `status` = '%s', 
-            `icon` = '%s' WHERE `Profile`.`ID` = %s"""%(nick_name,gender,country,company,time_zone,status,base64_pic,g.user['ID']))
+            `icon` = '%s' WHERE `Profile`.`ID` = %s"""%(nick_name,gender,country,company,time_zone,status,bytes.decode(base64_pic),g.user['ID']))
         return(nick_name)
     else:
         return render_template('profile/profile_edit.html')
