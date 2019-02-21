@@ -3,8 +3,6 @@ from flask import Flask, render_template, request
 import sys
 import pymysql
 from PIL import Image
-from io import BytesIO
-import base64
 
 class Database:
     def __init__(self):
@@ -85,9 +83,7 @@ def hello_world():
 def upload_file():
     connect = Database()
     connect.Connect_to_db()
-    
-
-
-    base64_pic = image_to_base64(request.files['image'])
+    file = request.files['image']
+    base64_pic = image_to_base64(img)
 
     return base64_pic

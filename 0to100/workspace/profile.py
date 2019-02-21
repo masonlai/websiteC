@@ -31,34 +31,32 @@ bp = Blueprint('profile', __name__,url_prefix='/profile')
 def profile_edit():
     connect = Database()
     connect.Connect_to_db()
+    global nick_name, country, company, time_zone, status, gender, icon
     if request.method == 'POST':
-        nick_name = "'"+request.form['Nick_name']+"'"
-        country = "'"+request.form['Country']+"'"
-        company ="'"+request.form['Company']+"'"
-        time_zone = "'"+request.form['Time_zone']+"'"
-        status = "'"+request.form['Status']+"'"
+        nick_name = request.form['Nick_name']
+        country = request.form['Country']
+        company =request.form['Company']
+        time_zone = request.form['Time_zone']
+        status = request.form['Status']
+        gender = request.form['Gender']
         try:
             icon = request.files['file']
-            try:
-                gender = "'"+request.form['Gender']+"'"
-                base64_pic = "'"+image_to_base64(request.files['image'])+"'"
-            except:
-                base64_pic = 'NULL'
+            base64_pic = image_to_base64(icon)
         except:
-            icon = 'NULL'
+            base64_pic = 'NULL'
+
 
         if not nick_name:
-            nick_name = 'NULL'
+            nick_name = 'No_show'
         elif not company:
-            company = 'NULL'
+            company = 'No_show'
         elif not status:
-            status = 'NULL'
+            status = 'No_show'
 
-        run = connect.Non_select("""UPDATE `Profile` SET `nick_name` = %s, `gender` = %s, `country` = %s, 
-                `company` = %s, `time_zone` = %s, `status` = %s, `icon` = %s WHERE `Profile`.`ID` = %s"""%(nick_name, gender, country, company, time_zone, status, icon, g.user['ID']))
-
-
+        run = connect.Non_select("""UPDATE `Profile` SET `nick_name` = '%s', `gender` = '%s', `country` = '%s', 
+            `company` = '%s', `time_zone` = '%s', `status` = '%s', 
+            `icon` = '%s' WHERE `Profile`.`ID` = %s"""%(nick_name,gender,country,company,time_zone,status,base64_pic,g.user['ID']))
         return(nick_name)
-
-    return render_template('profile/profile_edit.html')
+    else:
+        return render_template('profile/profile_edit.html')
 
