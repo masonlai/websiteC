@@ -7,11 +7,14 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from workspace.database import *
 
+from workspace.default_icon import *
+
 import sys
 import pymysql
 from PIL import Image
 from io import BytesIO
 import base64
+from flask.ext.images import resized_img_src
 
 def image_to_base64(image_path):
     '''
@@ -30,7 +33,13 @@ bp = Blueprint('profile', __name__,url_prefix='/profile')
 
 @bp.route('/profile', methods=('GET', 'POST'))
 def profile():
-    return render_template('profile/profile.html')
+    connect = Database()
+    connect.Connect_to_db()
+    profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` = %s"""%g.user['ID'])
+    bytes_icon = profile_info['icon']
+    user_icon = Image.open(BytesIO(base64.b64decode(bytes_icon)))
+
+    return render_template('profile/profile.html',profile_info=profile_info,user_icon=user_icon)
 
 @bp.route('/profile_edit', methods=('GET', 'POST'))
 def profile_edit():
@@ -47,20 +56,21 @@ def profile_edit():
         try:
             icon = request.files['file']
             base64_pic = image_to_base64(icon)
+            icon = bytes.decode(base64_pic)
         except:
-            base64_pic = 'NULL'
+            icon = 'NULL'
 
 
         if not nick_name:
             nick_name = 'No_show'
-        elif not company:
+        if not company:
             company = 'No_show'
-        elif not status:
+        if not status:
             status = 'No_show'
 
         run = connect.Non_select("""UPDATE `Profile` SET `nick_name` = '%s', `gender` = '%s', `country` = '%s', 
             `company` = '%s', `time_zone` = '%s', `status` = '%s', 
-            `icon` = '%s' WHERE `Profile`.`ID` = %s"""%(nick_name,gender,country,company,time_zone,status,bytes.decode(base64_pic),g.user['ID']))
+            `icon` = '%s' WHERE `Profile`.`ID` = %s"""%(nick_name,gender,country,company,time_zone,status,icon,g.user['ID']))
         return(nick_name)
     else:
         return render_template('profile/profile_edit.html')

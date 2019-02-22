@@ -8,12 +8,15 @@
 <div class="body">
   <section class="left-col user-info">
     <div class="profile-avatar">
-      <div class="inner"><img src="user_icon.png"></div>
+      <div class="inner"><img src="{{resized_img_src(user_icon)}}" alt="User Image"></div>
     </div>
     <h1>User Name</h1>
     <h2>LV??</h2>
     <div class="meta">
-      <p><i class="fa fa-fw fa-map-marker"></i> nation</p>
+      {% if profile_info['country']!='No_show' %}
+      <p><i class="fa fa-fw fa-map-marker"></i> nation: {{profile_info['country']}}</p>
+      {% endif %}
+
       <p><i class="fa fa-fw fa-link"></i>count of goods</p>
       <p><i class="fa fa-fw fa-clock-o"></i> Joined Dec 26, 2008</p>
     </div>

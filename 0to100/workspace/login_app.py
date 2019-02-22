@@ -83,14 +83,12 @@ def login():
 
 
             run2 = connect.select_funcOne("""SELECT ID FROM user where username = '%s'""" %username)
-
-            run3 = connect.Non_select("""INSERT INTO `Profile` (`ID`, `nick_name`, `gender`, `country`, `time_zone`, `status`) 
-                VALUES ('%s', NULL, NULL, NULL, NULL, NULL);"""%run2['ID'])
+            from workspace.default_icon import default_icon
+            run3 = connect.Non_select("""INSERT INTO `Profile` (`ID`, `nick_name`, `gender`, `country`, `company`,`time_zone`, `status`, `icon`) 
+                VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s');"""%(run2['ID'],No_show,No_show,No_show,No_show,No_show,No_show,default_icon))
 
 
             return redirect(url_for('login_app.login'))
-
-
 
         flash(error)
 
