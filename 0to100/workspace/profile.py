@@ -47,7 +47,7 @@ def profile_edit():
     connect = Database()
     connect.Connect_to_db()
     global nick_name, country, company, time_zone, status, gender, icon
-    if request.method == 'POST':
+    if request.method == 'POST' and request.form['action'] == "SaveChanges":
         nick_name = request.form['Nick_name']
         country = request.form['Country']
         company =request.form['Company']
@@ -73,6 +73,21 @@ def profile_edit():
             `company` = '%s', `time_zone` = '%s', `status` = '%s', 
             `icon` = '%s' WHERE `Profile`.`ID` = %s"""%(nick_name,gender,country,company,time_zone,status,icon,g.user['ID']))
         return(nick_name)
+    elif request.method == 'POST' and request.form['action'] == "crop":
+        return render_template('profile/crop.html')
     else:
         return render_template('profile/profile_edit.html')
 
+@bp.route('/crop', methods=['GET', 'POST'])
+def crop():
+    if request.method == 'POST':
+        x = request.form.get('x')
+        y = request.form.get('y')
+        w = request.form.get('w')
+        h = request.form.get('h')
+        filenames = avatars.crop_avatar(session['raw_filename'], x, y, w, h)
+        url_s = url_for('get_avatar', filename=filenames[0])
+        url_m = url_for('get_avatar', filename=filenames[1])
+        url_l = url_for('get_avatar', filename=filenames[2])
+        return render_template('done.html', url_s=url_s, url_m=url_m, url_l=url_l)
+    return render_template('profile/profile_edit.html')
