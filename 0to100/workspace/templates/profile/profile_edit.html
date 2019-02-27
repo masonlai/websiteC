@@ -9,9 +9,10 @@
     <div class="col-md-4 col-sm-6 col-xs-12">
         <form method="post" enctype="multipart/form-data" >
       <div class="text-center user_icon">
-        <img src="{{ url_for('static', filename='user_icon.png') }}" alt="avatar">
+        <img src="{{ avatars.default() }}" >
         <h6>Upload your icon</h6>
         <input type="file" class="text-center center-block well well-sm" name="file">
+        <input class="btn btn-primary" value="crop" type="Crop" name="action">
       </div>
     </div>
     
@@ -410,7 +411,8 @@
         <div class="form-group">
           <label class="col-md-3 control-label"></label>
           <div class="col-md-8">
-            <input class="btn btn-primary" value="Save Changes" type="submit">
+           
+            <input class="btn btn-primary" value="SaveChanges" type="submit" name="action">
             <span></span>
             <input class="btn btn-default" value="Cancel" type="reset">
           </div>

@@ -14,7 +14,7 @@ import pymysql
 from PIL import Image
 from io import BytesIO
 import base64
-from flask.ext.images import resized_img_src
+
 
 def image_to_base64(image_path):
     '''
@@ -37,7 +37,8 @@ def profile():
     connect.Connect_to_db()
     profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` = %s"""%g.user['ID'])
     bytes_icon = profile_info['icon']
-    user_icon = Image.open(BytesIO(base64.b64decode(bytes_icon)))
+    user_icon = base64.b64decode(bytes_icon)
+    
 
     return render_template('profile/profile.html',profile_info=profile_info,user_icon=user_icon)
 
