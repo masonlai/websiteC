@@ -31,6 +31,8 @@ def create_app(test_config=None):
     app.register_blueprint(login_app.bp)
     app.register_blueprint(main_index.bp)
     app.register_blueprint(profile.bp)
+    basedir = os.path.abspath(os.path.dirname(__name__))
+    app.config['AVATARS_SAVE_PATH'] = os.path.join(basedir, 'avatars')
 
 
 

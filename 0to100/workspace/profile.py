@@ -14,7 +14,11 @@ import pymysql
 from PIL import Image
 from io import BytesIO
 import base64
+from flask_avatars import Avatars
 
+
+
+avatars = Avatars()
 
 def image_to_base64(image_path):
     '''
@@ -61,7 +65,6 @@ def profile_edit():
         except:
             icon = 'NULL'
 
-
         if not nick_name:
             nick_name = 'No_show'
         if not company:
@@ -74,20 +77,28 @@ def profile_edit():
             `icon` = '%s' WHERE `Profile`.`ID` = %s"""%(nick_name,gender,country,company,time_zone,status,icon,g.user['ID']))
         return(nick_name)
     elif request.method == 'POST' and request.form['action'] == "crop":
-        return render_template('profile/crop.html')
+        f = request.files.get('file')
+        raw_filename = avatars.save_avatar(f)
+        session['raw_filename'] = raw_filename  
+        return redirect(url_for('profile.crop'))
     else:
         return render_template('profile/profile_edit.html')
 
 @bp.route('/crop', methods=['GET', 'POST'])
 def crop():
     if request.method == 'POST':
+        CR = 'afterCR'
         x = request.form.get('x')
         y = request.form.get('y')
         w = request.form.get('w')
         h = request.form.get('h')
         filenames = avatars.crop_avatar(session['raw_filename'], x, y, w, h)
-        url_s = url_for('get_avatar', filename=filenames[0])
-        url_m = url_for('get_avatar', filename=filenames[1])
         url_l = url_for('get_avatar', filename=filenames[2])
-        return render_template('done.html', url_s=url_s, url_m=url_m, url_l=url_l)
-    return render_template('profile/profile_edit.html')
+        return render_template('profile/profile_edit.html', url_l=url_l)
+    else:
+        CR = 'CR'
+        return render_template('profile/profile_edit.html',CR=CR)
+
+@bp.route('/avatars/<path:filename>')
+def get_avatar(filename):
+    return send_from_directory(bp.config['AVATARS_SAVE_PATH'], filename)
