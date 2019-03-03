@@ -30,7 +30,6 @@ html, html {
   background-color: #f5f5f5;
   position: relative;
   z-index: 1;
-  background-image: url(http://placekitten.com/980/250);
 }
 
 .body {
@@ -61,9 +60,6 @@ html, html {
   min-height: 400px;
 }
 
-.right-col {
-  background-color: blue;
-}
 
 /* LEFT COL */
 .user-info h1 {
@@ -114,19 +110,7 @@ html, html {
   float: left;
   background-color: #EFEFEF;
 }
-.image-grid.col-3 li {
-  width: 32%;
-  margin-right: 2%;
-  margin-bottom: 2%;
-  height: 0;
-  padding-bottom: 30%;
-  background-image: url(http://placekitten.com/200/200);
-  -webkit-background-size: 100%;
-  background-size: 100%;
-}
-.image-grid.col-3 li:nth-child(3n) {
-  margin-right: 0;
-}
+
 
 .profile-nav {
   height: 46px;

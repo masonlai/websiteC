@@ -80,12 +80,10 @@ def login():
             run = connect.Non_select("""INSERT INTO `user` (`username`, `password`, 
             `first_name`, `last_name`, `email`) VALUES ('%s', '%s', '%s', '%s', '%s');"""
             %(username,password,first_name,last_name,email))
-
-
-            run2 = connect.select_funcOne("""SELECT ID FROM user where username = '%s'""" %username)
-            from workspace.default_icon import default_icon
-            run3 = connect.Non_select("""INSERT INTO `Profile` (`ID`, `nick_name`, `gender`, `country`, `company`,`time_zone`, `status`, `icon`) 
-                VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s');"""%(run2['ID'],No_show,No_show,No_show,No_show,No_show,No_show,default_icon))
+            a = 'No_show'
+            run2 = connect.select_funcOne("""SELECT ID, username FROM user where username = '%s'""" %username)
+            run3 = connect.Non_select("""INSERT INTO `Profile` (`ID`, `nick_name`, `gender`, `country`, `company`,`time_zone`, `status`, `background`, `icon`) 
+                VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s', '%s');"""%(run2['ID'],run2['username'],a,a,a,a,a,'#5083b6','default'))
 
 
             return redirect(url_for('login_app.login'))

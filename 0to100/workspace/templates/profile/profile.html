@@ -1,24 +1,70 @@
 {% extends 'top_bar.html' %}
 {% block link %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='profile.css') }}">
+
+<script type="text/javascript">
+ window.onload = function what(){
+  var d2 = new Date('{{current_time}}');
+  var d1 = new Date('{{changed}}');
+  var seconds =  (d2- d1)/1000;
+
+  if (seconds<59){
+document.getElementById("changed").innerHTML = seconds+'s ago'
+  }
+  else if(seconds<3599){
+    document.getElementById("changed").innerHTML = Math.floor(seconds/60)+' mins ago'
+  }
+  else if (seconds<215999){
+    document.getElementById("changed").innerHTML = Math.floor((seconds/60)/60)+' hours ago'
+  }
+  else if (seconds<5183999){
+    document.getElementById("changed").innerHTML = Math.floor(((seconds/60)/60)/24)+' days ago'
+  }
+  else{
+    document.getElementById("changed").innerHTML = Math.floor((((seconds/60)/60)/24)/365)+' years ago'
+  }
+
+}
+</script>
+
 {% endblock %}
 {% block contentA %}
 <header class="site-header"></header>
-<div class="cover-photo"></div>
+
+<div class="cover-photo" style="background-color: {{profile_info['background']}}"></div>
+
 <div class="body">
   <section class="left-col user-info">
     <div class="profile-avatar">
-      <div class="inner"><img src="data:image/png;base64,{{ user_icon }}" ></div>
+      <div class="inner">
+        {% if user_icon != 'default' %}
+            <img src="data:image/png;base64, {{user_icon}}" alt="user_icon" />
+        {% else %}
+            <img src="{{ avatars.default() }}" >
+        {%endif%}
+
+      </div>
     </div>
-    <h1>User Name</h1>
-    <h2>LV??</h2>
-    <div class="meta">
-      {% if profile_info['country']!='No_show' %}
-      <p><i class="fa fa-fw fa-map-marker"></i> nation: {{profile_info['country']}}</p>
+    <h1>{{profile_info['nick_name']}}</h1>
+    {%if profile_info['country'] != 'No_show'%}
+    <h2>From {{profile_info['country']}}</h2>
+    {%endif%}
+      {% if profile_info['time_zone']!='No_show' %}
+      <p><i class="fa fa-fw fa-map-marker"></i>(UTC {{profile_info['time_zone']}})</p>
       {% endif %}
 
-      <p><i class="fa fa-fw fa-link"></i>count of goods</p>
-      <p><i class="fa fa-fw fa-clock-o"></i> Joined Dec 26, 2008</p>
+    <div class="meta">
+      {% if profile_info['gender']!='No_show' %}
+      <p><i class="fa fa-fw fa-map-marker"></i> Gender: {{profile_info['gender']}}</p>
+      {% endif %}
+      {% if profile_info['compay']!='No_show' %}
+      <p><i class="fa fa-fw fa-link"></i>Company:{{profile_info['company']}}</p>
+      {% endif %}
+
+      <p> Joined {{joined}}</p>
+      <form method="post" enctype="multipart/form-data" >
+      <input type="color" name="background"><input type="submit" name="set_BG" value="setting background color">
+    </form>
     </div>
   </section>
   <section class="section center-col content">
@@ -26,47 +72,29 @@
     <!-- Nav -->
     <nav class="profile-nav">
       <ul>
-        <li class="active">Activity</li>
+        <li class="active">Status</li>
         <li>Looks</li>
         <li>Hyped</li>
         <li>Loved</li>
-        <li>Collections</li>
       </ul>
     </nav>
     
     <!-- Wil hyped X-->
     <div class="unit user-hyped">
-      <h3><a href="http://lookbook.nu/user/17530-Willabelle-O">Willabelle</a> hyped <a href="#more-looks-url">13 looks</a></h3>
-      <p class="time">12 hours ago</p>
+      <h3> 
+<blockquote class="blockquote blockquote-reverse">
+  <p class="mb-0" style="color: black">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+  <footer class="blockquote-footer" id="changed"></footer>
+</blockquote>
+ </h3>
+
       <ul class="image-grid col-3">
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
+
       </ul>
-      <a href="#more-looks-url" class="more">View 7 more looks <i class="fa fa-angle-down"></i></a>
     </div>
     
-    <!-- Wil fanned X-->
-    <div class="unit user-hyped">
-      <h3><a href="http://lookbook.nu/user/17530-Willabelle-O">Willabelle</a> fanned <a href="#user-profile-url">Mizuho K</a></h3>
-      <p class="time">16 hours ago</p>
-      <ul class="image-grid col-3">
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-      </ul>
-      <a href="#more-looks-url" class="more">View 7 more looks <i class="fa fa-angle-down"></i></a>
-    </div>
   </section>
-  <section class="right-col">
-    
-  </section>
+
 </div>
 
 <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
