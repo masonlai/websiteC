@@ -1,11 +1,19 @@
 import functools
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from workspace.database import *
+
+from flask_mail import Mail, Message
+
+mail = Mail()
+
+
+
+
 
 bp = Blueprint('login_app', __name__, url_prefix='/login_app')
 
@@ -98,3 +106,22 @@ def logout():
     """Clear the current session, including the stored user id."""
     session.clear()
     return redirect(url_for('index'))
+
+
+def send_smtp_mail(subject, to, body):
+    message = Message(subject, recipients=[to], body=body)
+    mail.send(message)
+
+@bp.route('/vaildate', methods=['GET', 'POST'])
+def index():
+    to = '123hosumlai@gmail.com'
+    subject = "just a test"
+    body = "I just said its a test"
+    app = current_app._get_current_object()
+    mail.init_app(app)
+    if request.method == 'POST':
+        send_smtp_mail(subject, to, body)
+        
+        return redirect(url_for('login.index'))
+
+    return render_template('login_app/mail.html')

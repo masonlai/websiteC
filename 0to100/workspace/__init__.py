@@ -2,14 +2,26 @@ import os
 
 from flask import Flask
 from flask_avatars import Avatars
-
+from flask_mail import Mail, Message
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='CUproject',
     )
 
-    avatars = Avatars(app)
+    app.jinja_env.trim_blocks = True
+    app.jinja_env.lstrip_blocks = True
+
+    app.config.update(
+        MAIL_SERVER='smtp.gmail.com',
+        MAIL_PORT=465,
+        MAIL_USE_SSL=True,
+        MAIL_USERNAME='nonamelascope@gmail.com',
+        MAIL_PASSWORD='vai12121',
+        MAIL_DEFAULT_SENDER=('Mason Lai', 'vai12121')
+    )
+
+
 
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)

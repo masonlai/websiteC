@@ -16,7 +16,6 @@ from flask_avatars import Avatars
 import datetime
 
 
-
 avatars = Avatars()
 
 def image_to_base64(image_path):
