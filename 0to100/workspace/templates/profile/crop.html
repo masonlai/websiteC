@@ -1,8 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Flask-Avatars Demo</title>
+{% extends 'top_bar.html' %}
+{% block link %}
     {{ avatars.jcrop_css() }}
     <style>
         #preview-box {
@@ -23,9 +20,11 @@
             box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
         }
     </style>
-</head>
-<body>
-<h1>Step 2: Crop</h1>
+
+{% endblock %}
+{% block contentA %}
+<br><br><br>
+<h1><u><a href="/profile/profile_edit">⬅Return</a></u></h1>
 {{ avatars.crop_box('profile.get_avatar', session['raw_filename']) }}
 {{ avatars.preview_box('profile.get_avatar', session['raw_filename']) }}
 <form method="post">
@@ -37,5 +36,4 @@
 </form>
 {{ avatars.jcrop_js() }}
 {{ avatars.init_jcrop() }}
-</body>
-</html>
+{% endblock %}

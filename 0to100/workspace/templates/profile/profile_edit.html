@@ -22,7 +22,7 @@
             <img src="{{ avatars.default() }}" >
         {%endif%}
         <h6>Upload your icon</h6>
-        <input type="file" class="text-center center-block well well-sm" name="file">
+        <input type="file" class="text-center center-block well well-sm" name="file" accept="image/jpeg, image/png, image/jpg" />
         <button class="btn btn-primary btn-lg btn-block" type="submit" name="action" value="crop">Crop</button>
 
       </div>
@@ -40,16 +40,26 @@
         <div class="form-group">
           <label class="col-lg-3 control-label">Nick Name:</label>
           <div class="col-lg-8">
-            <input class="form-control" type="text" name="Nick_name">
+            <input class="form-control" type="text" name="Nick_name" value="{{profile_info['nick_name']}}">
           </div>
         </div>
 
         <div class="form-group">
           <label class="col-lg-3 control-label">Gender:</label>
           <div class="col-lg-8">
+        {%if profile_info['gender'] == 'No_show' %}
           <label class="radio-inline"><input type="radio" name="Gender" value="No_show" checked="">Don't show</label>
           <label class="radio-inline"><input type="radio" name="Gender" value="Male">Male</label>
           <label class="radio-inline"><input type="radio" name="Gender" value="Female">Female</label>
+        {%elif profile_info['gender'] == 'Male' %}
+          <label class="radio-inline"><input type="radio" name="Gender" value="No_show" >Don't show</label>
+          <label class="radio-inline"><input type="radio" name="Gender" value="Male" checked="">Male</label>
+          <label class="radio-inline"><input type="radio" name="Gender" value="Female">Female</label>
+        {% else %}
+          <label class="radio-inline"><input type="radio" name="Gender" value="No_show" >Don't show</label>
+          <label class="radio-inline"><input type="radio" name="Gender" value="Male">Male</label>
+          <label class="radio-inline"><input type="radio" name="Gender" value="Female" checked="">Female</label>
+        {%endif%}
         </div>
         </div>
 
@@ -58,7 +68,9 @@
           <div class="col-lg-8">
             <div class="ui-select">
               <select id="user_counter" class="form-control" name="Country">
-
+                {%if profile_info['country'] != 'No-show'%}
+                <option value="{{profile_info['country']}}">{{profile_info['country']}}</option>
+                {%endif%}
                 <option value="No_show">------Don't display------</option>
                 <option value="Afghanistan">Afghanistan</option>
                 <option value="Åland Islands">Åland Islands</option>
@@ -314,7 +326,11 @@
         <div class="form-group">
           <label class="col-lg-3 control-label">Company:</label>
           <div class="col-lg-8">
+            {%if profile_info['company'] != 'No_show'%}
+            <input class="form-control" type="text" name="Company" value="{{profile_info['company']}}">
+            {%else%}
             <input class="form-control" type="text" name="Company">
+            {%endif%}
           </div>
         </div>
 
@@ -325,7 +341,9 @@
           <div class="col-lg-8">
             <div class="ui-select">
               <select id="user_time_zone" class="form-control" name="Time_zone">
-
+                {%if profile_info['time_zone'] != 'No_show'%}
+                <option value="{{profile_info['time_zone']}}">(GMT{{profile_info['time_zone']}}:00)</option>
+                {%endif%}
                 <option value="No_show">------Don't display------</option>
                 <option timeZoneId="1" gmtAdjustment="GMT-12:00" useDaylightTime="0" value="-12">(GMT-12:00) International Date Line West</option>
                 <option timeZoneId="2" gmtAdjustment="GMT-11:00" useDaylightTime="0" value="-11">(GMT-11:00) Midway Island, Samoa</option>
@@ -417,9 +435,13 @@
         </div>
 
         <div class="form-group">
-          <label class="col-md-3 control-label">Status:</label>
+          <label class="col-md-3 control-label" >Status:</label>
           <div class="col-md-8">
-            <textarea class="form-control" rows="5" id="comment" name="Status"></textarea>
+            {%if profile_info['status'] != 'No_show'%}
+            <textarea class="form-control" rows="5" id="comment" name="Status">{{profile_info['status']}}</textarea>
+            {%else%}
+            <textarea class="form-control" rows="5" id="comment" name="Status" ></textarea>
+            {%endif%}
           </div>
         </div>
 

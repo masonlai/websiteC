@@ -91,7 +91,7 @@ def profile_edit():
     else:
         profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` = %s"""%g.user['ID'])
         user_icon = profile_info['icon']
-        return render_template('profile/profile_edit.html',url_l=request.args.get('url_l'),crop=request.args.get('crop'),user_icon=user_icon)
+        return render_template('profile/profile_edit.html',url_l=request.args.get('url_l'),crop=request.args.get('crop'),user_icon=user_icon,profile_info=profile_info)
 
 @bp.route('/crop', methods=['GET', 'POST'])
 def crop():

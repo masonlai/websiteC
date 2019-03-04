@@ -45,6 +45,9 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
 
       </div>
     </div>
+
+  <a type="button" class="btn btn-outline-info btn-block" href='/profile/profile_edit'>Edit Profile</a>
+
     <h1>{{profile_info['nick_name']}}</h1>
     {%if profile_info['country'] != 'No_show'%}
     <h2>From {{profile_info['country']}}</h2>
@@ -83,7 +86,7 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
     <div class="unit user-hyped">
       <h3> 
 <blockquote class="blockquote blockquote-reverse">
-  <p class="mb-0" style="color: black">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+  <p class="mb-0" style="color: black">{{profile_info['status']}}</p>
   <footer class="blockquote-footer" id="changed"></footer>
 </blockquote>
  </h3>
