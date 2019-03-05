@@ -9,6 +9,9 @@ from workspace.database import *
 
 from flask_mail import Mail, Message
 
+from itsdangerous import BadSignature, SignatureExpired
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+
 mail = Mail()
 
 
@@ -106,11 +109,11 @@ def login():
             to = email
             
             session.clear()
-            session['vaildate'] = user['username']
+            session['vaildate'] = username
 
             token = generate_token(username,'vaildate')
 
-            body =  render_template('login_app/confirm.txt', username, token, **kwargs)
+            body =  render_template('login_app/confirm.txt', username=username, token=token)
 
             send_smtp_mail(subject, to, body)
             
@@ -134,28 +137,38 @@ def send_smtp_mail(subject, to, body):
 
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
-def generate_token(user, operation, expire_in=None, **kwargs):
+def generate_token(user, operation, expire_in=None):
     s = Serializer(current_app.config['SECRET_KEY'], expire_in)
 
     data = {'id': user, 'operation': operation}
-    data.update(**kwargs)
+    
     return s.dumps(data)
 
 
 @bp.route('/confirm/<token>')
 def confirm(token):
-    if current_user.confirmed:
-        return redirect(url_for('login_app.login'))
 
     if validate_token(user=session['vaildate'], token=token, operation='vaildate'):
         flash('Account confirmed.', 'success')
 
         connect = Database()
         connect.Connect_to_db()
-        run = connect.Non_select("""UPDATE `user` SET `vaildation` = '%s' WHERE `user`.`username` = %s"""%('Y',session['vaildate']))
+        run = connect.Non_select("""UPDATE `user` SET `vaildation` = '%s' WHERE `username` = '%s'"""%('Y',session['vaildate']))
 
         return redirect(url_for('login_app.login'))
     else:
         flash('Invalid or expired token.', 'danger')
         return redirect(url_for('login_app.login'))
 
+def validate_token(user, token, operation):
+    s = Serializer(current_app.config['SECRET_KEY'])
+
+    try:
+        data = s.loads(token)
+    except (SignatureExpired, BadSignature):
+        return False
+
+    if operation != 'vaildate' or user != session['vaildate']:
+        return False
+
+    return True
