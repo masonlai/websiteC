@@ -58,6 +58,8 @@ def login():
             error = 'Incorrect username.'
         elif not check_password_hash(generate_password_hash(user['password']), password):
             error = 'Incorrect password.'
+        elif user['vaildation'] == 'N':
+            error = 'Check your email and vaildate.'
 
         if error is None:
             # store the user id in a new session and return to the index
@@ -86,16 +88,33 @@ def login():
 
         if error is None:
             run = connect.Non_select("""INSERT INTO `user` (`username`, `password`, 
-            `first_name`, `last_name`, `email`) VALUES ('%s', '%s', '%s', '%s', '%s');"""
-            %(username,password,first_name,last_name,email))
+            `first_name`, `last_name`, `email`, `vaildation`) VALUES ('%s', '%s', '%s', '%s', '%s','%s');"""
+            %(username,password,first_name,last_name,email,'N'))
             a = 'No_show'
             run2 = connect.select_funcOne("""SELECT ID, username FROM user where username = '%s'""" %username)
             run3 = connect.Non_select("""INSERT INTO `Profile` (`ID`, `nick_name`, `gender`, `country`, `company`,`time_zone`, `status`, `background`, `icon`) 
                 VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s', '%s');"""%(run2['ID'],run2['username'],a,a,a,a,a,'#5083b6','default'))
 
 
-            return redirect(url_for('login_app.login'))
+            error = 'please go to your email and verify your email address'
 
+            subject = "Nonamela vaildation"
+
+            app = current_app._get_current_object()
+            mail.init_app(app)
+
+            to = email
+            
+            session.clear()
+            session['vaildate'] = user['username']
+
+            token = generate_token(username,'vaildate')
+
+            body =  render_template('login_app/confirm.txt', username, token, **kwargs)
+
+            send_smtp_mail(subject, to, body)
+            
+            
         flash(error)
 
     return render_template('login_app/login.html')
@@ -112,16 +131,31 @@ def send_smtp_mail(subject, to, body):
     message = Message(subject, recipients=[to], body=body)
     mail.send(message)
 
-@bp.route('/vaildate', methods=['GET', 'POST'])
-def index():
-    to = '123hosumlai@gmail.com'
-    subject = "just a test"
-    body = "I just said its a test"
-    app = current_app._get_current_object()
-    mail.init_app(app)
-    if request.method == 'POST':
-        send_smtp_mail(subject, to, body)
-        
-        return redirect(url_for('login.index'))
 
-    return render_template('login_app/mail.html')
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+
+def generate_token(user, operation, expire_in=None, **kwargs):
+    s = Serializer(current_app.config['SECRET_KEY'], expire_in)
+
+    data = {'id': user, 'operation': operation}
+    data.update(**kwargs)
+    return s.dumps(data)
+
+
+@bp.route('/confirm/<token>')
+def confirm(token):
+    if current_user.confirmed:
+        return redirect(url_for('login_app.login'))
+
+    if validate_token(user=session['vaildate'], token=token, operation='vaildate'):
+        flash('Account confirmed.', 'success')
+
+        connect = Database()
+        connect.Connect_to_db()
+        run = connect.Non_select("""UPDATE `user` SET `vaildation` = '%s' WHERE `user`.`username` = %s"""%('Y',session['vaildate']))
+
+        return redirect(url_for('login_app.login'))
+    else:
+        flash('Invalid or expired token.', 'danger')
+        return redirect(url_for('login_app.login'))
+
