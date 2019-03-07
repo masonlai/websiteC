@@ -29,7 +29,7 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
 
 {% endblock %}
 {% block contentA %}
-<header class="site-header"></header>
+
 
 <div class="cover-photo" style="background-color: {{profile_info['background']}}"></div>
 
@@ -45,8 +45,7 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
 
       </div>
     </div>
-
-  <a type="button" class="btn btn-outline-info btn-block" href='/profile/profile_edit'>Edit Profile</a>
+  <a href="/profile/profile_edit"><button type="button" class="btn btn-primary btn-block" >Edit profile</button></a>
 
     <h1>{{profile_info['nick_name']}}</h1>
     {%if profile_info['country'] != 'No_show'%}
@@ -60,36 +59,61 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
       {% if profile_info['gender']!='No_show' %}
       <p><i class="fa fa-fw fa-map-marker"></i> Gender: {{profile_info['gender']}}</p>
       {% endif %}
-      {% if profile_info['compay']!='No_show' %}
+      {% if profile_info['company'] != 'No_show' %}
       <p><i class="fa fa-fw fa-link"></i>Company:{{profile_info['company']}}</p>
       {% endif %}
 
       <p> Joined {{joined}}</p>
       <form method="post" enctype="multipart/form-data" >
-      <input type="color" name="background"><input type="submit" name="set_BG" value="setting background color">
+      <input type="color" name="background">
+      <button type="submit" class="btn btn-outline-primary btn-sm" value="setting background color" name="set_BG">setting background color</button>
+
+
     </form>
     </div>
   </section>
   <section class="section center-col content">
     
     <!-- Nav -->
-    <nav class="profile-nav">
-      <ul>
-        <li class="active">Status</li>
-        <li>Looks</li>
-        <li>Hyped</li>
-        <li>Loved</li>
-      </ul>
-    </nav>
-    
-    <!-- Wil hyped X-->
-    <div class="unit user-hyped">
-      <h3> 
+
+<div class="container">
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#home">Status</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#menu1">Menu 1</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#menu2">Menu 2</a>
+    </li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div id="home" class="container tab-pane active"><br>
 <blockquote class="blockquote blockquote-reverse">
+  {%if profile_info['status'] != 'No_show'%}
   <p class="mb-0" style="color: black">{{profile_info['status']}}</p>
+  {%else%}
+  <p class="mb-0" style="color: black">I am good</p>
+  {%endif%}
   <footer class="blockquote-footer" id="changed"></footer>
 </blockquote>
- </h3>
+    </div>
+    <div id="menu1" class="container tab-pane fade"><br>
+      <h3>Menu 1</h3>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+    <div id="menu2" class="container tab-pane fade"><br>
+      <h3>Menu 2</h3>
+      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+    </div>
+  </div>
+</div>
+
+
+
 
       <ul class="image-grid col-3">
 

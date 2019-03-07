@@ -21,7 +21,7 @@ def create_app(test_config=None):
         MAIL_DEFAULT_SENDER=('Mason Lai', 'vai12121')
     )
 
-
+    avatars = Avatars(app)
 
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)

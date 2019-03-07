@@ -14,10 +14,6 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 mail = Mail()
 
-
-
-
-
 bp = Blueprint('login_app', __name__, url_prefix='/login_app')
 
 def login_required(view):
@@ -62,7 +58,9 @@ def login():
         elif not check_password_hash(generate_password_hash(user['password']), password):
             error = 'Incorrect password.'
         elif user['vaildation'] == 'N':
-            error = 'Check your email and vaildate.'
+            session['vaildation_username'] = username
+            return redirect(url_for('login_app.resend'))
+            
 
         if error is None:
             # store the user id in a new session and return to the index
@@ -109,6 +107,7 @@ def login():
             to = email
             
             session.clear()
+
             session['vaildate'] = username
 
             token = generate_token(username,'vaildate')
@@ -172,3 +171,23 @@ def validate_token(user, token, operation):
         return False
 
     return True
+
+
+@bp.route('/vaildation/resend',methods=('GET', 'POST'))
+def resend():
+
+    if request.method == 'POST':
+        connect = Database()
+        connect.Connect_to_db()
+        user = connect.select_funcOne( """SELECT * FROM user WHERE username = '%s'""" %session['vaildation_username'])
+        subject = "Nonamela vaildation"
+        to = user['email']
+        token = generate_token(session['vaildation_username'],'vaildate')
+
+        body =  render_template('login_app/confirm.txt', username=session['vaildation_username'], token=token)
+        app = current_app._get_current_object()
+        mail.init_app(app)
+        send_smtp_mail(subject, to, body)
+
+
+    return render_template('login_app/resend.html')

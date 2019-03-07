@@ -32,7 +32,6 @@ def image_to_base64(image_path):
 
 bp = Blueprint('profile', __name__,url_prefix='/profile')
 
-
 @bp.route('/profile', methods=('GET', 'POST'))
 def profile():
     connect = Database()

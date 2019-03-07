@@ -5,7 +5,9 @@
   <meta charset="UTF-8">
   <title>{% block title %}{% endblock %} - NNL</title>
 
-      <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+
+
+      <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/sketchy/bootstrap.min.css" rel="stylesheet" integrity="sha384-N8DsABZCqc1XWbg/bAlIDk7AS/yNzT5fcKzg/TwfmTuUqZhGquVmpb5VvfmLcMzp" crossorigin="anonymous">
       <link href='https://fonts.googleapis.com/css?family=ZCOOL KuaiLe' rel='stylesheet'>
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -17,18 +19,23 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-  <a class="navbar-brand" id="Web_name" href="#" style="font-family: ZCOOL KuaiLe">Nonamela</a>
-  <ul class="navbar-nav">
-    <li class="nav-item">
-      <a class="nav-link" href="#">About us</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">How to use</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Why choose us</a>
-    </li>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" id="Web_name" href="{{ url_for('index') }}" style="font-family: ZCOOL KuaiLe">Nonamela</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">About us <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">How to use</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Why choose us</a>
+      </li>
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
         Membership
@@ -38,12 +45,12 @@
         <a class="dropdown-item" href="#">Reader</a>
       </div>
     </li>
-  </ul>
+    </ul>
   <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
     <ul class="navbar-nav">
       {% if g.user %}
-      <li class="nav-item"><span style="color: #ffffff; font-size: 15pt;"><a href="{{ url_for('profile.profile') }}">welcome&nbsp;{{ g.user['username'] }}</a>&nbsp;&nbsp;&nbsp;</span>
-      <a href="{{ url_for('login_app.logout') }}">Log Out</a></li>
+      <li class="nav-item"><span style=" font-size: 13pt;"><a href="{{ url_for('profile.profile') }}" style="color: #ffffff">welcome&nbsp;{{ g.user['username'] }}</a>&nbsp;&nbsp;&nbsp;</span>
+      <a href="{{ url_for('login_app.logout') }}"style="color: #ffffff">Log Out</a></li>
       {% else %}
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('login_app.login') }}">Login</a>
@@ -51,6 +58,9 @@
       {% endif %}
     </ul>
   </div>
+  </div>
 </nav>
+
 {% block contentA %}{% endblock %}
+
 </body></html>

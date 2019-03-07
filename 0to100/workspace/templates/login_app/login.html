@@ -5,49 +5,32 @@
   <meta charset="utf-8">
 
   <title>Flat HTML5/CSS3 Login Form</title>
-  
 
-
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}">
-  <link href='https://fonts.googleapis.com/css?family=ZCOOL KuaiLe' rel='stylesheet'>
-  <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display" rel="stylesheet"> 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.js"
-  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-  crossorigin="anonymous"></script>
-
-  <script type="text/javascript" src="{{ url_for('static', filename='first_page.js') }}"></script>
-
-
-      <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
       <link href='https://fonts.googleapis.com/css?family=ZCOOL KuaiLe' rel='stylesheet'>
-      <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display" rel="stylesheet"> 
-  
-  
       <link rel="stylesheet" href="{{ url_for('static', filename='login_page.css') }}">
-      <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css'>
-
       <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js'></script>
-
+      <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/sketchy/bootstrap.min.css" rel="stylesheet" integrity="sha384-N8DsABZCqc1XWbg/bAlIDk7AS/yNzT5fcKzg/TwfmTuUqZhGquVmpb5VvfmLcMzp" crossorigin="anonymous">
 
 </head>
 
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" id="Web_name" href="#" style="font-family: ZCOOL KuaiLe">Nonamela</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-  <a class="navbar-brand" id="Web_name" href="#">Nonamela</a>
-  <ul class="navbar-nav">
-    <li class="nav-item">
-      <a class="nav-link" href="#">About us</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">How to use</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Why choose us</a>
-    </li>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">About us <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">How to use</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Why choose us</a>
+      </li>
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
         Membership
@@ -57,12 +40,12 @@
         <a class="dropdown-item" href="#">Reader</a>
       </div>
     </li>
-  </ul>
+    </ul>
   <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
     <ul class="navbar-nav">
       {% if g.user %}
-      <li class="nav-item"><span style="font-size: 17px"><a href="{{ url_for('profile.profile') }}">welcome&nbsp;{{ g.user['username'] }}&nbsp;&nbsp;&nbsp;</a></span></li>
-      <li class="nav-item"><a style="color: #007bff" href="{{ url_for('login_app.logout') }}">Log Out</a></li>
+      <li class="nav-item"><span style="color: #ffffff; font-size: 15pt;"><a href="{{ url_for('profile.profile') }}">welcome&nbsp;{{ g.user['username'] }}</a>&nbsp;&nbsp;&nbsp;</span>
+      <a href="{{ url_for('login_app.logout') }}">Log Out</a></li>
       {% else %}
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('login_app.login') }}">Login</a>
@@ -70,7 +53,9 @@
       {% endif %}
     </ul>
   </div>
+  </div>
 </nav>
+
 
   <div class="login-page">
   <div class="form">
@@ -88,41 +73,41 @@
           <div class="flash alert alert-warning">{{ message }}</div>
           {% endfor %}
 
-        <div class="row">
-          <div class="input-field col s6">
-            <input id="last_name" type="text" class="validate" name="first_name"required>
-            <label for="last_name">First Name</label>
-          </div>
-          <div class="input-field col s6">
-            <input id="last_name" type="text" class="validate" name="last_name" required>
-            <label for="last_name">Last Name</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="last_name" type="text" class="validate" name="username_signup" required>
-            <label for="username">User Name</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="email" type="email" class="validate" name="email" required>
-            <label for="email">Email</label>
-          </div>
-        
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="password" type="password" class="validate" name="password_signup" required>
-            <label for="password">Password</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="password-confirm" type="password" class="validate" name="password_confirm" required>
-            <label for="password-confirm">Password Confirmation</label>
-          </div>
-        </div>
+<div class="form-group row"> 
+<div class="col-md-6">
+  <input type="text" class="form-control" name="first_name" placeholder="First Name" required>
+</div>
+
+<div class="col-md-6">
+  <input type="text" class="form-control" name="last_name"  placeholder="Last Name" required>
+</div>
+
+</div>
+
+
+<div class="form-group">
+  <label class="col-form-label" for="inputDefault">User Name</label>
+  <input type="text" class="form-control" name="username_signup" required>
+</div>
+
+<div class="form-group">
+  <label class="col-form-label" for="inputDefault">Email</label>
+  <input type="email" class="form-control" name="email" required>
+</div>
+
+
+
+<div class="form-group">
+  <label class="col-form-label" for="inputDefault">Password</label>
+  <input type="password" class="form-control" name="password_signup" required>
+</div>
+
+<div class="form-group">
+  <label class="col-form-label" for="inputDefault">Password Confirmation</label>
+  <input type="password" class="form-control" name="password_confirm" required>
+</div>
+
+
         <center>
           <button class="btn waves-effect waves-light teal" type="submit" name="action" value="register">Submit</button>
           <p class="message">Already registered? <a href="#">Sign In</a></p>
@@ -131,20 +116,9 @@
     </form>
   </div>
 
-
-
-
-
-      
     </form>
 
-
-
-
     <form class="login-form" method="post">
-
-
-
 
   <div id="login" class="col s12">
     <form class="col s12">
@@ -153,22 +127,27 @@
           {% for message in get_flashed_messages() %}
             <div class="flash alert alert-warning">{{ message }}</div>
           {% endfor %}
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="last_name" type="text" class="validate" name="username_login" required>
-            <label for="username">User Name</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="password" type="password" class="validate" name="password_login" required>
-            <label for="password">Password</label>
-          </div>
-        </div>
+
+
+<div class="form-group">
+  <label class="col-form-label" for="inputDefault">User Name</label>
+  <input type="text" class="form-control" name="username_login" required>
+</div>
+
+
+<div class="form-group">
+  <label class="col-form-label" for="inputDefault">Password</label>
+  <input type="password" class="form-control" name="password_login" required>
+</div>
+
+
+
+
         </div>
         <br>
         <center>
-          <button class="btn waves-effect waves-light teal" type="submit" name="action" value="login">Connect</button>
+          <button class="btn btn-outline-secondary" type="submit" name="action" value="login">Connect</button>
+          
           <br>
           <br>
           <p class="message">Not registered? <a href="#">Create an account</a></p>
