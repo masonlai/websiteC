@@ -4,24 +4,18 @@
 
 {% block link %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/dropzone.min.css') }}" type="text/css">
-
-{{ dropzone.style('margin: 20px 0; border: 2px dashed #0087F7; min-height: 400px;') }}
-
-{{ super() }}
-<script src="{{ url_for('static', filename='js/dropzone.min.js') }}"></script>
-{{ dropzone.config() }}
+  {{ dropzone.load_css() }}
+  {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 360px;') }}
 {% endblock %}
 
 {% block contentA %}
 <div class="page-header">
     <h1>Upload</h1>
 </div>
-<div class="row">
-    <div class="col-md-12">
-        {{ dropzone.create(action='upload.upload') }}
-        <a class="btn btn-light float-right" href="{{ url_for('upload.upload') }}">Done</a>
-    </div>
-</div>
+
+  {{ dropzone.create(action='upload.upload') }}
+  {{ dropzone.load_js() }}
+  {{ dropzone.config() }}
+
 {% endblock %}
 
