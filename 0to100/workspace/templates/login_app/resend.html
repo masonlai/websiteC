@@ -3,18 +3,25 @@
 
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='resend.css') }}">
 <script type="text/javascript">
-    var i=7;
-    var timehwnd=setInterval("Countdown()",1000);
-    function Countdown(){
-        i--;
-        if(i == 0){
-            $("#button").val("下一步");
-            $("#button").removeAttr("disabled");
-            clearInterval(timehwnd);
-        }else{
-            $("#button").val("下一步("+i+")");
-        }
+    window.onload=function() {
+      setTimeout(function(){
+        document.getElementById('submitButton').disabled = null;
+      },10000);
+        for (var i = 10 ; i > 1 ; i--){
+            setTimeout(function(){
+       document.getElementById("timer").innerHTML = i},1000)}
+      
     }
+
+var timeleft = 10;
+var downloadTimer = setInterval(function(){
+  document.getElementById("countdown").innerHTML = 'You can resend: '+ timeleft + " seconds remaining";
+  timeleft -= 1;
+  if(timeleft <= 0){
+    clearInterval(downloadTimer);
+    document.getElementById("countdown").innerHTML = "Finished"
+  }
+}, 1000);
 </script>
  {% endblock %}
 {% block contentA %}
@@ -24,8 +31,14 @@
     <h4 class="card-title">Your email should be vaildated</h4>
     <p class="card-text">Click here to resend verify email:</p>
     <form method="POST">
-    	
-    <button id='button' type="submit" class="btn btn-outline-success">Re-send</button>
+
+        {%if resend > 0%}
+        <input type="submit" id="submitButton" disabled="disabled"  value="Re-send!" class="btn btn-outline-success" />
+         <p id='countdown'></p>
+        {%else%}
+        <input type="submit" value="Re-send!" id="resend" name="resend" class="btn btn-outline-success">
+        {%endif%}
+        
     </form>
   </div>
 

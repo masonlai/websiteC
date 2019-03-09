@@ -11,6 +11,9 @@ from flask_mail import Mail, Message
 
 from itsdangerous import BadSignature, SignatureExpired
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from threading import Thread
+
+
 
 mail = Mail()
 
@@ -58,7 +61,7 @@ def login():
         elif not check_password_hash(generate_password_hash(user['password']), password):
             error = 'Incorrect password.'
         elif user['vaildation'] == 'N':
-            session['vaildation_username'] = username
+            session['vaildate'] = username
             return redirect(url_for('login_app.resend'))
             
 
@@ -128,10 +131,17 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+def send_async_mail(app, message):
+    with app.app_context():
+        mail.send(message)
+
 
 def send_smtp_mail(subject, to, body):
+    app = current_app._get_current_object()  # if use factory (i.e. create_app()), get app like this
     message = Message(subject, recipients=[to], body=body)
-    mail.send(message)
+    thr = Thread(target=send_async_mail, args=[app, message])
+    thr.start()
+    return thr
 
 
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -146,18 +156,24 @@ def generate_token(user, operation, expire_in=None):
 
 @bp.route('/confirm/<token>')
 def confirm(token):
+    try:
+        if validate_token(user=session['vaildate'], token=token, operation='vaildate'):
+            flash('Account confirmed.', 'success')
 
-    if validate_token(user=session['vaildate'], token=token, operation='vaildate'):
-        flash('Account confirmed.', 'success')
+            connect = Database()
+            connect.Connect_to_db()
+            run = connect.Non_select("""UPDATE `user` SET `vaildation` = '%s' WHERE `username` = '%s'"""%('Y',session['vaildate']))
 
-        connect = Database()
-        connect.Connect_to_db()
-        run = connect.Non_select("""UPDATE `user` SET `vaildation` = '%s' WHERE `username` = '%s'"""%('Y',session['vaildate']))
+            return redirect(url_for('login_app.login'))
+        else:
+            flash('Invalid or expired token.', 'danger')
+            return redirect(url_for('login_app.login'))
 
-        return redirect(url_for('login_app.login'))
-    else:
+    except KeyError :
         flash('Invalid or expired token.', 'danger')
         return redirect(url_for('login_app.login'))
+
+
 
 def validate_token(user, token, operation):
     s = Serializer(current_app.config['SECRET_KEY'])
@@ -175,7 +191,7 @@ def validate_token(user, token, operation):
 
 @bp.route('/vaildation/resend',methods=('GET', 'POST'))
 def resend():
-
+    resend = 0
     if request.method == 'POST':
         connect = Database()
         connect.Connect_to_db()
@@ -188,6 +204,7 @@ def resend():
         app = current_app._get_current_object()
         mail.init_app(app)
         send_smtp_mail(subject, to, body)
+        resend =+ 1
 
 
-    return render_template('login_app/resend.html')
+    return render_template('login_app/resend.html',resend=resend)
