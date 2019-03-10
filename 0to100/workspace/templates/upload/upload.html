@@ -5,17 +5,63 @@
 {% block link %}
 {{ super() }}
   {{ dropzone.load_css() }}
-  {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 360px;') }}
+  {{ dropzone.style('border: 2px dashed #0087F7;
+    rgin: 10%;max-width: 800px;
+    height: 500px;
+    min-height: 0px !important;') }}
 {% endblock %}
 
 {% block contentA %}
-<div class="page-header">
-    <h1>Upload</h1>
+    <div class="container">
+    <div class="form-group row"> <h1>Tittle:</h1>
+    <div class="col-md-3">
+    <input class="form-control form-control-lg" type="text" placeholder=".form-control-lg" id="inputLarge">
+</div></div> 
+<div class="form-group row">
+<div class="col-md-1"></div>
+<footer class="blockquote-footer">by <cite title="Source Title">{{g.profile_info['nick_name'] }}</cite></footer>
+</blockquote></div>
+<div class="form-group row">
+    <div class="col-md-8">
+    {{ dropzone.create(action='upload.upload') }}
+    {{ dropzone.load_js() }}
+    {{ dropzone.config() }}
+</div>
+<div class="clearfix"></div>
+ <div class="col-md-4">
+<div class="card border-primary mb-3" >
+  <div class="card-header">{{g.profile_info['nick_name'] }}</div>
+  <div class="card-body">
+    <div class="form-group">
+      <label for="exampleTextarea">Say somethings:</label>
+      <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+    </div>
+  </div>
+</div><button type="submit" class="btn btn-primary btn-lg btn-block" name="POST" value="POST">POST</button>
 </div>
 
-  {{ dropzone.create(action='upload.upload') }}
-  {{ dropzone.load_js() }}
-  {{ dropzone.config() }}
+</div>
+
+
+  <h1 class="display-3">Comment!</h1>
+
+
+<div class="list-group">
+
+  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+        <img src="{{ avatars.default() }}" width="30ox" height="30px" >
+      <small class="text-muted">x days ago</small>
+    </div>
+    <p class="mb-1">Comments Example.</p>
+  </a>
+
+
+
+</div>
+
+
+</div>
 
 {% endblock %}
 
