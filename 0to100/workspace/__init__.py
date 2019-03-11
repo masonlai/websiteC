@@ -18,14 +18,10 @@ def create_app(test_config=None):
         MAIL_USERNAME='nonamelascope@gmail.com',
         MAIL_PASSWORD='vai12121',
         MAIL_DEFAULT_SENDER=('Mason Lai', 'vai12121'),
-        DROPZONE_ALLOWED_FILE_TYPE='image',
-        DROPZONE_MAX_FILE_SIZE=3,
-        DROPZONE_MAX_FILES=30,
 
     )
 
     avatars = Avatars(app)
-    dropzone = Dropzone(app)
 
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)
@@ -36,12 +32,12 @@ def create_app(test_config=None):
 
     from workspace import first_page
     app.register_blueprint(first_page.bp)
-
-    from workspace import login_app, main_index, profile, upload
+    from workspace import login_app, main_index, profile, upload, show
     app.register_blueprint(login_app.bp)
     app.register_blueprint(main_index.bp)
     app.register_blueprint(profile.bp)
     app.register_blueprint(upload.bp)
+    app.register_blueprint(show.bp)
     basedir = os.path.abspath(os.path.dirname(__name__))
     app.config['AVATARS_SAVE_PATH'] = os.path.join(basedir, 'avatars')
     app.add_url_rule('/', endpoint='index')

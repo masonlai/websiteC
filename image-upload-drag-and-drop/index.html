@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Image Upload drag and drop</title>
+  
+  
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
+
+  <style type="text/css">
+  .uploadOuter {
+  text-align: center;
+  padding: 20px;
+}
+.uploadOuter strong {
+  padding: 0 10px;
+}
+.dragBox {
+  width: 250px;
+  height: 100px;
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+  font-weight: bold;
+  line-height: 95px;
+  color: #999;
+  border: 2px dashed #ccc;
+  display: inline-block;
+  transition: transform 0.3s;
+}
+.dragBox input[type="file"] {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  top: 0;
+  left: 0;
+}
+.draging {
+  transform: scale(1.1);
+}
+#preview {
+  text-align: center;
+}
+#preview img {
+   width: 250px;
+  height: 100px;
+}</style>
+
+  
+</head>
+
+<body>
+
+  <div class="uploadOuter">
+  <label for="uploadFile" class="btn btn-primary">Upload Image</label>
+  <strong>OR</strong>
+<span class="dragBox" >
+  Darg and Drop image here
+<input type="file" onChange="dragNdrop(event)"  ondragover="drag()" ondrop="drop()" id="uploadFile"  />
+</span>
+</div>
+<div id="preview"></div>
+  
+  
+
+    <script >
+    "use strict";
+function dragNdrop(event) {
+    var fileName = URL.createObjectURL(event.target.files[0]);
+    var preview = document.getElementById("preview");
+    var previewImg = document.createElement("img");
+    previewImg.setAttribute("src", fileName);
+    preview.innerHTML = "";
+    preview.appendChild(previewImg);
+}
+function drag() {
+    document.getElementById('uploadFile').parentNode.className = 'draging dragBox';
+}
+function drop() {
+    document.getElementById('uploadFile').parentNode.className = 'dragBox';
+}</script>
+
+
+
+
+</body>
+
+</html>

@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script type="text/javascript">
-var timeleft = 10;
-var downloadTimer = setInterval(function(){
-  document.getElementById("countdown").innerHTML = timeleft + " seconds remaining";
-  timeleft -= 1;
-  if(timeleft <= 0){
-    clearInterval(downloadTimer);
-    document.getElementById("countdown").innerHTML = "Finished"
-  }
-}, 1000);
-</script>
+<head>      <script type="text/javascript">
+	dropContainer.ondragover = dropContainer.ondragenter = function(evt) {
+  evt.preventDefault();
+};
+
+dropContainer.ondrop = function(evt) {
+  // pretty simple -- but not for IE :(
+  fileInput.files = evt.dataTransfer.files;
+  evt.preventDefault();
+};
+</script><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 </head>
 <body>
 
-<p id="countdown"></p>
+<div id="dropContainer" style="border:1px solid black;height:100px;">
+   Drop Here
+</div>
+  Should update here:
+  <input type="file" id="fileInput" />
+
+</div>
+
 </body>
 </html>
