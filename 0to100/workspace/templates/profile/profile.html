@@ -45,8 +45,10 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
 
       </div>
     </div>
-  <a href="/profile/profile_edit"><button type="button" class="btn btn-primary btn-block" >Edit profile</button></a>
-
+    {%if not g.user['ID'] %}{%else%}
+    {%if int(id) == int(g.user['ID'])%}
+    <a href="/profile/profile_edit"><button type="button" class="btn btn-primary btn-block" >Edit profile</button></a>
+    {%endif%}{% endif %}
     <h1>{{profile_info['nick_name']}}</h1>
     {%if profile_info['country'] != 'No_show'%}
     <h2>From {{profile_info['country']}}</h2>
@@ -63,11 +65,14 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
       <p><i class="fa fa-fw fa-link"></i>Company:{{profile_info['company']}}</p>
       {% endif %}
 
+
       <p> Joined {{joined}}</p>
+      {%if not g.user['ID'] %}{%else%}
+      {%if int(id) == int(g.user['ID'])%}
       <form method="post" enctype="multipart/form-data" >
       <input type="color" name="background">
       <button type="submit" class="btn btn-outline-primary btn-sm" value="setting background color" name="set_BG">setting background color</button>
-
+      {%endif%}{%endif%}
 
     </form>
     </div>

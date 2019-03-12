@@ -49,7 +49,7 @@
   <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
     <ul class="navbar-nav">
       {% if g.user %}
-      <li class="nav-item"><span style=" font-size: 13pt;"><a href="{{ url_for('profile.profile') }}" style="color: #ffffff">welcome&nbsp;{{g.profile_info['nick_name'] }}</a>&nbsp;&nbsp;&nbsp;</span>
+      <li class="nav-item"><span style=" font-size: 13pt;"><a href="{{ url_for('profile.profile',id=g.user['ID']) }}" style="color: #ffffff">welcome&nbsp;{{g.profile_info['nick_name'] }}</a>&nbsp;&nbsp;&nbsp;</span>
       <a href="{{ url_for('login_app.logout') }}"style="color: #ffffff">Log Out</a></li>
       {% else %}
       <li class="nav-item">

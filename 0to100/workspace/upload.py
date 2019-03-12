@@ -7,9 +7,12 @@ from workspace.database import *
 
 from workspace.profile import image_to_base64
 
+from workspace.login_app import login_required
+
 bp = Blueprint('upload', __name__, url_prefix='/upload')
 
 @bp.route('/', methods=['GET', 'POST'])
+@login_required
 def upload():
 
     if request.method == 'POST':
@@ -34,6 +37,7 @@ def upload():
     return render_template('upload/upload.html',edit=edit)
 
 @bp.route('/edit/<id>', methods=['GET', 'POST'])
+@login_required
 def edit(id):
     connect = Database()
     connect.Connect_to_db()

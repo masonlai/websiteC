@@ -14,6 +14,7 @@ from io import BytesIO
 import base64
 from flask_avatars import Avatars
 import datetime
+from workspace.login_app import login_required
 
 
 avatars = Avatars()
@@ -32,24 +33,25 @@ def image_to_base64(image_path):
 
 bp = Blueprint('profile', __name__,url_prefix='/profile')
 
-@bp.route('/profile', methods=('GET', 'POST'))
-def profile():
+@bp.route('/profile/<id>', methods=('GET', 'POST'))
+def profile(id):
     connect = Database()
     connect.Connect_to_db()
-    profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` = %s"""%g.user['ID'])
+    profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` = %s"""%id)
     user_icon = profile_info['icon']
     if request.method == 'POST':
         backgroud = request.form['background']
         run = connect.Non_select("""UPDATE `Profile` SET `background` = '%s'
             WHERE `Profile`.`ID` = %s"""%(backgroud, g.user['ID']))
-        profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` = %s"""%g.user['ID'])
+        profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` = %s"""%id)
         user_icon = profile_info['icon']
     joined = str(profile_info['joined_date'])[0:10]
-    changed = str(profile_info['changed_date'])[0:19]
+    changed = str(profile_info['changed_date'])
     current_time = str(datetime.datetime.now())[0:19]
-    return render_template('profile/profile.html',profile_info=profile_info,user_icon=user_icon, joined=joined,changed=changed,current_time=current_time)
+    return render_template('profile/profile.html',id=id,int=int,profile_info=profile_info,user_icon=user_icon, joined=joined,changed=changed,current_time=current_time)
 
 @bp.route('/profile_edit', methods=('GET', 'POST'))
+@login_required
 def profile_edit():
     connect = Database()
     connect.Connect_to_db()
@@ -92,6 +94,7 @@ def profile_edit():
         return render_template('profile/profile_edit.html',url_l=request.args.get('url_l'),crop=request.args.get('crop'),user_icon=user_icon,profile_info=profile_info)
 
 @bp.route('/crop', methods=['GET', 'POST'])
+@login_required
 def crop():
     if request.method == 'POST':
         x = request.form.get('x')
@@ -107,5 +110,6 @@ def crop():
         return render_template('profile/crop.html')
 
 @bp.route('/avatars/<path:filename>')
+@login_required
 def get_avatar(filename):
     return send_from_directory(current_app.config['AVATARS_SAVE_PATH'], filename)
