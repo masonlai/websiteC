@@ -14,25 +14,37 @@ bp = Blueprint('upload', __name__, url_prefix='/upload')
 @bp.route('/', methods=['GET', 'POST'])
 @login_required
 def upload():
-
+    connect = Database()
+    connect.Connect_to_db()
+    
     if request.method == 'POST':
+        try:
+            f = request.files.get('file')
+            caption =request.form['caption']
+            title =request.form['title']
 
-        f = request.files.get('file')
-        caption =request.form['caption']
-        title =request.form['title']
-        base64_pic = image_to_base64(f)
-        picture = bytes.decode(base64_pic)
-        connect = Database()
-        connect.Connect_to_db()
 
-        run = connect.Non_select("""INSERT INTO `picture` (`ID`, `auth_ID`,`title`,`caption`, \
-        `picture`, `likes`,`collection`, `timestamp`) VALUES (NULL, '%s', '%s','%s','%s',\
-        0, 0,CURRENT_TIMESTAMP);"""%(g.user['ID'],title,caption,picture))
+            check = connect.select_funcOne("""SELECT * FROM `picture` WHERE `title`='%s' """%title)
 
-        show_info = connect.select_funcOne("""SELECT * FROM `picture` WHERE `auth_ID`='%s' and `title`='%s' and\
-        `caption`='%s' and `picture`='%s' and `likes`=0 and `collection`=0"""%(g.user['ID'],title,caption,picture))
+            if not check:
 
-        return redirect(url_for('show.show', id=show_info['ID']))
+                base64_pic = image_to_base64(f)
+                picture = bytes.decode(base64_pic)
+
+
+                run = connect.Non_select("""INSERT INTO `picture` (`ID`, `auth_ID`,`title`,`caption`, \
+                `picture`, `timestamp`) VALUES (NULL, '%s', '%s','%s','%s',\
+                CURRENT_TIMESTAMP);"""%(g.user['ID'],title,caption,picture))
+
+                show_info = connect.select_funcOne("""SELECT * FROM `picture` WHERE `auth_ID`='%s' and `title`='%s' and\
+                `caption`='%s' and `picture`='%s'"""%(g.user['ID'],title,caption,picture))
+
+                return redirect(url_for('show.show', id=show_info['ID']))
+            else:
+                flash('Title is repeated')
+        except OSError as e:
+            flash(e)
+
     edit='upload'
     return render_template('upload/upload.html',edit=edit)
 

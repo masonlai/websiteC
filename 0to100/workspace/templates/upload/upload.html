@@ -30,6 +30,10 @@
       </div>
 {%else%}
 
+
+
+
+
       <div class="col-md-8" style="height: 500px; text-align: center;">
 
         <img src="data:image/png;base64, {{show_info['picture']}}" alt="user_icon" style=" height: auto;width: auto; max-height: 100%; max-width: 100%;" />
@@ -45,7 +49,7 @@
           <div class="card-body">
             <div class="form-group">
               <label for="exampleTextarea">Say somethings:</label>
-              <textarea class="form-control" id="exampleTextarea" rows="3" name="caption">
+              <textarea class="form-control" id="exampleTextarea" rows="3" name="caption" maxlength="400">
               {%if edit == 'edit'%}{{show_info['caption']}}{%endif%}</textarea>
             </div>
           </div>
@@ -70,6 +74,23 @@
 {%if not edit %}
   <label for="uploadFile" class="btn btn-primary">Upload Image</label>
 {%endif%}
+        <div class="col-md-12 row">
+          <div class="col-md-5">
+
+            <div style="float: none;margin: 0 auto;" class="col-md-10"><img class="like" src="{{ url_for('static', filename='icons8-in-love-48.png') }}">like
+             
+
+            </div>
+          </div>
+          <div class="col-md-5">
+
+
+
+            <div style="float: none;margin: 0 auto;" class="col-md-10"><img src="{{ url_for('static', filename='icons8-star-48.png') }}">collect
+
+            </div>
+          </div></div>
+
     <h1 class="display-3">Comments!</h1>
 
 

@@ -10,6 +10,8 @@ from workspace.database import *
 
 bp = Blueprint('main_index', __name__,url_prefix='/main_index')
 
-@bp.route('/main_page', methods=('GET', 'POST'))
+@bp.route('/', methods=('GET', 'POST'))
 def main_page():
     return render_template('main_index/main_page.html')
+
+

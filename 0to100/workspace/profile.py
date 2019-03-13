@@ -32,13 +32,68 @@ def image_to_base64(image_path):
     return base64_str
 
 bp = Blueprint('profile', __name__,url_prefix='/profile')
-
-@bp.route('/profile/<id>', methods=('GET', 'POST'))
-def profile(id):
+@bp.route('/profile/<int:id>',defaults={'cl':1,'menu':'HomePage','order':'A'}, methods=('GET', 'POST'))
+@bp.route('/profile/<int:id>/<menu>',defaults={'cl':1,'order':'A'}, methods=('GET', 'POST'))
+@bp.route('/profile/<int:id>/<menu><int:cl><order>', methods=('GET', 'POST'))
+def profile(id,cl,menu,order):
     connect = Database()
     connect.Connect_to_db()
-    profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` = %s"""%id)
+    profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` ='%s'"""%id)
     user_icon = profile_info['icon']
+
+
+
+    paginate =[]
+    count = 0
+    row = []
+    if menu == 'collection':
+        if order == 'B':
+            collection =  connect.select_funcALL("""SELECT collection.`picture_ID` , \
+                collection.timestamp , picture.picture ,picture.title FROM \
+                `collection` JOIN picture ON collection.`picture_ID` = picture.ID WHERE\
+                 collection.`collecter_ID`=%s ORDER BY collection.timestamp """%id)
+        else:
+            collection =  connect.select_funcALL("""SELECT collection.`picture_ID` , \
+                collection.timestamp , picture.picture ,picture.title FROM \
+                `collection` JOIN picture ON collection.`picture_ID` = picture.ID WHERE\
+                 collection.`collecter_ID`=%s ORDER BY collection.timestamp DESC"""%id)
+        count = len(collection)
+
+        for i in range(0,len(collection),3):
+            row.append(collection[i:i+3])
+
+        for i in range(0,len(row),2):
+            paginate.append(row[i:i+2])
+
+        if len(paginate)< (cl-1):
+            cl = 1
+
+    elif menu == 'Gallery' :
+
+
+        if order == 'B':
+            Gallery =  connect.select_funcALL("""SELECT `ID`,`title`,`picture`,\
+                `timestamp`FROM `picture` WHERE `auth_ID`='%s' ORDER BY timestamp """%id)
+        else:
+            Gallery =  connect.select_funcALL("""SELECT `ID`,`title`,`picture`,\
+                `timestamp`FROM `picture` WHERE `auth_ID`='%s' ORDER BY timestamp DESC"""%id)
+
+        count = len(Gallery)
+
+        for i in range(0,len(Gallery),3):
+            row.append(Gallery[i:i+3])
+
+        for i in range(0,len(row),2):
+            paginate.append(row[i:i+2])
+
+        if len(paginate)< (cl-1):
+            cl = 1
+
+
+
+    else:
+        menu = 'HomePage'
+
     if request.method == 'POST':
         backgroud = request.form['background']
         run = connect.Non_select("""UPDATE `Profile` SET `background` = '%s'
@@ -48,7 +103,9 @@ def profile(id):
     joined = str(profile_info['joined_date'])[0:10]
     changed = str(profile_info['changed_date'])
     current_time = str(datetime.datetime.now())[0:19]
-    return render_template('profile/profile.html',id=id,int=int,profile_info=profile_info,user_icon=user_icon, joined=joined,changed=changed,current_time=current_time)
+    return render_template('profile/profile.html',id=id,int=int,profile_info=profile_info,len=len,\
+        user_icon=user_icon, joined=joined,changed=changed,\
+        menu=menu,current_time=current_time,paginate=paginate,cl=cl,count=count,row=row,order=order)
 
 @bp.route('/profile_edit', methods=('GET', 'POST'))
 @login_required

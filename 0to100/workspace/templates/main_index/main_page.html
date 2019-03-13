@@ -7,10 +7,13 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='main_page.css') }}">
 {% endblock %}
 
-
+hd-wallpaper-ivy-leaves-207301.jpg
 
 {% block contentA %}
-<div id="AD" class="carousel slide" data-ride="carousel" style="margin: 55px 200px;">
+<div class="container">
+<div class="col-md-12">
+<div class="jumbotron" style="background-image: url('{{ url_for('static', filename='board-brown-design-172296.jpg') }}');background-size: cover;">
+<div id="AD" class="carousel slide" data-ride="carousel"  style=" height: auto;width: auto; max-height: 100%; max-width: 100%;"/>
  
   <!-- 指示符 -->
   <ul class="carousel-indicators">
@@ -42,6 +45,7 @@
         <p>描述文字!</p>
       </div>
     </div>
+
   </div>
  
   <!-- 左右切换按钮 -->
@@ -52,18 +56,16 @@
     <span class="carousel-control-next-icon"></span>
   </a>
  
+</div></div></div>
+
+<div class="jumbotron">
+  <h1 class="display-3">Nonamela!!!</h1>
+  <p class="lead">Naming is hard for me!</p>
+  <hr class="my-4">
+
+
 </div>
 
-
-<div id="main_form" style="margin: 30px 300px;box-shadow: 10px 10px 10px 10px #888888;">
-    Discover<hr>
-    <p>Suggest user:</p>
-    <br> <!--using for icon of pop user-->
-    <hr>
-    <a href="#">New &nbsp;</a>
-    <a href="#">popular &nbsp;</a>
-    <a href="#">classification &nbsp;</a>
 </div>
-
 
 {% endblock %}
