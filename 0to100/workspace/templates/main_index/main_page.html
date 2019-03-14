@@ -11,61 +11,107 @@ hd-wallpaper-ivy-leaves-207301.jpg
 
 {% block contentA %}
 <div class="container">
-<div class="col-md-12">
-<div class="jumbotron" style="background-image: url('{{ url_for('static', filename='board-brown-design-172296.jpg') }}');background-size: cover;">
-<div id="AD" class="carousel slide" data-ride="carousel"  style=" height: auto;width: auto; max-height: 100%; max-width: 100%;"/>
- 
-  <!-- 指示符 -->
-  <ul class="carousel-indicators">
-    <li data-target="#AD" data-slide-to="0" class="active"></li>
-    <li data-target="#AD" data-slide-to="1"></li>
-    <li data-target="#AD" data-slide-to="2"></li>
-  </ul>
- 
-  <!-- 轮播图片 -->
-  <div class="carousel-inner" >
-    <div class="carousel-item active">
-      <img src="http://static.runoob.com/images/mix/img_fjords_wide.jpg">
-      <div class="carousel-caption">
-        <h3>第一张图片描述标题</h3>
-        <p>描述文字!</p>
+  <div class="col-md-12">
+    <div class="jumbotron" style="background-image: url('{{ url_for('static', filename='board-brown-design-172296.jpg') }}');background-size: cover;">
+      <div id="AD" class="carousel slide" data-ride="carousel"  style=" height: auto;width: auto; max-height: 100%; max-width: 100%;"/>
+
+
+
+
+
+
+      <ul class="carousel-indicators">
+        <li data-target="#AD" data-slide-to="0" class="active"></li>
+        <li data-target="#AD" data-slide-to="1"></li>
+        <li data-target="#AD" data-slide-to="2"></li>
+      </ul>
+
+
+      <div class="carousel-inner" >
+        <div class="carousel-item active">
+          <img src="http://static.runoob.com/images/mix/img_fjords_wide.jpg">
+          <div class="carousel-caption">
+            <h3>first title</h3>
+            <p>caption!</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img src="http://static.runoob.com/images/mix/img_nature_wide.jpg">
+          <div class="carousel-caption">
+            <h3>title</h3>
+            <p>caption!</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img src="http://static.runoob.com/images/mix/img_mountains_wide.jpg">
+          <div class="carousel-caption">
+            <h3>title</h3>
+            <p>caption!</p>
+          </div>
+        </div>
+
       </div>
-    </div>
-    <div class="carousel-item">
-      <img src="http://static.runoob.com/images/mix/img_nature_wide.jpg">
-      <div class="carousel-caption">
-        <h3>第二张图片描述标题</h3>
-        <p>描述文字!</p>
+
+
+      <a class="carousel-control-prev" href="#AD" data-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </a>
+      <a class="carousel-control-next" href="#AD" data-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </a>
+
+    </div></div></div>
+
+
+
+
+
+
+    <div class="jumbotron">
+
+
+      <div class="col-md-12">
+        {%for a in range(len(row))%}
+
+          <div class="row justify-content-md-center">
+
+          {%for i in range(len(row[a]))%}
+          <div class="col-md-3">
+            <a href="{{ url_for('show.show',id=row[a][i]['ID']) }}">
+              <img src="data:image/png;base64, {{row[a][i]['picture']}}" alt="user_icon" style=" height: auto;width: auto; max-height: 70%; max-width: 70%;"/></a>
+            </div>
+
+            {%endfor%}
+          </div>
+            <div class="row justify-content-md-center">
+            {%for i in range(len(row[a]))%}
+            <div class="col-md-3 ">
+              <a href="{{ url_for('show.show',id=row[a][i]['ID']) }}">
+                {{row[a][i]['title']}}
+              </a>
+            </div>
+
+            {%endfor%}
+          </div>
+            <div class="row justify-content-md-center">
+            {%for i in range(len(row[a]))%}
+            <div class="col-md-3 " style="text-align: center;">
+            <img src="{{ url_for('static', filename='icons8-in-love-48.png') }}" style="width:24px;height: 24px">
+            <img src="{{ url_for('static', filename='icons8-star-48.png') }}" style="width:24px;height: 24px">
+            </div>
+
+            {%endfor%}
+          </div>
+          {%endfor%}
+
+        </div>
+
+
       </div>
-    </div>
-    <div class="carousel-item">
-      <img src="http://static.runoob.com/images/mix/img_mountains_wide.jpg">
-      <div class="carousel-caption">
-        <h3>第三张图片描述标题</h3>
-        <p>描述文字!</p>
-      </div>
+
+
     </div>
 
   </div>
- 
-  <!-- 左右切换按钮 -->
-  <a class="carousel-control-prev" href="#AD" data-slide="prev">
-    <span class="carousel-control-prev-icon"></span>
-  </a>
-  <a class="carousel-control-next" href="#AD" data-slide="next">
-    <span class="carousel-control-next-icon"></span>
-  </a>
- 
-</div></div></div>
 
-<div class="jumbotron">
-  <h1 class="display-3">Nonamela!!!</h1>
-  <p class="lead">Naming is hard for me!</p>
-  <hr class="my-4">
-
-
-</div>
-
-</div>
-
-{% endblock %}
+  {% endblock %}
