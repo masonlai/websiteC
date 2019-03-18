@@ -32,12 +32,13 @@ def create_app(test_config=None):
 
     from workspace import first_page
     app.register_blueprint(first_page.bp)
-    from workspace import login_app, main_index, profile, upload, show
+    from workspace import login_app, main_index, profile, upload, show,admin
     app.register_blueprint(login_app.bp)
     app.register_blueprint(main_index.bp)
     app.register_blueprint(profile.bp)
     app.register_blueprint(upload.bp)
     app.register_blueprint(show.bp)
+    app.register_blueprint(admin.bp)
     basedir = os.path.abspath(os.path.dirname(__name__))
     app.config['AVATARS_SAVE_PATH'] = os.path.join(basedir, 'avatars')
     app.add_url_rule('/', endpoint='index')

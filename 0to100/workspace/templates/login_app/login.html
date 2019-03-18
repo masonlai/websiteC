@@ -15,7 +15,7 @@
 
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" id="Web_name"  href="{{ url_for('index') }}"  style="font-family: ZCOOL KuaiLe">Nonamela</a>
+  <a class="navbar-brand" id="Web_name"  href="{{ url_for('main_index.main_page') }}"  style="font-family: ZCOOL KuaiLe">Nonamela</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -23,13 +23,13 @@
   <div class="collapse navbar-collapse" id="navbarColor02">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">About us <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="{{ url_for('index',_anchor='section1') }}">About us <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">How to use</a>
+        <a class="nav-link" href="{{ url_for('profile.Myprofile')}}">My profile</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Why choose us</a>
+        <a class="nav-link" href="{{ url_for('upload.upload') }}">Upload</a>
       </li>
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -41,6 +41,8 @@
       </div>
     </li>
     </ul>
+
+
   <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
     <ul class="navbar-nav">
       {% if g.user %}
@@ -53,6 +55,9 @@
       {% endif %}
     </ul>
   </div>
+
+
+
   </div>
 </nav>
 
@@ -69,10 +74,14 @@
     <form class="col s12">
       <div class="form-container">
         <h4 id="Web_name">Sign UP</h4>
-          {% for message in get_flashed_messages() %}
-          <div class="flash alert alert-warning">{{ message }}</div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+          <div class="alert alert-dismissible alert-{{ category }}">{{ message }}</div>
           {% endfor %}
 
+  {% endif %}
+{% endwith %}
 <div class="form-group row"> 
 <div class="col-md-6">
   <input type="text" class="form-control" name="first_name" placeholder="First Name" required minlength="2" maxlength="10">

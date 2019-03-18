@@ -52,4 +52,3 @@ class Database:
         RB.rollback()
         RB.close()
 
-

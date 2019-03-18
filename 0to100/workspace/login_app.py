@@ -30,6 +30,30 @@ def login_required(view):
 
     return wrapped_view
 
+def admin_required(view):
+    """View decorator that redirects anonymous users to the login page."""
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user['admin'] == 'N':
+            return redirect(url_for('main_index.main_page'))
+
+        return view(**kwargs)
+
+    return wrapped_view
+
+
+def logout_required(view):
+    """View decorator that redirects anonymous users to the login page."""
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is not None:
+            flash('You should logout','danger')
+            return redirect(url_for('main_index.main_page'))
+
+        return view(**kwargs)
+
+    return wrapped_view
+
 @bp.before_app_request
 def load_logged_in_user():
     """If a user id is stored in the session, load the user object from
@@ -48,6 +72,7 @@ def load_logged_in_user():
 
 
 @bp.route('/login', methods=('GET', 'POST'))
+@logout_required
 def login():
     connect = Database()
     connect.Connect_to_db()
@@ -73,7 +98,7 @@ def login():
             session['user_id'] = user['ID']
             return redirect(url_for('index'))
 
-        flash(error)
+        flash(error,'danger')
 
 
     elif request.method == 'POST' and request.form['action'] == "register" :
@@ -122,7 +147,7 @@ def login():
             send_smtp_mail(subject, to, body)
             
             
-        flash(error)
+        flash(error,'danger')
 
     return render_template('login_app/login.html')
 
@@ -160,7 +185,7 @@ def generate_token(user, operation, expire_in=None):
 def confirm(token):
     try:
         if validate_token(user=session['vaildate'], token=token, operation='vaildate'):
-            flash('Account confirmed.', 'success')
+            flash('Account confirmed.','success')
 
             connect = Database()
             connect.Connect_to_db()
@@ -168,11 +193,11 @@ def confirm(token):
 
             return redirect(url_for('login_app.login'))
         else:
-            flash('Invalid or expired token.', 'danger')
+            flash('Invalid or expired token.','danger')
             return redirect(url_for('login_app.login'))
 
     except KeyError :
-        flash('Invalid or expired token.', 'danger')
+        flash('Invalid or expired token.','danger')
         return redirect(url_for('login_app.login'))
 
 

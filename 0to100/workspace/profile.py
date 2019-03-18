@@ -65,8 +65,6 @@ def profile(id,cl,menu,order):
         for i in range(0,len(row),2):
             paginate.append(row[i:i+2])
 
-        if len(paginate)< (cl-1):
-            cl = 1
 
     elif menu == 'Gallery' :
 
@@ -86,13 +84,38 @@ def profile(id,cl,menu,order):
         for i in range(0,len(row),2):
             paginate.append(row[i:i+2])
 
-        if len(paginate)< (cl-1):
-            cl = 1
+
+    elif menu == 'Follow':
+        if order == 'B':
+            following =  connect.select_funcALL("""select * from follow where follower = %s ORDER BY timestamp"""%id)
+        else:
+            following =  connect.select_funcALL("""select * from follow where follower = %s ORDER BY timestamp DESC"""%id)
+        count = len(following)
+        for i in range(len(following)):
+            Gallery = connect.select_funcOne("""select COUNT(*) from picture where auth_ID = %s"""%following[i]['following'])
+            follower = connect.select_funcOne("""select COUNT(*) from follow where following = %s"""%following[i]['following'])
+            follow_name = connect.select_funcOne("""select nick_name from Profile where ID = %s"""%following[i]['following'])
+            following[i]['gallery'] = Gallery['COUNT(*)']
+            following[i]['followers'] = follower['COUNT(*)']
+            following[i]['name'] = follow_name['nick_name']
+
+
+        for i in range(0,len(following),9):
+            paginate.append(following[i:i+9])
 
 
 
     else:
         menu = 'HomePage'
+
+    check_follow='N'
+    if not not g.user:
+        follow = connect.select_funcOne("""select *from follow where following = %s and follower = %s"""%(id,g.user['ID']))
+        if not follow:
+            check_follow='N'
+        else:
+            check_follow='Y'
+
 
     if request.method == 'POST':
         backgroud = request.form['background']
@@ -103,9 +126,11 @@ def profile(id,cl,menu,order):
     joined = str(profile_info['joined_date'])[0:10]
     changed = str(profile_info['changed_date'])
     current_time = str(datetime.datetime.now())[0:19]
+    if len(paginate)< (cl-1):
+        cl = 1
     return render_template('profile/profile.html',id=id,int=int,profile_info=profile_info,len=len,\
         user_icon=user_icon, joined=joined,changed=changed,\
-        menu=menu,current_time=current_time,paginate=paginate,cl=cl,count=count,row=row,order=order)
+        menu=menu,current_time=current_time,paginate=paginate,cl=cl,count=count,row=row,order=order,check_follow=check_follow)
 
 @bp.route('/profile_edit', methods=('GET', 'POST'))
 @login_required
@@ -137,7 +162,7 @@ def profile_edit():
         run = connect.Non_select("""UPDATE `Profile` SET `nick_name` = '%s', `gender` = '%s', `country` = '%s', 
             `company` = '%s', `time_zone` = '%s', `status` = '%s', 
             `icon` = '%s' WHERE `Profile`.`ID` = %s"""%(nick_name,gender,country,company,time_zone,status,icon,g.user['ID']))
-        return redirect(url_for('profile.profile'))
+        return redirect(url_for('profile.profile',id=g.user['ID']))
 
     elif request.method == 'POST' and request.form['action'] == "crop":
         f = request.files.get('file')
@@ -170,3 +195,28 @@ def crop():
 @login_required
 def get_avatar(filename):
     return send_from_directory(current_app.config['AVATARS_SAVE_PATH'], filename)
+
+@bp.route('/Myprofile', methods=['GET', 'POST'])
+@login_required
+def Myprofile():
+    return redirect(url_for('profile.profile',id=g.user['ID']))
+
+
+@bp.route('/follow<int:id>/<check_follow>', methods=['GET', 'POST'],defaults={'menu':'idc','cl':1,'order':'B'})
+@bp.route('/follow/<int:id>/<menu><int:cl><order>/<check_follow>', methods=('GET', 'POST'))
+@login_required
+def follow(id,check_follow,menu,cl,order):
+    connect = Database()
+    connect.Connect_to_db()
+    if check_follow == 'N':
+        run = connect.Non_select("""INSERT INTO `follow` (`following`, `follower`,\
+         `timestamp`) VALUES ('%s', '%s', CURRENT_TIMESTAMP)"""%(id,g.user['ID']))
+        flash('Follow successful','success')
+    elif check_follow =='F':
+        run = connect.Non_select("""DELETE FROM `follow` where `following`=%s and `follower`=%s"""%(id,g.user['ID']))
+        flash('Unfollow successful','warning')
+        return redirect(url_for('profile.profile',id=g.user["ID"],menu='Follow',cl=cl,order=order))
+    else:
+        run = connect.Non_select("""DELETE FROM `follow` where `following`=%s and `follower`=%s"""%(id,g.user['ID']))
+        flash('Unfollow successful','warning')
+    return redirect(url_for('profile.profile',id = id))

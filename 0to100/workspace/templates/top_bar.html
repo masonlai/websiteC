@@ -28,28 +28,24 @@
   <div class="collapse navbar-collapse" id="navbarColor02">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">About us <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="{{ url_for('index',_anchor='section1') }}">About us <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">How to use</a>
+        <a class="nav-link" href="{{ url_for('profile.Myprofile') }}">My profile</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('upload.upload') }}">Upload</a>
       </li>
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-        Membership
-      </a>
-      <div class="dropdown-menu">
-        <a class="dropdown-item" href="#">Author</a>
-        <a class="dropdown-item" href="#">Reader</a>
-      </div>
-    </li>
+      {%if g.user['admin'] == "Y"%}
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.admin') }}">Admin</a>
+      </li>
+      {%endif%}
     </ul>
   <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
     <ul class="navbar-nav">
       {% if g.user %}
-      <li class="nav-item"><span style=" font-size: 13pt;"><a href="{{ url_for('profile.profile',id=g.user['ID']) }}" style="color: #ffffff">welcome&nbsp;{{g.profile_info['nick_name'] }}</a>&nbsp;&nbsp;&nbsp;</span>
+      <li class="nav-item"><span style=" font-size: 13pt;"><a  style="color: #ffffff">welcome&nbsp;{{g.profile_info['nick_name'] }}</a>&nbsp;&nbsp;&nbsp;</span>
       <a href="{{ url_for('login_app.logout') }}"style="color: #ffffff">Log Out</a></li>
       {% else %}
       <li class="nav-item">
@@ -60,9 +56,16 @@
   </div>
   </div>
 </nav>
-          {% for message in get_flashed_messages() %}
-          <div class="alert alert-dismissible alert-danger">{{ message }}</div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+          <div class="alert alert-dismissible alert-{{ category }}">{{ message }}</div>
           {% endfor %}
+
+  {% endif %}
+{% endwith %}
+
+
 
 {% block contentA %}{% endblock %}
 

@@ -1,0 +1,84 @@
+{% extends 'top_bar.html' %}
+
+{% block title %}report{% endblock %}
+
+{% block link %}
+
+{% endblock %}
+
+{% block contentA %}
+<div class="container">
+
+<div class="jumbotron">
+  <h1 class="display-3">Report a violation</h1>
+
+<div class="col-md-12 row">
+<div class="col-md-3 text-center">
+
+ <a href="{{ url_for('show.show',id=post['ID']) }}">
+<img src="data:image/png;base64, {{post['picture']}}" alt="user_icon" style=" height: auto;width: auto; max-height: 100%; max-width: 100%;" />
+
+{{post['title']}}</a>
+<br>Auth: {{post['nick_name']}}
+</div>
+ 
+
+<div class="col-md-9">
+
+<div class="card border-primary mb-3" style="max-width: 100%;">
+            <form method="post">
+  <div class="card-header">Is there a problem with this post?</div>
+
+  <div class="card-body row">
+
+    <div class="col-md-2">Report reason:</div>
+
+    <div class="col-md-10">
+      <div class="form-check">
+          <label class="form-check-label">
+              <input type="radio" class="form-check-input" name="reason" value="This post contains excessive sexual content">
+              This post contains excessive sexual content<br>
+              <input type="radio" class="form-check-input" name="reason" value="Privacy infringement/violation of personality rights">
+              Privacy infringement/violation of personality rights<br>
+              <input type="radio" class="form-check-input" name="reason" value="My work has been redistributed without permission">
+              My work has been redistributed without permission<br>
+              <input type="radio" class="form-check-input" name="reason"  value="This post contains excessive grotesque content">
+              This post contains excessive grotesque content<br>
+              <input type="radio" class="form-check-input" name="reason" value="This post infringes on copyrights">
+              This post infringes on copyrights<br>
+              <input type="radio" class="form-check-input" name="reason" value="Posts equivalent to child pornography/child abuse">
+              Posts equivalent to child pornography/child abuse<br>
+              <input type="radio" class="form-check-input" name="reason" value="Posted information for commercial advertisement, promotion">
+              Posted information for commercial advertisement, promotion<br>
+              <input type="radio" class="form-check-input" name="reason" value="Other violations">
+              Other violations<br>
+          </label>
+      </div>
+
+  </div>
+</div>
+
+
+  <div class="card-body row">
+
+    <div class="col-md-2">Report Details:</div>
+    <div class="col-md-10">
+
+    <div class="form-group">
+      <textarea class="form-control" id="exampleTextarea" rows="3" name="details"></textarea>
+    </div>
+  In case of copyright violation, usage rules violation and unauthorized redistribution, please provide additional info.
+ <div class="row justify-content-md-center"><button type="submit" class="btn btn-secondary">Submit</button>
+</form>
+</div></div>
+
+</div>
+
+
+
+</div>
+</div>
+</div></div></div></div>
+
+{% endblock %}
+

@@ -3,187 +3,202 @@
 {% block title %}show{% endblock %}
 
 {% block link %}
-<style type="text/css">
 
-</style>
 {% endblock %}
 
 {% block contentA %}
 <div class="container">
 
 
-<div class="row">
-<div class="order-last col-md-12">
-    <div class="form-group row">
-      <div class="col-md-8" style="height: 500px; text-align: center;">
+  <div class="row">
+    <div class="order-last col-md-12">
+      <div class="form-group row">
+        <div class="col-md-8" style="height: 500px; text-align: center;">
 
-        <img src="data:image/png;base64, {{show_info['picture']}}" alt="user_icon" style=" height: auto;width: auto; max-height: 100%; max-width: 100%;" />
-        <hr>
-{%if not g.user['ID'] %}{%else%}
-        <div class="col-md-12 row">
-          <div class="col-md-6">
-            {%if not like%}
-            <div style="float: none;margin: 0 auto;" class="col-md-10"><a href="{{ url_for('show.like',id=id )}}">
-              {{len(likes)}}<img class="like" src="{{ url_for('static', filename='icons8-in-love-48.png') }}">like</a>
+          <img src="data:image/png;base64, {{show_info['picture']}}" alt="user_icon" style=" height: auto;width: auto; max-height: 100%; max-width: 100%;" />
+          <hr>
+
+          <div class="col-md-12 row">
+            <div class="col-md-6">
+              {%if not like%}
+              <div style="float: none;margin: 0 auto;" class="col-md-10"><a href="{{ url_for('show.like',id=id )}}">
+                {{len(likes)}}<img class="like" src="{{ url_for('static', filename='icons8-in-love-48.png') }}">like</a>
+                {%else%}
+                <div style="float: none;margin: 0 auto;" class="col-md-10"><a href="{{ url_for('show.unlike',id=id )}}">
+                  {{len(likes)}}<img src="{{ url_for('static', filename='icons8-disappointed-48.png') }}">unlike</a>
+                  {%endif%}
+
+
+
+                </div>
+              </div>
+              <div class="col-md-6">
+
+
+
+                {%if not collection%}
+                <div style="float: none;margin: 0 auto;" class="col-md-10"><a href="{{ url_for('show.collection',id=id )}}">
+                  {{len(collections)}}<img src="{{ url_for('static', filename='icons8-star-48.png') }}">collect</a>
+                  {%else%}
+                  <div style="float: none;margin: 0 auto;" class="col-md-10"><a href="{{ url_for('show.uncollection',id=id )}}">
+                    {{len(collections)}}<img src="{{ url_for('static', filename='icons8-rating-off-48.png') }}">uncollect</a>
+
+                    {%endif%}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="clearfix"></div>
+            <div class="col-md-4">
+              <div class="card border-primary mb-3" >
+                <div class="card-header"><a href="{{ url_for('profile.profile',id=auth_info['ID']) }}">
+                  {%if auth_info['icon'] == 'default'%}
+                  <img src="{{ avatars.default() }}" width="30ox" height="30px" > 
+                  {%else%}
+                  <img src="data:image/png;base64, {{auth_info['icon']}}" width="30ox" height="30px" > 
+                  {%endif%}
+                {{auth_info['nick_name'] }}</a></div>
+
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="exampleTextarea">{{show_info['caption']}}</label>
+
+                  </div>
+                </div>
+              </div>
+
+
+              {%if g.user['ID'] == auth_info['ID']%}
+
+              <form method="post" enctype="multipart/form-data" >
+                <button type="submit" class="btn btn-primary btn-lg btn-block" name="submit" value="edit">EDIT</button>
+              </form>
               {%else%}
-            <div style="float: none;margin: 0 auto;" class="col-md-10"><a href="{{ url_for('show.unlike',id=id )}}">
-              {{len(likes)}}<img src="{{ url_for('static', filename='icons8-disappointed-48.png') }}">unlike</a>
+              <form method="post" enctype="multipart/form-data" >
+                <button type="submit" class="btn btn-primary btn-lg btn-block" name="submit" value="follow">{%if check_follow == 'N'%}FOLLOW{%else%}UNFOLLOW{%endif%}</button>
+              </form>
               {%endif%}
 
 
+              <div class="col-md-12">
+                <div class="row justify-content-end">
+                  <a href="{{ url_for('show.report',id=id) }}">
+                  <img title="Report this post" src="{{ url_for('static', filename='icons8-box-important-90.png')}}" style="max-width: 30px;max-height: 30px"  >
+                </a></div></div>
 
+
+
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+            <div class="order-first col-md-12">
+              <div class="form-group row"> <h1>Tittle:{{show_info['title']}}</h1>
+                <div class="col-md-3">
+
+                </div>
+              </div>  <div class="col align-self-center"><p class="lead">{{str(show_info['timestamp'])[0:10]}}</p></div>
+              <div class="form-group row">
+
+                <div class="col-md-1"></div>
+
+                <footer class="blockquote-footer">by <cite title="Source Title">{{auth_info['nick_name'] }} </cite></footer>
+              </div>
             </div>
           </div>
-          <div class="col-md-6">
+          <br><br>
 
+          <h1 class="display-3">Comments!</h1>
 
+          <div class="col-md-3" >
+            <form method="post" enctype="multipart/form-data" >
 
-            {%if not collection%}
-            <div style="float: none;margin: 0 auto;" class="col-md-10"><a href="{{ url_for('show.collection',id=id )}}">
-              {{len(collections)}}<img src="{{ url_for('static', filename='icons8-star-48.png') }}">collect</a>
-              {%else%}
-            <div style="float: none;margin: 0 auto;" class="col-md-10"><a href="{{ url_for('show.uncollection',id=id )}}">
-              {{len(collections)}}<img src="{{ url_for('static', filename='icons8-rating-off-48.png') }}">uncollect</a>
+              <select class="form-control" id="exampleSelect1" onchange="location = this.value;">
+                <option value="{{ url_for('show.show',id=id,page=page,order=1) }}">from NEW to OLD</option>
+                <option value="{{ url_for('show.show',id=id,page=page,order=2) }}">from OLD to NEW</option>
+              </select>
+            </form>
+          </div><br>
 
-              {%endif%}
+          {%if len(paginate[page-1])==0%}
+          <h1 >There are no comments!!</h1>
+          {%endif%}
+          {%for i in range(len(paginate[page-1]))%}
+          <div class="list-group">
+
+            <a title="{%if not comments[i]['reported']%}Report this comment{%else%}Cancel your report{%endif%}
+            " class="list-group-item list-group-item-action flex-column align-items-start" href="{{ url_for('show.report_comment',id=id,comment=paginate[page-1][i]['ID']) }}" >
+              <div class="d-flex w-100 justify-content-between">
+
+                {%if paginate[page-1]['icon'] == 'default'%}
+                <img src="{{ avatars.default() }}" width="30ox" height="30px" > 
+                {%else%}
+                <img src="data:image/png;base64, {{paginate[page-1][i]['icon']}}" width="30ox" height="30px" > 
+                {%endif%}
+                <p class="lead">{{paginate[page-1][i]['nick_name']}}
+                  <small class="text-muted" id="time_different">{{paginate[page-1][i]['timestamp']}}</small>
+                  
+                  
+                
+                </div>
+                <p class="text-secondary">{{paginate[page-1][i]['comments']}}</p>
+              </a>
             </div>
-          </div>
-        </div>
-      </div>
-{%endif%}
+
+            {%endfor%}
+
+            <br><br>
+
+            <div style="float: none;margin: 0 auto;">
+
+              <ul class="pagination justify-content-center">
+                <li class="page-item {%if page == 1%}disabled{%endif%}">
+                  <a class="page-link" href="{{ url_for('show.show',id=id,page=page-1,order=order) }}">&laquo;</a>
+                </li>
 
 
-      <div class="clearfix"></div>
-      <div class="col-md-4">
-        <div class="card border-primary mb-3" >
-          <div class="card-header"><a href="{{ url_for('profile.profile',id=auth_info['ID']) }}">
-            {%if auth_info['icon'] == 'default'%}
-            <img src="{{ avatars.default() }}" width="30ox" height="30px" > 
-            {%else%}
-            <img src="data:image/png;base64, {{auth_info['icon']}}" width="30ox" height="30px" > 
+                {%for i in range(len(paginate))%}
+
+                <li class="page-item {%if page == i+1%}active{%endif%}">
+                  <a class="page-link " href="{{ url_for('show.show',id=id,page=i+1,order=order) }}" >{{i+1}}</a>
+                </li>
+
+                {%endfor%}
+
+                <li class="page-item {%if page == (len(paginate))%}disabled{%endif%}">
+                  <a class="page-link" href="{{ url_for('show.show',id=id,page=page+1,order=order) }}">&raquo;</a>
+                </li>
+              </ul>
+
+            </div>
+
+
+            {%if not g.user['ID'] %}{%else%}
+
+            <hr>
+            <label for="Comments"><h3>Leave your comments:</h3></label>
+            <form method="post" enctype="multipart/form-data" >
+              <div style="float: none;margin: 0 auto;" class="col-md-10">
+                <div class="form-group">
+
+                  <textarea class="form-control" name="comments" rows="2" maxlength="300"></textarea>
+                </div>
+                <div class="float-right">
+                  <button type="submit" class="btn btn-outline-primary" name="submit" value="send">Send</button>
+                </div>
+              </div>
+            </form>
+            <br><br><br><br>
             {%endif%}
-          {{auth_info['nick_name'] }}</a></div>
-            
-          <div class="card-body">
-            <div class="form-group">
-              <label for="exampleTextarea">{{show_info['caption']}}</label>
 
-            </div>
           </div>
-        </div>
-        {%if g.user['ID'] == auth_info['ID']%}
-
-        <form method="post" enctype="multipart/form-data" >
-        <button type="submit" class="btn btn-primary btn-lg btn-block" name="submit" value="edit">EDIT</button>
-      </form>
-        {%endif%}
-   
-
-
-
-      </div>
-    </div>
-    </div>
-
-
-
-
-
-
-<div class="order-first col-md-12">
-  <div class="form-group row"> <h1>Tittle:{{show_info['title']}}</h1>
-    <div class="col-md-3">
-
-    </div>
-  </div> 
-    <div class="form-group row">
-      <div class="col-md-1"></div>
-      <footer class="blockquote-footer">by <cite title="Source Title">{{auth_info['nick_name'] }}</cite></footer>
-    </div>
-</div>
-</div>
-    <br><br>
-
-    <h1 class="display-3">Comments!</h1>
-
-    <div class="col-md-3" >
-      <form method="post" enctype="multipart/form-data" >
-
-      <select class="form-control" id="exampleSelect1" onchange="location = this.value;">
-        <option value="{{ url_for('show.show',id=id,page=page,order=1) }}">from NEW to OLD</option>
-        <option value="{{ url_for('show.show',id=id,page=page,order=2) }}">from OLD to NEW</option>
-      </select>
-    </form>
-    </div><br>
-
-{%if len(paginate[page-1])==0%}
-<h1 >There are no comments!!</h1>
-{%endif%}
-{%for i in range(len(paginate[page-1]))%}
-    <div class="list-group">
-
-      <a href="{{ url_for('profile.profile',id=paginate[page-1][i]['ID']) }}" class="list-group-item list-group-item-action flex-column align-items-start">
-        <div class="d-flex w-100 justify-content-between">
-
-            {%if paginate[page-1]['icon'] == 'default'%}
-            <img src="{{ avatars.default() }}" width="30ox" height="30px" > 
-            {%else%}
-            <img src="data:image/png;base64, {{paginate[page-1][i]['icon']}}" width="30ox" height="30px" > 
-            {%endif%}
-            <p class="lead">{{paginate[page-1][i]['nick_name']}}
-          <small class="text-muted" id="time_different">{{paginate[page-1][i]['timestamp']}}</small>
-        </div>
-        <p class="text-secondary">{{paginate[page-1][i]['comments']}}</p>
-      </a>
-    </div>
-
-{%endfor%}
-
-
-<br><br>
-
-<div style="float: none;margin: 0 auto;">
-
-  <ul class="pagination justify-content-center">
-    <li class="page-item {%if page == 1%}disabled{%endif%}">
-      <a class="page-link" href="{{ url_for('show.show',id=id,page=page-1,order=order) }}">&laquo;</a>
-    </li>
-
-
-    {%for i in range(len(paginate))%}
-
-    <li class="page-item {%if page == i+1%}active{%endif%}">
-      <a class="page-link " href="{{ url_for('show.show',id=id,page=i+1,order=order) }}" >{{i+1}}</a>
-    </li>
-
-    {%endfor%}
-
-    <li class="page-item {%if page == (len(paginate))%}disabled{%endif%}">
-      <a class="page-link" href="{{ url_for('show.show',id=id,page=page+1,order=order) }}">&raquo;</a>
-    </li>
-  </ul>
-
-</div>
-
-
-{%if not g.user['ID'] %}{%else%}
-
-  <hr>
-    <label for="Comments"><h3>Leave your comments:</h3></label>
-    <form method="post" enctype="multipart/form-data" >
-    <div style="float: none;margin: 0 auto;" class="col-md-10">
-    <div class="form-group">
-
-      <textarea class="form-control" name="comments" rows="2" maxlength="300"></textarea>
-    </div>
-    <div class="float-right">
-    <button type="submit" class="btn btn-outline-primary" name="submit" value="send">Send</button>
-  </div>
-</div>
-  </form>
-  <br><br><br><br>
-{%endif%}
-
-</div>
-  {% endblock %}
+          {% endblock %}
 

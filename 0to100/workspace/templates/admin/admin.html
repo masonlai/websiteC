@@ -1,0 +1,211 @@
+{% extends 'top_bar.html' %}
+
+{% block link %}
+<style type="text/css"> .ADtext{
+
+  text-shadow: -1px 0 #000, 0 1px #000,
+      1px 0 #000, 0 -3px #000;
+ font-size:20px;color:#fff ;}
+
+
+.carousel-control-prev-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%39424C' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
+}
+
+.carousel-control-next-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%39424C' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+}
+
+</style>
+
+<script type="text/javascript">
+$(function(){
+  var hash = window.location.hash;
+  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+
+  $('.nav-tabs a').click(function (e) {
+    $(this).tab('show');
+    var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+    window.location.hash = this.hash;
+    $('html,body').scrollTop(scrollmem);
+  });
+});
+</script>
+{% endblock %}
+{% block contentA %}
+<div class="container">
+
+<div class="row justify-content-center" style="margin-top: 50px">
+
+<div class="col-md-9">
+<div class="jumbotron">
+
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#home">Home</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#profile">Profile</a>
+  </li>
+</ul>
+<!---1-->
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade show active" id="home">
+
+
+
+      <div id="AD" class="carousel slide" data-ride="carousel"  style=" height: auto;width: auto; max-height: 100%; max-width: 100%; margin-top: 15px"/>
+
+      <ul class="carousel-indicators">
+
+        {%for i in range(len(AD))%}
+        <li data-target="#AD" data-slide-to="{{i+1}}" {%if i == 0%}class="active"{%endif%}></li>
+        {%endfor%}
+      </ul>
+
+
+      <div class="carousel-inner" >
+        {%for i in range(len(AD))%}
+        <div class="carousel-item {%if i == 0%}active{%endif%}">
+            <div class="row justify-content-md-center">
+           <img src="data:image/png;base64, {{AD[i]['picture']}}" alt="user_icon" style="margin: auto ;height: 350px" >
+       </div>
+          <div class="carousel-caption">
+            <p class="ADtext">{{AD[i]['title']}}</p>
+            <p class="ADtext">{{AD[i]['caption']}}</p>
+          </div>
+        </div>
+
+        {%endfor%}
+      </div>
+
+
+      <a class="carousel-control-prev" href="#AD" data-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </a>
+      <a class="carousel-control-next" href="#AD" data-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </a>
+
+    </div>
+
+<hr>
+<form method="post" enctype="multipart/form-data" >
+<div class="container">
+<div class="row col-md-12" >
+<div class="col-md-6">
+<div class="form-group">
+  <label class="col-form-label" for="inputDefault">Title</label>
+  <input type="text" class="form-control" placeholder="Title" id="inputDefault" name="title" required>
+</div></div>
+<div class="col-md-6">
+<div class="form-group">
+  <label class="col-form-label" for="inputDefault">Caption</label>
+  <input type="text" class="form-control" placeholder="Caption" id="inputDefault" name="caption">
+</div>
+</div></div>
+
+<div class="col-md-12">
+    <div class="form-group">
+      <label for="exampleInputFile">Upload photo:</label>
+      <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp" name="file" required accept="image/jpg,image/jpeg,image/png">
+      <small id="fileHelp" class="form-text text-muted">JPG , PNG and JEPG are acceptable</small>
+    </div>
+<div class="col-md-12">
+
+<button type="submit" name="action" value="AD" class="btn btn-outline-primary btn-lg btn-block ">Upload</button></div>
+</div>
+</form>
+<hr style="margin-top: 45px">
+
+</div></form>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Image</th>
+      <th scope="col">Title</th>
+      <th scope="col">Caption</th>
+     <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+{%for i in range(len(AD))%}
+    <tr {%if i%2 == 0 %}class="table-info"{%else%}class="table-light"{%endif%}>
+      <th scope="row"><img src="data:image/png;base64, {{AD[i]['picture']}}" alt="user_icon" style="margin: auto ;max-height: 28px;"></th>
+      <td>{{AD[i]['title']}}</td>
+      <td>{{AD[i]['caption']}}</td>
+      <td><a href="{{ url_for('admin.del_AD',id = AD[i]['ID']) }}">
+        <button type="button"  class="btn btn-outline-primary btn-sm">Delelte</button></a></td>
+    </tr>
+{%endfor%}
+
+
+  </tbody>
+</table> 
+
+  </div>
+
+
+
+<!---2-->
+
+
+
+  <div class="tab-pane fade" id="profile">
+
+
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Post</th>
+      <th scope="col">Reason</th>
+      <th scope="col">Details</th>
+     <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+{%for i in range(len(report))%}
+    <tr {%if i%2 == 0 %}class="table-info"{%else%}class="table-light"{%endif%}>
+      <th scope="row">{{report[i]['post_ID']}}</th>
+      <td>{{report[i]['reason']}}</td>
+      <td>{{report[i]['details']}}</td>
+      <td><a href="{{ url_for('admin.del_AD',id = 6) }}">
+        <button type="button"  class="btn btn-outline-primary btn-sm">Delelte</button></a></td>
+    </tr>
+{%endfor%}
+
+
+  </tbody>
+</table> 
+
+
+
+  </div>
+
+
+
+<!---3-->
+
+
+</div>
+
+
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+</div>
+
+
+
+</div>
+
+{%endblock%}

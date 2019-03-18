@@ -1,0 +1,82 @@
+{% extends 'top_bar.html' %}
+{% block contentA %}
+<div class="container">
+<div class="col-md-11">
+<div class="row justify-content-center">
+<div class="jumbotron">
+  <h1 class="display-3">THE MOST POPULAR!!!</h1>
+
+  <hr class="my-4">
+
+{%for a in range(len(paginate[page-1]))%}
+<div class="row justify-content-center">
+{%for i in range(len(paginate[page-1][a]))%}
+<div class="col-md-2">
+  <a href="{{ url_for('show.show',id=paginate[page-1][a][i]['picture_ID']) }}">
+<img src="data:image/png;base64, {{paginate[page-1][a][i]['picture']}}" alt="user_icon" style=" height: auto;width: auto; max-height: 100%; max-width: 100%;"/></a>
+</div>
+
+{%endfor%}
+</div>
+
+<div class="row justify-content-center">
+{%for i in range(len(paginate[page-1][a]))%}
+<div class="col-md-2 " style="text-align: center;">
+<a href="{{ url_for('show.show',id=paginate[page-1][a][i]['picture_ID']) }}">
+{{paginate[page-1][a][i]['title']}}
+</a>
+</div>
+
+{%endfor%}
+</div>
+
+<div class="row justify-content-center">
+{%for i in range(len(paginate[page-1][a]))%}
+
+<div class="col-md-2 " style="text-align: center;">{{paginate[page-1][a][i]['like']}}
+<img src="{{ url_for('static', filename='icons8-in-love-48.png') }}" style="width:24px;height: 24px">
+<img src="{{ url_for('static', filename='icons8-star-48.png') }}" style="width:24px;height: 24px">{{paginate[page-1][a][i]['collection']}}
+</div>
+
+{%endfor%}
+</div>
+
+<div class="row justify-content-center">
+{%for i in range(len(paginate[page-1][a]))%}
+
+<div class="col-md-2 " style="text-align: center;">
+{{paginate[page-1][a][i]['timestamp']}}
+</div>
+
+{%endfor%}
+</div>
+
+{%endfor%}
+
+<div style="float: none;margin: 0 auto;">
+<br>
+  <ul class="pagination justify-content-center">
+    <li class="page-item {%if page == 1%}disabled{%endif%}">
+      <a class="page-link" href="{{ url_for('main_index.pop_page',page=page-1,) }}">&laquo;</a>
+    </li>
+
+
+    {%for i in range(len(paginate))%}
+
+    <li class="page-item {%if page == i+1%}active{%endif%}">
+      <a class="page-link " href="{{url_for('main_index.pop_page',page=i+1)}}" >{{i+1}}</a>
+    </li>
+
+    {%endfor%}
+
+    <li class="page-item {%if page == (len(paginate))%}disabled{%endif%}">
+      <a class="page-link" href="{{ url_for('main_index.pop_page',page=page+1) }}">&raquo;</a>
+    </li>
+  </ul>
+
+</div>
+
+
+</div></div></div></div>
+{% endblock %}
+

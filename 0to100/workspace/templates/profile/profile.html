@@ -47,7 +47,11 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
     </div>
     {%if not g.user['ID'] %}{%else%}
     {%if int(id) == int(g.user['ID'])%}
-    <a href="/profile/profile_edit"><button type="button" class="btn btn-primary btn-block" >Edit profile</button></a>
+    <a href="{{ url_for('profile.profile_edit') }}"><button type="button" class="btn btn-primary btn-block" >Edit profile</button></a>
+    {%else%}
+    
+    <a href="{{ url_for('profile.follow',id=id,check_follow=check_follow) }}"><button type="button" class="btn btn-primary btn-block" >
+    {%if check_follow=='N'%}Follow{%else%}Unfollow{%endif%}</button></a>
     {%endif%}{% endif %}
     <h1>{{profile_info['nick_name']}}</h1>
     {%if profile_info['country'] != 'No_show'%}
@@ -92,6 +96,9 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
     <li class="nav-item">
       <a class="nav-link {%if menu == 'Gallery'%}active{%endif%}"   href="{{ url_for('profile.profile',id=id,menu='Gallery') }}">Photo Gallery</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link {%if menu == 'Follow'%}active{%endif%}"   href="{{ url_for('profile.profile',id=id,menu='Follow') }}">Following</a>
+    </li>
   </ul>
   <!-- Tab panes -->
 
@@ -117,7 +124,7 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
       <span class="float-right">
       <form method="post" enctype="multipart/form-data" >
 
-      <select class="form-control" id="exampleSelect1" onchange="location = this.value;">
+      <select class="form-control"  onchange="location = this.value;">
         {%if order == 'B'%}
         <option value="{{ url_for('profile.profile',id=id,menu='collection',cl=cl,order='B') }}">from OLD to NEW</option>
         <option value="{{ url_for('profile.profile',id=id,menu='collection',cl=cl,order='A') }}">from NEW to OLD</option>
@@ -176,6 +183,7 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
 
 
 </div>
+
 {%elif menu == 'Gallery'%}
 
 <div class="row">
@@ -184,7 +192,7 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
     <div class="col-md-8" >
       <span class="float-right">
       <form method="post" enctype="multipart/form-data" >
-      <select class="form-control" id="exampleSelect1" onchange="location = this.value;">
+      <select class="form-control" onchange="location = this.value;">
         {%if order == 'B'%}
         <option value="{{ url_for('profile.profile',id=id,menu='Gallery',cl=cl,order='B') }}">from OLD to NEW</option>
         <option value="{{ url_for('profile.profile',id=id,menu='Gallery',cl=cl,order='A') }}">from NEW to OLD</option>
@@ -245,8 +253,84 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
 </div>
 
 
+{% elif menu == 'Follow'%}
+<div class="row">
+  <div class="col-md-4" >
+<h2>Following:{{count}} </h2></div>
+    <div class="col-md-8" >
+      <span class="float-right">
+      <form method="post" enctype="multipart/form-data" >
+      <select class="form-control" onchange="location = this.value;">
+        {%if order == 'B'%}
+        <option value="{{ url_for('profile.profile',id=id,menu='Follow',cl=cl,order='B') }}">from OLD to NEW</option>
+        <option value="{{ url_for('profile.profile',id=id,menu='Follow',cl=cl,order='A') }}">from NEW to OLD</option>
+        {%else%}
+
+        <option value="{{ url_for('profile.profile',id=id,menu='Follow',cl=cl,order='A') }}">from NEW to OLD</option>
+        <option value="{{ url_for('profile.profile',id=id,menu='Follow',cl=cl,order='B') }}">from OLD to NEW</option>
+        {%endif%}
+      </select>
+    </form></span>
+    </div></div>
+
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Auth</th>
+      <th scope="col">Gallery</th>
+      <th scope="col">Follower</th>
+
+      <th scope="col"></th>
+
+
+    </tr>
+  </thead>
+  <tbody>
+    {%for i in range(len(paginate))%}
+
+    <tr class="table-light">
+      <th scope="row"><a href="{{ url_for('profile.profile',id=paginate[cl-1][i]['following']) }}">{{paginate[cl-1][i]['name']}}</a></th>
+      <td>{{paginate[cl-1][i]['gallery']}}</td>
+      <td>{{paginate[cl-1][i]['followers']}}</td>
+      {%if not not g.user%}
+      {%if paginate[cl-1][i]['follower'] == g.user["ID"] %}
+      <td><a href="{{ url_for('profile.follow',id=paginate[cl-1][i]['following'],check_follow='F',menu='Follow',cl=cl,order='B') }}">
+        <button type="button"  class="btn btn-outline-primary btn-sm">Unfollow</button></a></td>
+      {%endif%}{%endif%}
+    </tr>
+
+    {%endfor%}
+
+  </tbody>
+</table> 
+
+  <ul class="pagination justify-content-center">
+    <li class="page-item {%if cl == 1%}disabled{%endif%}">
+      <a class="page-link" href="{{ url_for('profile.profile',id=id,menu='Follow',cl=cl-1,order=order) }}">&laquo;</a>
+    </li>
+
+
+    {%for i in range(len(paginate))%}
+
+    <li class="page-item {%if cl == i+1%}active{%endif%}">
+      <a class="page-link " href="{{url_for('profile.profile',id=id,menu='Follow',cl=i+1,order=order)}}" >{{i+1}}</a>
+    </li>
+
+    {%endfor%}
+
+    <li class="page-item {%if cl == (len(paginate))%}disabled{%endif%}">
+      <a class="page-link" href="{{ url_for('profile.profile',id=id,menu='Follow',cl=cl+1,order=order) }}">&raquo;</a>
+    </li>
+  </ul>
 
 {%endif%}
+
+
+
+
+
     </div>
   </div>
 </div>

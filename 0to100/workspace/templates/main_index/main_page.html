@@ -1,13 +1,10 @@
 {% extends 'top_bar.html' %}
 
 {% block link %}
-<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='main_page.css') }}">
 {% endblock %}
 
-hd-wallpaper-ivy-leaves-207301.jpg
+
 
 {% block contentA %}
 <div class="container">
@@ -68,7 +65,9 @@ hd-wallpaper-ivy-leaves-207301.jpg
 
 
     <div class="jumbotron">
+  <h1 class="display-3">THE NEWEST POST!!!</h1>
 
+  <hr class="my-4">
 
       <div class="col-md-12">
         {%for a in range(len(row))%}
@@ -78,7 +77,7 @@ hd-wallpaper-ivy-leaves-207301.jpg
           {%for i in range(len(row[a]))%}
           <div class="col-md-3">
             <a href="{{ url_for('show.show',id=row[a][i]['ID']) }}">
-              <img src="data:image/png;base64, {{row[a][i]['picture']}}" alt="user_icon" style=" height: auto;width: auto; max-height: 70%; max-width: 70%;"/></a>
+              <img src="data:image/png;base64, {{row[a][i]['picture']}}" alt="user_icon" style=" height: auto;width: auto; max-height: 100%; max-width: 100%;"/></a>
             </div>
 
             {%endfor%}
@@ -95,16 +94,140 @@ hd-wallpaper-ivy-leaves-207301.jpg
           </div>
             <div class="row justify-content-md-center">
             {%for i in range(len(row[a]))%}
-            <div class="col-md-3 " style="text-align: center;">
+            <div class="col-md-3 " style="text-align: center;">{{new_like_row[a][i]}}
             <img src="{{ url_for('static', filename='icons8-in-love-48.png') }}" style="width:24px;height: 24px">
-            <img src="{{ url_for('static', filename='icons8-star-48.png') }}" style="width:24px;height: 24px">
+            <img src="{{ url_for('static', filename='icons8-star-48.png') }}" style="width:24px;height: 24px">{{new_coll_row[a][i]}}
             </div>
 
             {%endfor%}
           </div>
+          <br>
           {%endfor%}
 
         </div>
+        <div class=" text-right"><a href="{{ url_for('main_index.Newest_page') }}"><p>Veiw more &raquo;&raquo;&raquo;</p></a></div>
+    <hr class="my-4">
+  <h1 class="display-3">THE MOST POPLUAR POST!!!</h1>
+<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#Modal">Score = P / (T+2)^G </button>
+
+
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Score = P / (T+2)^G</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+where,<br>
+P = points of an item (like+collection)<br>
+T = time since submission (in hours)<br>
+G = Gravity, defaults to 1.8 in news.arc<br>
+base on <a href="https://medium.com/hacking-and-gonzo/how-hacker-news-ranking-algorithm-works-1d9b0cf2c08d" target="_blank">How Hacker News ranking algorithm works</a>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+  <hr class="my-4">
+
+      <div class="col-md-12">
+        {%for a in range(len(pop_like_row))%}
+
+          <div class="row justify-content-md-center">
+
+          {%for i in range(len(pop_like_row[a]))%}
+          <div class="col-md-3">
+            <a href="{{ url_for('show.show',id=pop_like_row[a][i]['picture_ID']) }}">
+              <img src="data:image/png;base64, {{pop_like_row[a][i]['picture']}}" alt="user_icon" style=" height: auto;width: auto; max-height: 100%; max-width: 100%;"/></a>
+            </div>
+
+            {%endfor%}
+          </div>
+            <div class="row justify-content-md-center">
+            {%for i in range(len(pop_like_row[a]))%}
+            <div class="col-md-3 ">
+              <a href="{{ url_for('show.show',id=pop_like_row[a][i]['picture_ID']) }}">
+                {{row[a][i]['title']}}
+              </a>
+            </div>
+
+            {%endfor%}
+          </div>
+            <div class="row justify-content-md-center">
+            {%for i in range(len(pop_like_row[a]))%}
+            <div class="col-md-3 " style="text-align: center;">{{pop_like_row[a][i]['COUNT(*)']}}
+            <img src="{{ url_for('static', filename='icons8-in-love-48.png') }}" style="width:24px;height: 24px">
+            <img src="{{ url_for('static', filename='icons8-star-48.png') }}" style="width:24px;height: 24px">
+            {%if not pop_like_row[a][i]['collection']%}
+            {{0}}
+            {%else%}
+            {{pop_like_row[a][i]['collection']}}
+            {%endif%}
+            </div>
+
+            {%endfor%}
+          </div>
+          <br>
+          {%endfor%}
+          <div class=" text-right"><a href="{{ url_for('main_index.pop_page') }}"><p>Veiw more &raquo;&raquo;&raquo;</p></a></div>
+<!---  --->
+{%if not not follow_row%}
+  <hr class="my-4">
+    <h1 class="display-3">FOLLOW!!!</h1>
+    <hr class="my-4">
+
+      <div class="col-md-12">
+
+        {%for a in range(follow_loop)%}
+
+          <div class="row justify-content-md-center">
+
+          {%for i in range(0,len(follow_row[a]))%}
+          <div class="col-md-3">
+            <a href="{{ url_for('show.show',id=follow_row[a][i]['ID']) }}">
+              <img src="data:image/png;base64, {{follow_row[a][i]['picture']}}" alt="user_icon" style=" height: auto;width: auto; max-height: 100%; max-width: 100%;"/></a>
+            </div>
+
+            {%endfor%}
+          </div>
+            <div class="row justify-content-md-center">
+            {%for i in range(len(follow_row[a]))%}
+            <div class="col-md-3 ">
+              <a href="{{ url_for('show.show',id=follow_row[a][i]['ID']) }}">
+                {{row[a][i]['title']}}
+              </a>
+            </div>
+
+            {%endfor%}
+          </div>
+            <div class="row justify-content-md-center">
+            {%for i in range(len(follow_row[a]))%}
+            <div class="col-md-3 " style="text-align: center;">{{follow_row[a][i]['like']}}
+            <img src="{{ url_for('static', filename='icons8-in-love-48.png') }}" style="width:24px;height: 24px">
+            <img src="{{ url_for('static', filename='icons8-star-48.png') }}" style="width:24px;height: 24px">
+            {{follow_row[a][i]['collection']}}
+            </div>
+
+            {%endfor%}
+          </div>
+          <br>
+          {%endfor%}
+          <div class=" text-right"><a href="{{ url_for('main_index.follow_page') }}"><p>Veiw more &raquo;&raquo;&raquo;</p></a></div>
+
+{%endif%}
 
 
       </div>
