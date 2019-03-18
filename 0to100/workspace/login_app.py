@@ -30,6 +30,18 @@ def login_required(view):
 
     return wrapped_view
 
+def unban_required(view):
+    """View decorator that redirects anonymous users to the login page."""
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user['admin'] =='ban':
+
+            return redirect(url_for('main_index.main_page'))
+
+        return view(**kwargs)
+
+    return wrapped_view
+
 def admin_required(view):
     """View decorator that redirects anonymous users to the login page."""
     @functools.wraps(view)
@@ -53,6 +65,7 @@ def logout_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
 
 @bp.before_app_request
 def load_logged_in_user():
@@ -96,7 +109,7 @@ def login():
             # store the user id in a new session and return to the index
             session.clear()
             session['user_id'] = user['ID']
-            return redirect(url_for('index'))
+            return redirect(url_for('main_index.main_page'))
 
         flash(error,'danger')
 
@@ -222,12 +235,12 @@ def resend():
     if request.method == 'POST':
         connect = Database()
         connect.Connect_to_db()
-        user = connect.select_funcOne( """SELECT * FROM user WHERE username = '%s'""" %session['vaildation_username'])
+        user = connect.select_funcOne( """SELECT * FROM user WHERE username = '%s'""" %session['vaildate'])
         subject = "Nonamela vaildation"
         to = user['email']
-        token = generate_token(session['vaildation_username'],'vaildate')
+        token = generate_token(session['vaildate'],'vaildate')
 
-        body =  render_template('login_app/confirm.txt', username=session['vaildation_username'], token=token)
+        body =  render_template('login_app/confirm.txt', username=session['vaildate'], token=token)
         app = current_app._get_current_object()
         mail.init_app(app)
         send_smtp_mail(subject, to, body)

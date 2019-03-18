@@ -132,7 +132,7 @@
           <h1 >There are no comments!!</h1>
           {%endif%}
           {%for i in range(len(paginate[page-1]))%}
-          <div class="list-group">
+          <div class="list-group" id="comment{{paginate[page-1][i]['ID']}}" >
 
             <a title="{%if not comments[i]['reported']%}Report this comment{%else%}Cancel your report{%endif%}
             " class="list-group-item list-group-item-action flex-column align-items-start" href="{{ url_for('show.report_comment',id=id,comment=paginate[page-1][i]['ID']) }}" >
@@ -181,7 +181,7 @@
             </div>
 
 
-            {%if not g.user['ID'] %}{%else%}
+            {%if not g.user['ID'] or  g.user['admin'] == 'ban'%}{%else%}
 
             <hr>
             <label for="Comments"><h3>Leave your comments:</h3></label>

@@ -42,15 +42,24 @@ $(function(){
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link active" data-toggle="tab" href="#home">Home</a>
+    <a class="nav-link active" data-toggle="tab" href="#AD123">AD control</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#profile">Profile</a>
+    <a class="nav-link" data-toggle="tab" href="#post">Post</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#comment">Comment</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#ban">Ban user</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#unban">Unban</a>
   </li>
 </ul>
 <!---1-->
 <div id="myTabContent" class="tab-content">
-  <div class="tab-pane fade show active" id="home">
+  <div class="tab-pane fade show active" id="AD123">
 
 
 
@@ -152,7 +161,7 @@ $(function(){
 
 
 
-  <div class="tab-pane fade" id="profile">
+  <div class="tab-pane fade" id="post">
 
 
 
@@ -169,10 +178,10 @@ $(function(){
   <tbody>
 {%for i in range(len(report))%}
     <tr {%if i%2 == 0 %}class="table-info"{%else%}class="table-light"{%endif%}>
-      <th scope="row">{{report[i]['post_ID']}}</th>
+      <th scope="row"><a href="{{url_for('show.show',id=report[i]['post_ID'])}}">{{report[i]['post_ID']}}</th>
       <td>{{report[i]['reason']}}</td>
       <td>{{report[i]['details']}}</td>
-      <td><a href="{{ url_for('admin.del_AD',id = 6) }}">
+      <td><a href="{{ url_for('admin.del_post',id = report[i]['post_ID']) }}">
         <button type="button"  class="btn btn-outline-primary btn-sm">Delelte</button></a></td>
     </tr>
 {%endfor%}
@@ -188,8 +197,117 @@ $(function(){
 
 
 <!---3-->
+  <div class="tab-pane fade" id="comment">
 
 
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">CM_ID</th>
+      <th scope="col">Content</th>
+      <th scope="col">Count report</th>
+     <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+{%for i in range(len(comment))%}
+    <tr {%if i%2 == 0 %}class="table-info"{%else%}class="table-light"{%endif%}>
+      <th scope="row"><a href="{{url_for('show.show',id=comment[i]['pic_ID'],
+        _anchor = 'comment'+ str(comment[i]['comment_ID']))}}">{{comment[i]['comment_ID']}}</a></th>
+      <td>{{comment[i]['comments']}}</td>
+      <td>{{comment[i]['COUNT(report_comment.comment_ID)']}}</td>
+      <td>
+      <a href="{{ url_for('admin.del_comment',id = comment[i]['comment_ID'])}}">
+        <button type="button"  class="btn btn-outline-primary btn-sm">Delelte</button></a></td>
+    </tr>
+
+{%endfor%}
+
+
+  </tbody>
+</table> 
+
+
+
+  </div>
+  <!--4-->
+
+  <div class="tab-pane fade" id="ban">
+
+
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">User_ID</th>
+      <th scope="col">Count of report(post)</th>
+      <th scope="col">Count of report(comment)</th>
+     <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+{%for i in range(len(count_post_report))%}
+    <tr {%if i%2 == 0 %}class="table-info"{%else%}class="table-light"{%endif%}>
+      <th scope="row"><a href="{{url_for('profile.profile',id=count_post_report[i]['auth_ID'])}}">{{count_post_report[i]['auth_ID']}}</a></th>
+      <td>{{count_post_report[i]['COUNT(*)']}}</td>
+      <td>{{count_post_report[i]['comment']}}</td>
+      <td>
+      <a href="{{ url_for('admin.ban_user',id = count_post_report[i]['auth_ID'])}}">
+        <button type="button"  class="btn btn-outline-primary btn-sm">Ban</button></a></td>
+    </tr>
+
+{%endfor%}
+
+
+  </tbody>
+</table> 
+
+
+
+  </div>
+
+
+
+   <!--5-->
+
+  <div class="tab-pane fade" id="unban">
+
+
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">User_ID</th>
+      <th scope="col">Count of report(post)</th>
+      <th scope="col">Count of report(comment)</th>
+     <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+{%for i in range(len(ban_user))%}
+    <tr {%if i%2 == 0 %}class="table-info"{%else%}class="table-light"{%endif%}>
+      <th scope="row"><a href="{{url_for('profile.profile',id=ban_user[i]['ID'])}}">{{ban_user[i]['ID']}}</a></th>
+      <td>{{ban_user[i]['post']}}</td>
+      <td>{{ban_user[i]['comment']}}</td>
+      <td>
+      <a href="{{ url_for('admin.unban_user',id = ban_user[i]['ID'])}}">
+        <button type="button"  class="btn btn-outline-primary btn-sm">Unban</button></a></td>
+    </tr>
+
+{%endfor%}
+
+
+  </tbody>
+</table> 
+
+
+
+  </div>
+<!--end-->
 </div>
 
 
