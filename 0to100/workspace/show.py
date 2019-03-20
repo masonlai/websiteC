@@ -5,20 +5,22 @@ from workspace.database import *
 
 import datetime as dt
 from workspace.login_app import login_required
-
+from flask_avatars import Avatars
+avatars = Avatars()
 
 bp = Blueprint('show', __name__, url_prefix='/show')
 
 @bp.route('/<int:id>',defaults={'page':1,'order':1}, methods=['GET', 'POST'])
-@bp.route('/<int:id><int:page><int:order>', methods=['GET', 'POST'])
+@bp.route('/<int:id>/<int:page>/<int:order>', methods=['GET', 'POST'])
 def show(id,page,order):
     connect = Database()
     connect.Connect_to_db()
 
     show_info = connect.select_funcOne("""SELECT * FROM `picture` WHERE `ID` = %s"""%id)
-
+    if not show_info:
+        return redirect(url_for('main_index.main_page'))
     auth_info = connect.select_funcOne("""SELECT Profile.nick_name, Profile.ID, Profile.icon FROM `picture` JOIN\
-     Profile ON picture.auth_ID = Profile.ID where picture.auth_ID = '%s' """%(show_info['auth_ID'],))
+     Profile ON picture.auth_ID = Profile.ID where picture.auth_ID = '%s' """%show_info['auth_ID'])
 
     if order == 2:
         comments = connect.select_funcALL("""SELECT comments.ID,\

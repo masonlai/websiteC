@@ -56,7 +56,6 @@
   </div>
   </div>
 </nav>
-
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     {% for category, message in messages %}
@@ -65,10 +64,7 @@
 
   {% endif %}
 {% endwith %}
-{% if g.user['admin'] == 'ban'%}
-       
-<div class="alert alert-dismissible alert-danger">Your Account was banned</div>
-{%endif%}
+
 
 
 {% block contentA %}{% endblock %}

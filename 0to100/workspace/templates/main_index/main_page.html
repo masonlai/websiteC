@@ -53,6 +53,7 @@
 
 
 
+
     <div class="jumbotron">
   <h1 class="display-3">THE NEWEST POST!!!</h1>
 
@@ -66,7 +67,7 @@
           {%for i in range(len(row[a]))%}
           <div class="col-md-3">
             <a href="{{ url_for('show.show',id=row[a][i]['ID']) }}">
-              <img src="data:image/png;base64, {{row[a][i]['picture']}}" alt="user_icon" style=" height: auto;width: auto; max-height: 100%; max-width: 100%;"/></a>
+              <img src="data:image/png;base64, {{row[a][i]['picture']}}" alt="user_icon" style=" max-height: 100%; max-width: 100%;"/></a>
             </div>
 
             {%endfor%}
@@ -140,7 +141,7 @@ base on <a href="https://medium.com/hacking-and-gonzo/how-hacker-news-ranking-al
           {%for i in range(len(pop_like_row[a]))%}
           <div class="col-md-3">
             <a href="{{ url_for('show.show',id=pop_like_row[a][i]['picture_ID']) }}">
-              <img src="data:image/png;base64, {{pop_like_row[a][i]['picture']}}" alt="user_icon" style=" height: auto;width: auto; max-height: 100%; max-width: 100%;"/></a>
+              <img src="data:image/png;base64, {{pop_like_row[a][i]['picture']}}" alt="user_icon" style=" max-height: 100%; max-width: 100%;"/></a>
             </div>
 
             {%endfor%}
@@ -149,7 +150,7 @@ base on <a href="https://medium.com/hacking-and-gonzo/how-hacker-news-ranking-al
             {%for i in range(len(pop_like_row[a]))%}
             <div class="col-md-3 ">
               <a href="{{ url_for('show.show',id=pop_like_row[a][i]['picture_ID']) }}">
-                {{row[a][i]['title']}}
+                {{pop_like_row[a][i]['title']}}
               </a>
             </div>
 

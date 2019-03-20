@@ -21,8 +21,7 @@ def main_page():
     connect.Connect_to_db()
 
     new_pic = connect.select_funcALL("""SELECT `title`,`ID`,`picture`,`auth_ID` FROM `picture` ORDER BY`timestamp` DESC LIMIT 9""")
-    follow_row =[]
-    follow_loop = 0
+
     new_row=[]
     new_like=[]
     new_coll=[]
@@ -75,16 +74,22 @@ def main_page():
 
     if len(pic_like_pop) > 9:
         for i in range(9):
-            picture = connect.select_funcOne("""SELECT `picture` FROM `picture` WHERE `ID`=%s"""%pic_like_pop[i]['picture_ID'])
+            picture = connect.select_funcOne("""SELECT `picture` ,`title` FROM `picture` WHERE `ID`=%s"""%pic_like_pop[i]['picture_ID'])
             pic_like_pop[i]['picture'] = picture['picture']
+            pic_like_pop[i]['title'] = picture['title']
+
     else:
         for i in range(len(pic_like_pop)):
-            picture = connect.select_funcOne("""SELECT `picture` FROM `picture` WHERE `ID`=%s"""%pic_like_pop[i]['picture_ID'])
+            picture = connect.select_funcOne("""SELECT `picture` , `title` FROM `picture` WHERE `ID`=%s"""%pic_like_pop[i]['picture_ID'])
             pic_like_pop[i]['picture'] = picture['picture']
+            pic_like_pop[i]['title'] = picture['title']
 
     pop_like_row=[]
     for i in range(0,len(pic_like_pop),3):
         pop_like_row.append(pic_like_pop[i:i+3])
+
+    while len(pop_like_row) > 3:
+        pop_like_row.pop()
 
     if not not g.user:
         follow_pic = connect.select_funcALL("""SELECT picture.ID,picture.title,picture.picture from picture LEFT JOIN 
@@ -103,9 +108,7 @@ def main_page():
                 follow_pic[i]['like']= like['COUNT(*)']
                 follow_pic[i]['collection'] = collection['COUNT(*)']
 
-
-
-
+        follow_row =[]
         for i in range(0,len(follow_pic),3):
             follow_row.append(follow_pic[i:i+3])
 
@@ -113,10 +116,10 @@ def main_page():
             follow_loop = 3
         else:
             follow_loop = len(follow_row)
-    AD = connect.select_funcALL("""SELECT * FROM `AD` ORDER BY`timestamp` DESC""")
 
-    return render_template('main_index/main_page.html',row=new_row,len=len,AD=AD,\
-        new_like_row=new_like_row,new_coll_row=new_coll_row,pop_like_row=pop_like_row,follow_row=follow_row,follow_loop=follow_loop)
+    AD = connect.select_funcALL("""SELECT * FROM `AD` ORDER BY`timestamp` DESC""")
+    return render_template('main_index/main_page.html',row=new_row,len=len,\
+        new_like_row=new_like_row,new_coll_row=new_coll_row,pop_like_row=pop_like_row,follow_row=follow_row,follow_loop=follow_loop,AD=AD)
 
 
 
@@ -199,13 +202,13 @@ def pop_page(page):
 
         pic_like_pop[i]['timestamp_C'] = int(TD/60/60)
         try:
-            pic_like_pop[i]['Score'] = int((pic_like_pop[i]['COUNT(*)']+pic_like_pop[i]['collection']) / ( pic_like_pop[i]['timestamp_C']+2)**1.8)
+            pic_like_pop[i]['Score'] = (pic_like_pop[i]['COUNT(*)']+pic_like_pop[i]['collection']) / ( pic_like_pop[i]['timestamp_C']+2)**1.8
 
         except KeyError:
 
-            pic_like_pop[i]['Score'] = int(pic_like_pop[i]['COUNT(*)'] / ( pic_like_pop[i]['timestamp_C']+2)**1.8)
+            pic_like_pop[i]['Score'] = pic_like_pop[i]['COUNT(*)'] / ( pic_like_pop[i]['timestamp_C']+2)**1.8
     def myFunc(e):
-        return e['Score']
+      return e['Score']
 
     pic_like_pop.sort(key=myFunc,reverse=True)
 

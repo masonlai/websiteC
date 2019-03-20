@@ -60,7 +60,7 @@
       <a class="page-link" href="{{ url_for('main_index.Newest_page',page=page-1,) }}">&laquo;</a>
     </li>
 
-
+    {%if len(paginate) < 7 %}
     {%for i in range(len(paginate))%}
 
     <li class="page-item {%if page == i+1%}active{%endif%}">
@@ -68,6 +68,41 @@
     </li>
 
     {%endfor%}
+    {% elif page < 7%}
+
+    {%for i in range(7)%}
+    <li class="page-item {%if page == i+1%}active{%endif%}">
+      <a class="page-link " href="{{url_for('main_index.Newest_page',page=i+1)}}" >{{i+1}}</a>
+    </li>
+    {%endfor%}
+    <li class="page-item {%if page == (len(paginate))%}disabled{%endif%}">
+      <a class="page-link" href="{{ url_for('main_index.Newest_page',page=10) }}">...</a>
+    </li>
+    {%elif page > len(paginate)-6%}
+    <li class="page-item {%if page == (len(paginate))%}disabled{%endif%}">
+      <a class="page-link" href="{{ url_for('main_index.Newest_page',page=len(paginate)-10) }}">...</a>
+    </li>
+    {%for i in range(len(paginate)-6,len(paginate)+1)%}
+    <li class="page-item {%if page == i%}active{%endif%}">
+      <a class="page-link " href="{{url_for('main_index.Newest_page',page=i)}}" >{{i}}</a>
+    </li>
+    {%endfor%}
+
+    {%else%}
+
+    <li class="page-item {%if page == (len(paginate))%}disabled{%endif%}">
+      <a class="page-link" href="{{ url_for('main_index.Newest_page',page=page-3) }}">...</a>
+    </li>
+    {%for i in range(-3,3)%}
+    <li class="page-item {%if page == i+page%}active{%endif%}">
+      <a class="page-link " href="{{url_for('main_index.Newest_page',page=i+page)}}" >{{i+page}}</a>
+    </li>
+    {%endfor%}
+    <li class="page-item {%if page == (len(paginate))%}disabled{%endif%}">
+      <a class="page-link" href="{{ url_for('main_index.Newest_page',page=page+3) }}">...</a>
+    </li>
+    {%endif%}
+
 
     <li class="page-item {%if page == (len(paginate))%}disabled{%endif%}">
       <a class="page-link" href="{{ url_for('main_index.Newest_page',page=page+1) }}">&raquo;</a>

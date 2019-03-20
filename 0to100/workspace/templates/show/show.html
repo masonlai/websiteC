@@ -138,8 +138,8 @@
             " class="list-group-item list-group-item-action flex-column align-items-start" href="{{ url_for('show.report_comment',id=id,comment=paginate[page-1][i]['ID']) }}" >
               <div class="d-flex w-100 justify-content-between">
 
-                {%if paginate[page-1]['icon'] == 'default'%}
-                <img src="{{ avatars.default() }}" width="30ox" height="30px" > 
+                {%if paginate[page-1][i]['icon'] == 'default'%}
+                <img src="{{ avatars.default() }}"  width="30ox" height="30px" > 
                 {%else%}
                 <img src="data:image/png;base64, {{paginate[page-1][i]['icon']}}" width="30ox" height="30px" > 
                 {%endif%}
@@ -181,7 +181,7 @@
             </div>
 
 
-            {%if not g.user['ID'] or  g.user['admin'] == 'ban'%}{%else%}
+            {%if not g.user['ID'] %}{%else%}
 
             <hr>
             <label for="Comments"><h3>Leave your comments:</h3></label>
