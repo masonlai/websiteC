@@ -1,6 +1,6 @@
 import os
 from flask_dropzone import Dropzone
-from flask import Flask
+from flask import Flask, render_template
 from flask_avatars import Avatars
 from flask_mail import Mail, Message
 from faker import Faker
@@ -179,3 +179,8 @@ def init_db():
     click.echo('DELETE FROM `comments`')
     run = connect.Non_select("""DELETE FROM `collection` """)
     click.echo('DELETE FROM `collection`')
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error/404.html'), 404
