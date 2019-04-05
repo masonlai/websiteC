@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 19, 2019 at 04:35 PM
+-- Generation Time: Apr 06, 2019 at 02:22 AM
 -- Server version: 5.7.25-0ubuntu0.16.04.2
--- PHP Version: 7.0.33-0ubuntu0.16.04.2
+-- PHP Version: 7.0.33-0ubuntu0.16.04.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -111,7 +111,7 @@ CREATE TABLE `Profile` (
   `changed_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `nick_name` varchar(20) DEFAULT NULL,
   `gender` varchar(10) DEFAULT NULL,
-  `country` varchar(30) DEFAULT NULL,
+  `country` varchar(50) DEFAULT NULL,
   `company` varchar(70) DEFAULT NULL,
   `time_zone` varchar(50) DEFAULT NULL,
   `status` text,
@@ -141,7 +141,8 @@ CREATE TABLE `report` (
 
 CREATE TABLE `report_comment` (
   `comment_ID` int(11) NOT NULL,
-  `reporter_ID` int(11) NOT NULL
+  `reporter_ID` int(11) NOT NULL,
+  `status` varchar(11) NOT NULL DEFAULT 'exist'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -154,11 +155,11 @@ CREATE TABLE `user` (
   `ID` int(8) NOT NULL,
   `username` varchar(16) DEFAULT NULL,
   `password` varchar(16) DEFAULT NULL,
-  `first_name` varchar(10) DEFAULT NULL,
+  `first_name` varchar(15) DEFAULT NULL,
   `last_name` varchar(15) DEFAULT NULL,
   `email` varchar(70) NOT NULL,
   `vaildation` varchar(1) NOT NULL,
-  `admin` varchar(1) NOT NULL DEFAULT 'N'
+  `admin` varchar(3) NOT NULL DEFAULT 'N'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -233,22 +234,22 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `AD`
 --
 ALTER TABLE `AD`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 --
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9894;
 --
 -- AUTO_INCREMENT for table `picture`
 --
 ALTER TABLE `picture`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4358;
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `ID` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `ID` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10600;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
