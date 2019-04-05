@@ -1,5 +1,4 @@
 import os
-from flask_dropzone import Dropzone
 from flask import Flask, render_template
 from flask_avatars import Avatars
 from flask_mail import Mail, Message
@@ -70,7 +69,7 @@ app = create_app()
 @app.cli.command()
 def create_fake():
     from workspace.database import Database
-    
+
 
     fake = Faker(locale='en_US')
     connect = Database()
@@ -103,7 +102,7 @@ def create_fake():
                 `password`, `first_name`, `last_name`, `email`, `vaildation`, `admin`) VALUES ( '%s', '%s', '%s', '%s', '%s', 'Y', 'N')\
                 """%(username,password,first_name,last_name,email))
             run2 = connect.select_funcOne("""SELECT ID, username FROM user where username = '%s'""" %username)
-            run3 = connect.Non_select("""INSERT INTO `Profile` (`ID`, `nick_name`, `gender`, `country`, `company`,`time_zone`, `status`, `background`, `icon`) 
+            run3 = connect.Non_select("""INSERT INTO `Profile` (`ID`, `nick_name`, `gender`, `country`, `company`,`time_zone`, `status`, `background`, `icon`)
                 VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s', '%s')\
                 ;"""%(run2['ID'],fake.last_name(),random.choice(gender),fake.country(),fake.company(),time_zone,fake.text(max_nb_chars=200, ext_word_list=None)\
                     ,fake.safe_hex_color(),random.choice(icon)))
@@ -184,3 +183,11 @@ def init_db():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('error/404.html'), 404
+
+
+@app.errorhandler(500)
+def page_not_found505(e):
+    return render_template('error/500.html'), 500
+
+if __name__ == '__main__':
+    app.run()

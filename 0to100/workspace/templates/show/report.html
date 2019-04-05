@@ -2,8 +2,9 @@
 
 {% block title %}report{% endblock %}
 
-{% block link %}
 
+{% block link %}
+<link rel="stylesheet" href="{{ url_for('static', filename='upload.css') }}">
 {% endblock %}
 
 {% block contentA %}
@@ -21,7 +22,7 @@
 {{post['title']}}</a>
 <br>Auth: {{post['nick_name']}}
 </div>
- 
+
 
 <div class="col-md-9">
 

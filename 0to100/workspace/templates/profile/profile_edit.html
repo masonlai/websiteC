@@ -1,5 +1,9 @@
 {% extends 'top_bar.html' %}
+
+{% block title %}Edit{% endblock %}
 {% block link %}
+<link rel="Shortcut Icon" type="image/x-icon" href="{{ url_for('static', filename='Terrabyte.ico') }}" />
+
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='profile_edit.css') }}">
 <script type="text/javascript">
 
@@ -27,7 +31,7 @@
 
       </div>
     </div>
-    
+
 
 
 
@@ -453,7 +457,7 @@
         <div class="form-group">
           <label class="col-md-3 control-label"></label>
           <div class="col-md-8">
-           
+
             <input class="btn btn-primary" value="SaveChanges" type="submit" name="action">
             <span></span>
             <input class="btn btn-default" value="Cancel" type="reset">

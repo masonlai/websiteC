@@ -34,7 +34,7 @@ def admin(page):
 
     count_comment_report = connect.select_funcALL("""SELECT comments.user_ID ,COUNT(*) FROM \
         report_comment,comments WHERE report_comment.comment_ID=comments.ID GROUP BY comments.user_ID""")
-    ban_user=connect.select_funcALL("""SELECT ID FROM `user` WHERE `admin` = 'ban'""")
+    ban_user=connect.select_funcALL("""SELECT ID FROM `user` WHERE `admin` = 'b'""")
     for i in range(len(count_post_report)):
         for a in range(len(count_comment_report)):
             if count_post_report[i]['auth_ID'] == count_comment_report[a]['user_ID']:
@@ -44,13 +44,23 @@ def admin(page):
             count_post_report[i]['comment']
         except KeyError:
             count_post_report[i]['comment'] = 0
-    for i in range(len(count_post_report)):
-        for a in range(len(ban_user)):
+    i=0
+    a=0
+    c=0
+    if len(ban_user) != 0:
+        while i <len(count_post_report):
+            if i == len(count_post_report)-c:
+                if a < len(ban_user)-1:
+                    a+=1
+                    i=0
+
             if count_post_report[i]['auth_ID'] == ban_user[a]['ID']:
                 ban_user[a]['comment'] = count_post_report[i]['comment']
                 ban_user[a]['post']= count_post_report[i]['COUNT(*)']
                 del(count_post_report[i])
-
+                c+=1
+                i-=1
+            i+=1
 
 
     if request.method == 'POST'and request.form['action'] == "AD":
@@ -107,7 +117,7 @@ def del_comment(id):
 def ban_user(id):
     connect = Database()
     connect.Connect_to_db()
-    run = connect.Non_select("""UPDATE `user` SET `admin` = 'ban' WHERE `user`.`ID` = %s"""%id)
+    run = connect.Non_select("""UPDATE `user` SET `admin` = 'b' WHERE `user`.`ID` = %s"""%id)
     flash('User was banned' ,'warning')
     return redirect(url_for('admin.admin',_anchor='ban'))
 

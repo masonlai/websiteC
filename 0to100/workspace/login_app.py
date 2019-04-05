@@ -20,7 +20,6 @@ mail = Mail()
 bp = Blueprint('login_app', __name__, url_prefix='/login_app')
 
 def login_required(view):
-    """View decorator that redirects anonymous users to the login page."""
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
@@ -31,7 +30,6 @@ def login_required(view):
     return wrapped_view
 
 def admin_required(view):
-    """View decorator that redirects anonymous users to the login page."""
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user['admin'] == 'N':
@@ -43,7 +41,6 @@ def admin_required(view):
 
 
 def logout_required(view):
-    """View decorator that redirects anonymous users to the login page."""
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is not None:
@@ -89,7 +86,7 @@ def login():
         elif user['vaildation'] == 'N':
             session['vaildate'] = username
             return redirect(url_for('login_app.resend'))
-            
+
 
         if error is None:
             # store the user id in a new session and return to the index
@@ -117,35 +114,35 @@ def login():
             error = 'misspell for password'
 
         if error is None:
-            run = connect.Non_select("""INSERT INTO `user` (`username`, `password`, 
+            run = connect.Non_select("""INSERT INTO `user` (`username`, `password`,
             `first_name`, `last_name`, `email`, `vaildation`) VALUES ('%s', '%s', '%s', '%s', '%s','%s');"""
             %(username,password,first_name,last_name,email,'N'))
             a = 'No_show'
             run2 = connect.select_funcOne("""SELECT ID, username FROM user where username = '%s'""" %username)
-            run3 = connect.Non_select("""INSERT INTO `Profile` (`ID`, `nick_name`, `gender`, `country`, `company`,`time_zone`, `status`, `background`, `icon`) 
+            run3 = connect.Non_select("""INSERT INTO `Profile` (`ID`, `nick_name`, `gender`, `country`, `company`,`time_zone`, `status`, `background`, `icon`)
                 VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s', '%s');"""%(run2['ID'],run2['username'],a,a,a,a,a,'#5083b6','default'))
 
 
             error = 'please go to your email and verify your email address'
 
-            subject = "Nonamela vaildation"
 
-            app = current_app._get_current_object()
-            mail.init_app(app)
-
-            to = email
-            
             session.clear()
 
             session['vaildate'] = username
 
-            token = generate_token(username,'vaildate')
+            connect = Database()
+            connect.Connect_to_db()
+            user = connect.select_funcOne( """SELECT * FROM user WHERE username = '%s'""" %session['vaildate'])
+            subject = "Nonamela vaildation"
+            to = user['email']
+            token = generate_token(session['vaildate'],'vaildate')
 
-            body =  render_template('login_app/confirm.txt', username=username, token=token)
-
+            body =  render_template('login_app/confirm.txt', username=session['vaildate'], token=token)
+            app = current_app._get_current_object()
+            mail.init_app(app)
             send_smtp_mail(subject, to, body)
-            
-            
+
+
         flash(error,'danger')
 
     return render_template('login_app/login.html')
@@ -176,28 +173,20 @@ def generate_token(user, operation, expire_in=None):
     s = Serializer(current_app.config['SECRET_KEY'], expire_in)
 
     data = {'id': user, 'operation': operation}
-    
+
     return s.dumps(data)
 
 
 @bp.route('/confirm/<token>')
 def confirm(token):
-    try:
-        if validate_token(user=session['vaildate'], token=token, operation='vaildate'):
-            flash('Account confirmed.','success')
 
-            connect = Database()
-            connect.Connect_to_db()
-            run = connect.Non_select("""UPDATE `user` SET `vaildation` = '%s' WHERE `username` = '%s'"""%('Y',session['vaildate']))
+    flash('Account confirmed.','success')
 
-            return redirect(url_for('login_app.login'))
-        else:
-            flash('Invalid or expired token.','danger')
-            return redirect(url_for('login_app.login'))
+    connect = Database()
+    connect.Connect_to_db()
+    run = connect.Non_select("""UPDATE `user` SET `vaildation` = '%s' WHERE `username` = '%s'"""%('Y',session['vaildate']))
 
-    except KeyError :
-        flash('Invalid or expired token.','danger')
-        return redirect(url_for('login_app.login'))
+    return redirect(url_for('login_app.login'))
 
 
 
@@ -209,7 +198,7 @@ def validate_token(user, token, operation):
     except (SignatureExpired, BadSignature):
         return False
 
-    if operation != 'vaildate' or user != session['vaildate']:
+    if operation != data.get('operation') or user != data.get('id'):
         return False
 
     return True
@@ -221,12 +210,12 @@ def resend():
     if request.method == 'POST':
         connect = Database()
         connect.Connect_to_db()
-        user = connect.select_funcOne( """SELECT * FROM user WHERE username = '%s'""" %session['vaildation_username'])
+        user = connect.select_funcOne( """SELECT * FROM user WHERE username = '%s'""" %session['vaildate'])
         subject = "Nonamela vaildation"
         to = user['email']
-        token = generate_token(session['vaildation_username'],'vaildate')
+        token = generate_token(session['vaildate'],'vaildate')
 
-        body =  render_template('login_app/confirm.txt', username=session['vaildation_username'], token=token)
+        body =  render_template('login_app/confirm.txt', username=session['vaildate'], token=token)
         app = current_app._get_current_object()
         mail.init_app(app)
         send_smtp_mail(subject, to, body)

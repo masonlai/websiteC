@@ -12,6 +12,7 @@ bp = Blueprint('show', __name__, url_prefix='/show')
 
 @bp.route('/<int:id>',defaults={'page':1,'order':1}, methods=['GET', 'POST'])
 @bp.route('/<int:id>/<int:page>/<int:order>', methods=['GET', 'POST'])
+@bp.route('/<int:id>/<int:page>',defaults={'order':1} ,methods=['GET', 'POST'])
 def show(id,page,order):
     connect = Database()
     connect.Connect_to_db()
@@ -24,15 +25,15 @@ def show(id,page,order):
 
     if order == 2:
         comments = connect.select_funcALL("""SELECT comments.ID,\
-                comments.comments, comments.timestamp, Profile.icon ,\
+                comments.comments, comments.timestamp, Profile.icon ,comments.user_ID,\
              Profile.nick_name ,Profile.ID FROM comments JOIN Profile \
-             ON comments.user_ID = Profile.ID WHERE comments.pic_ID = %s  """%id)
+             ON comments.user_ID = Profile.ID WHERE comments.pic_ID = %s ORDER BY comments.timestamp  """%id)
 
-        
+
 
     else:
         comments = connect.select_funcALL("""SELECT comments.ID,\
-            comments.comments, comments.timestamp, Profile.icon ,\
+            comments.comments, comments.timestamp, Profile.icon ,comments.user_ID,\
          Profile.nick_name ,Profile.ID FROM comments JOIN Profile\
           ON comments.user_ID = Profile.ID WHERE comments.pic_ID = %s ORDER BY comments.timestamp DESC; """%id)
 
@@ -123,7 +124,7 @@ def like(id):
 @login_required
 def collection(id):
     connect = Database()
-    connect.Connect_to_db() 
+    connect.Connect_to_db()
     run = connect.Non_select("""INSERT INTO `collection` (`picture_ID`, `collecter_ID`) VALUES ('%s', '%s')"""%(id,g.user['ID']))
     return redirect(url_for('show.show',id=id))
 
@@ -161,7 +162,7 @@ def report(id):
             run = connect.Non_select("""INSERT INTO `report` (`post_ID`, `reporter_ID`, `reason`, `Details`) \
                 VALUES ('%s', '%s', '%s', '%s')"""%(id,g.user['ID'],reson,details))
             flash('Reported','success')
-        except pymysql.err.IntegrityError: 
+        except pymysql.err.IntegrityError:
             flash('You are already reported','danger')
         return redirect(url_for('show.show',id=id))
 

@@ -1,6 +1,9 @@
 {% extends 'top_bar.html' %}
-{% block link %}
 
+{% block title %}Resend{% endblock %}
+
+{% block link %}
+<link rel="Shortcut Icon" type="image/x-icon" href="{{ url_for('static', filename='Terrabyte.ico') }}" />
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='resend.css') }}">
 <script type="text/javascript">
     window.onload=function() {
@@ -10,7 +13,7 @@
         for (var i = 10 ; i > 1 ; i--){
             setTimeout(function(){
        document.getElementById("timer").innerHTML = i},1000)}
-      
+
     }
 
 var timeleft = 10;
@@ -38,7 +41,7 @@ var downloadTimer = setInterval(function(){
         {%else%}
         <input type="submit" value="Re-send!" id="resend" name="resend" class="btn btn-outline-success">
         {%endif%}
-        
+
     </form>
   </div>
 

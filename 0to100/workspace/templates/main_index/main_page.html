@@ -1,6 +1,8 @@
 {% extends 'top_bar.html' %}
-
+{% block title %}Main{% endblock %}
 {% block link %}
+<link rel="Shortcut Icon" type="image/x-icon" href="{{ url_for('static', filename='Terrabyte.ico') }}" />
+
 <link rel="stylesheet" href="{{ url_for('static', filename='main_page.css') }}">
 {% endblock %}
 
@@ -197,7 +199,7 @@ base on <a href="https://medium.com/hacking-and-gonzo/how-hacker-news-ranking-al
             {%for i in range(len(follow_row[a]))%}
             <div class="col-md-3 ">
               <a href="{{ url_for('show.show',id=follow_row[a][i]['ID']) }}">
-                {{row[a][i]['title']}}
+                {{follow_row[a][i]['title']}}
               </a>
             </div>
 

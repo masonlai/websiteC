@@ -27,6 +27,8 @@ def main_page():
     new_coll=[]
     new_like_row=[]
     new_coll_row=[]
+    follow_row =[]
+    follow_loop=0
     for i in range(len(new_pic)):
         pic_like = connect.select_funcOne("""SELECT COUNT(*) FROM `love` WHERE `picture_ID` = %s"""%new_pic[i]['ID'])
         new_like.append(pic_like['COUNT(*)'])
@@ -60,15 +62,15 @@ def main_page():
 
         pic_like_pop[i]['timestamp'] = int(TD/60/60)
         try:
-            pic_like_pop[i]['Score'] = (pic_like_pop[i]['COUNT(*)']+pic_like_pop[i]['collection']) / ( pic_like_pop[i]['timestamp']+2)**1.8
+            pic_like_pop[i]['Score'] = pic_like_pop[i]['COUNT(*)']+pic_like_pop[i]['collection'] /  (pic_like_pop[i]['timestamp']+2)**1.8
 
         except KeyError:
 
             pic_like_pop[i]['Score'] = pic_like_pop[i]['COUNT(*)'] / ( pic_like_pop[i]['timestamp']+2)**1.8
-            
+
     def myFunc(e):
       return e['Score']
-
+    pic_like_pop=list(pic_like_pop)
     pic_like_pop.sort(key=myFunc,reverse=True)
 
 
@@ -92,7 +94,7 @@ def main_page():
         pop_like_row.pop()
 
     if not not g.user:
-        follow_pic = connect.select_funcALL("""SELECT picture.ID,picture.title,picture.picture from picture LEFT JOIN 
+        follow_pic = connect.select_funcALL("""SELECT picture.ID,picture.title,picture.picture from picture LEFT JOIN
             follow ON picture.auth_ID=follow.following WHERE follow.follower = %s ORDER BY `picture`.`timestamp` DESC"""%g.user['ID'])
         if len(follow_pic) >9:
             for i in range(9):
@@ -108,7 +110,7 @@ def main_page():
                 follow_pic[i]['like']= like['COUNT(*)']
                 follow_pic[i]['collection'] = collection['COUNT(*)']
 
-        follow_row =[]
+
         for i in range(0,len(follow_pic),3):
             follow_row.append(follow_pic[i:i+3])
 

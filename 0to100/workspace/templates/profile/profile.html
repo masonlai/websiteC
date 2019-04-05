@@ -1,5 +1,8 @@
 {% extends 'top_bar.html' %}
+{% block title %}Profile{% endblock %}
 {% block link %}
+<link rel="Shortcut Icon" type="image/x-icon" href="{{ url_for('static', filename='Terrabyte.ico') }}" />
+
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='profile.css') }}">
 
 <script type="text/javascript">
@@ -49,7 +52,7 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
     {%if int(id) == int(g.user['ID'])%}
     <a href="{{ url_for('profile.profile_edit') }}"><button type="button" class="btn btn-primary btn-block" >Edit profile</button></a>
     {%else%}
-    
+
     <a href="{{ url_for('profile.follow',id=id,check_follow=check_follow) }}"><button type="button" class="btn btn-primary btn-block" >
     {%if check_follow=='N'%}Follow{%else%}Unfollow{%endif%}</button></a>
     {%endif%}{% endif %}
@@ -82,7 +85,7 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
     </div>
   </section>
   <section class="section center-col content">
-    
+
     <!-- Nav -->
 
 <div class="container">
@@ -304,7 +307,7 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
     {%endfor%}
 
   </tbody>
-</table> 
+</table>
 
   <ul class="pagination justify-content-center">
     <li class="page-item {%if cl == 1%}disabled{%endif%}">
@@ -341,7 +344,7 @@ document.getElementById("changed").innerHTML = seconds+'s ago'
 
       </ul>
     </div>
-    
+
   </section>
 
 </div>

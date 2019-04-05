@@ -3,7 +3,7 @@
 {% block title %}show{% endblock %}
 
 {% block link %}
-
+<link rel="Shortcut Icon" type="image/x-icon" href="{{ url_for('static', filename='Terrabyte.ico') }}" />
 {% endblock %}
 
 {% block contentA %}
@@ -56,9 +56,9 @@
               <div class="card border-primary mb-3" >
                 <div class="card-header"><a href="{{ url_for('profile.profile',id=auth_info['ID']) }}">
                   {%if auth_info['icon'] == 'default'%}
-                  <img src="{{ avatars.default() }}" width="30ox" height="30px" > 
+                  <img src="{{ avatars.default() }}" width="30ox" height="30px" >
                   {%else%}
-                  <img src="data:image/png;base64, {{auth_info['icon']}}" width="30ox" height="30px" > 
+                  <img src="data:image/png;base64, {{auth_info['icon']}}" width="30ox" height="30px" >
                   {%endif%}
                 {{auth_info['nick_name'] }}</a></div>
 
@@ -122,8 +122,14 @@
             <form method="post" enctype="multipart/form-data" >
 
               <select class="form-control" id="exampleSelect1" onchange="location = this.value;">
+                  {%if order == 1%}
                 <option value="{{ url_for('show.show',id=id,page=page,order=1) }}">from NEW to OLD</option>
                 <option value="{{ url_for('show.show',id=id,page=page,order=2) }}">from OLD to NEW</option>
+                {%else%}
+
+                <option value="{{ url_for('show.show',id=id,page=page,order=2) }}">from OLD to NEW</option>
+                 <option value="{{ url_for('show.show',id=id,page=page,order=1) }}">from NEW to OLD</option>
+                 {%endif%}
               </select>
             </form>
           </div><br>
@@ -132,26 +138,35 @@
           <h1 >There are no comments!!</h1>
           {%endif%}
           {%for i in range(len(paginate[page-1]))%}
+                     <div class="col-md-12">
+                <div class="row justify-content-end">
+                     <div class="col-md-11">
+
           <div class="list-group" id="comment{{paginate[page-1][i]['ID']}}" >
 
-            <a title="{%if not comments[i]['reported']%}Report this comment{%else%}Cancel your report{%endif%}
-            " class="list-group-item list-group-item-action flex-column align-items-start" href="{{ url_for('show.report_comment',id=id,comment=paginate[page-1][i]['ID']) }}" >
+            <a title="GO his profile" class="list-group-item list-group-item-action flex-column align-items-start" href="{{ url_for('profile.profile',id=paginate[page-1][i]['user_ID']) }}" >
               <div class="d-flex w-100 justify-content-between">
 
                 {%if paginate[page-1][i]['icon'] == 'default'%}
-                <img src="{{ avatars.default() }}"  width="30ox" height="30px" > 
+                <img src="{{ avatars.default() }}"  width="30ox" height="30px" >
                 {%else%}
-                <img src="data:image/png;base64, {{paginate[page-1][i]['icon']}}" width="30ox" height="30px" > 
+                <img src="data:image/png;base64, {{paginate[page-1][i]['icon']}}" width="30ox" height="30px" >
                 {%endif%}
                 <p class="lead">{{paginate[page-1][i]['nick_name']}}
                   <small class="text-muted" id="time_different">{{paginate[page-1][i]['timestamp']}}</small>
-                  
-                  
-                
+
+
+
                 </div>
                 <p class="text-secondary">{{paginate[page-1][i]['comments']}}</p>
               </a>
-            </div>
+            </div></div>
+
+                <div class="col-md-1">
+                  <a title="{%if not paginate[page-1][i]['reported']%}Report this comment{%else%}Cancel your report{%endif%}
+            " href="{{ url_for('show.report_comment',id=id,comment=paginate[page-1][i]['ID']) }}">
+                  <img title="Report this comment" src="{{ url_for('static', filename='icons8-box-important-90.png')}}" style="max-width: 30px;max-height: 30px"  >
+                </a></div></div></div>
 
             {%endfor%}
 
