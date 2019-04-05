@@ -2,10 +2,10 @@ import pymysql
 
 class Database:
     def __init__(self):
-        self.__host = 'nonamela.mysql.pythonanywhere-services.com'
-        self.__user = 'nonamela'
-        self.__pwd = 'hosumlai0129'
-        self.__db = 'nonamela$project'
+        self.__host = 'localhost'
+        self.__user = 'root'
+        self.__pwd = 'vai'
+        self.__db = 'project'
 
     def get_host(self):
         return self.__host

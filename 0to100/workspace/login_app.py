@@ -63,7 +63,11 @@ def load_logged_in_user():
         connect.Connect_to_db()
         user = connect.select_funcOne( 'SELECT * FROM user WHERE ID = '+str(user_id))
         g.user = user
-        profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` = %s"""%g.user['ID'])
+        try:
+            profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` = %s"""%g.user['ID'])
+        except:
+            session.clear()
+            return redirect(url_for('index'))
         g.profile_info = profile_info
 
 
