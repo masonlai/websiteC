@@ -177,7 +177,7 @@ $(function(){
     <tr {%if i%2 == 0 %}class="table-info"{%else%}class="table-light"{%endif%}>
       <th scope="row"><a href="{{url_for('show.show',id=report[i]['post_ID'])}}">{{report[i]['post_ID']}}</th>
       <td>{{report[i]['reason']}}</td>
-      <td>{{report[i]['details']}}</td>
+      <td>{{report[i]['Details']}}</td>
       <td><a href="{{ url_for('admin.del_post',id = report[i]['post_ID']) }}">
         <button type="button"  class="btn btn-outline-primary btn-sm">Delelte</button></a></td>
     </tr>

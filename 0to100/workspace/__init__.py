@@ -84,7 +84,7 @@ def create_fake():
     a = 'No_show'
 
     run3 = connect.Non_select("""INSERT INTO `Profile` (`ID`, `nick_name`, `gender`, `country`, `company`,`time_zone`, `status`, `background`, `icon`)
-        VALUES ('999', 'admin', '%s','%s', '%s', '%s', '%s', '%s', '%s');"""%(a,a,a,a,a,'#5083b6','default'))
+        VALUES ('9999', 'admin', '%s','%s', '%s', '%s', '%s', '%s', '%s');"""%(a,a,a,a,a,'#5083b6','default'))
     click.echo('superuser is created')
     click.echo('username: admin   password: 12345')
 
@@ -152,7 +152,7 @@ def create_fake():
             run8 = connect.Non_select("""INSERT INTO `follow` (`following`, `follower`, `timestamp`) \
                 VALUES (%s, %s, CURRENT_TIMESTAMP)"""%(int(random.choice(user_list)),int(random.choice(post_list))))
             run9 = connect.Non_select("""INSERT INTO `comments` (`ID`, `pic_ID`, `user_ID`, `comments`, `timestamp`)\
-                 VALUES (NULL, %s, %s, '%s',CURRENT_TIMESTAMP);"""%(int(random.choice(user_list)),int(random.choice(post_list)),fake.text(max_nb_chars=299, ext_word_list=None)))
+                 VALUES (NULL, %s, %s, '%s',CURRENT_TIMESTAMP);"""%(int(random.choice(post_list)),int(random.choice(user_list)),fake.text(max_nb_chars=299, ext_word_list=None)))
         except:
             pass
 
