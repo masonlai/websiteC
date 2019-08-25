@@ -61,10 +61,12 @@ def load_logged_in_user():
     else:
         connect = Database()
         connect.Connect_to_db()
-        user = connect.select_funcOne( 'SELECT * FROM user WHERE ID = '+str(user_id))
+        sql = 'SELECT * FROM user WHERE ID = %s'
+        user = connect.select_funcOne( sql,str(user_id))
         g.user = user
         try:
-            profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` = %s"""%g.user['ID'])
+            sql = """SELECT * FROM `Profile` WHERE `ID` = %s"""
+            profile_info = connect.select_funcOne(sql,g.user['ID'])
         except:
             session.clear()
             return redirect(url_for('index'))
@@ -74,13 +76,17 @@ def load_logged_in_user():
 @bp.route('/login', methods=('GET', 'POST'))
 @logout_required
 def login():
+    if request.method == 'POST' and request.form['action'] == "search":
+        search = request.form['Search']
+        return redirect(url_for('main_index.search_page',search=search))
     connect = Database()
     connect.Connect_to_db()
     if request.method == 'POST'and request.form['action'] == "login":
         username = request.form['username_login']
         password = request.form['password_login']
         error = None
-        user = connect.select_funcOne( """SELECT * FROM user WHERE username = '%s'""" %username)
+        sql =  """SELECT * FROM user WHERE username = %s""" 
+        user = connect.select_funcOne(sql, username)
 
 
         if user is None:
@@ -101,6 +107,13 @@ def login():
         flash(error,'danger')
 
 
+    elif request.method == 'POST' and request.form['action'] == "search" :
+        search =request.form['search']
+
+        pass
+
+
+
     elif request.method == 'POST' and request.form['action'] == "register" :
         first_name = request.form['first_name']
         last_name = request.form['last_name']
@@ -108,23 +121,27 @@ def login():
         email = request.form['email']
         password = request.form['password_signup']
         password_cf = request.form['password_confirm']
-        connect = Database()
-        connect.Connect_to_db()
         error = None
 
-        if connect.select_funcOne( """SELECT username FROM user WHERE username = '%s'""" %username) is not None:
+        sql = """SELECT username FROM user WHERE username = %s"""
+
+        result = connect.select_funcOne(sql,username)
+
+        if result is not None:
             error = 'User {0} is already registered.'.format(username)
         elif password != password_cf:
             error = 'misspell for password'
 
         if error is None:
-            run = connect.Non_select("""INSERT INTO `user` (`username`, `password`,
-            `first_name`, `last_name`, `email`, `vaildation`) VALUES ('%s', '%s', '%s', '%s', '%s','%s');"""
-            %(username,password,first_name,last_name,email,'N'))
+            sql = """INSERT INTO `user` (`username`, `password`,
+            `first_name`, `last_name`, `email`, `vaildation`) VALUES (%s, %s, %s, %s, %s, %s);"""
+            run = connect.Non_select(sql,username,password,first_name,last_name,email,'N')
             a = 'No_show'
-            run2 = connect.select_funcOne("""SELECT ID, username FROM user where username = '%s'""" %username)
-            run3 = connect.Non_select("""INSERT INTO `Profile` (`ID`, `nick_name`, `gender`, `country`, `company`,`time_zone`, `status`, `background`, `icon`)
-                VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s', '%s');"""%(run2['ID'],run2['username'],a,a,a,a,a,'#5083b6','default'))
+            sql = """SELECT ID, username FROM user where username = %s"""
+            run2 = connect.select_funcOne(sql, username)
+            sql = """INSERT INTO `Profile` (`ID`, `nick_name`, `gender`, `country`, `company`,`time_zone`, `status`, `background`, `icon`)
+                VALUES (%s, %s, %s,%s, %s, %s, %s, %s, %s);"""
+            run3 = connect.Non_select(sql,run2['ID'],run2['username'],a,a,a,a,a,'#5083b6','default')
 
 
             error = 'please go to your email and verify your email address'
@@ -134,9 +151,8 @@ def login():
 
             session['vaildate'] = username
 
-            connect = Database()
-            connect.Connect_to_db()
-            user = connect.select_funcOne( """SELECT * FROM user WHERE username = '%s'""" %session['vaildate'])
+            sql =  """SELECT * FROM user WHERE username = %s""" 
+            user = connect.select_funcOne(sql,session['vaildate'])
             subject = "Nonamela vaildation"
             to = user['email']
             token = generate_token(session['vaildate'],'vaildate')
@@ -188,7 +204,8 @@ def confirm(token):
 
     connect = Database()
     connect.Connect_to_db()
-    run = connect.Non_select("""UPDATE `user` SET `vaildation` = '%s' WHERE `username` = '%s'"""%('Y',session['vaildate']))
+    sql = """UPDATE `user` SET `vaildation` = '%s' WHERE `username` = %s"""
+    run = connect.Non_select(sql,'Y',session['vaildate'])
 
     return redirect(url_for('login_app.login'))
 
@@ -214,7 +231,8 @@ def resend():
     if request.method == 'POST':
         connect = Database()
         connect.Connect_to_db()
-        user = connect.select_funcOne( """SELECT * FROM user WHERE username = '%s'""" %session['vaildate'])
+        sql = """SELECT * FROM user WHERE username = %s"""
+        user = connect.select_funcOne( sql, session['vaildate'])
         subject = "Nonamela vaildation"
         to = user['email']
         token = generate_token(session['vaildate'],'vaildate')

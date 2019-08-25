@@ -3,176 +3,167 @@
 
 <head>
   <meta charset="utf-8">
-
+<meta name=viewport content=width=device-width, user-scalable=no,initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0>
   <title>Login-NNL</title>
 
-<link rel="Shortcut Icon" type="image/x-icon" href="{{ url_for('static', filename='Terrabyte.ico') }}" />
-      <link href='https://fonts.googleapis.com/css?family=ZCOOL KuaiLe' rel='stylesheet'>
-      <link rel="stylesheet" href="{{ url_for('static', filename='login_page.css') }}">
-      <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js'></script>
-      <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/sketchy/bootstrap.min.css" rel="stylesheet" integrity="sha384-N8DsABZCqc1XWbg/bAlIDk7AS/yNzT5fcKzg/TwfmTuUqZhGquVmpb5VvfmLcMzp" crossorigin="anonymous">
+  <link rel="Shortcut Icon" type="image/x-icon" href="{{ url_for('static', filename='Terrabyte.ico') }}" />
+  <link href='https://fonts.googleapis.com/css?family=ZCOOL KuaiLe' rel='stylesheet'>
+  <link rel="stylesheet" href="{{ url_for('static', filename='login_page.css') }}">
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js'></script>
+  <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/sketchy/bootstrap.min.css" rel="stylesheet" integrity="sha384-N8DsABZCqc1XWbg/bAlIDk7AS/yNzT5fcKzg/TwfmTuUqZhGquVmpb5VvfmLcMzp" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" id="Web_name"  href="{{ url_for('main_index.main_page') }}"  style="font-family: ZCOOL KuaiLe">Nonamela</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+   <a class="navbar-brand" id="Web_name" href="{{ url_for('main_index.main_page') }}">Nonamela</a>
+   <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarColor02">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="{{ url_for('index',_anchor='section1') }}">About us <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('profile.Myprofile')}}">My profile</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('upload.upload') }}">Upload</a>
-      </li>
-    </ul>
-
-
-  <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
-    <ul class="navbar-nav">
+  <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+    <div class="navbar-nav">
+      <a href="{{ url_for('login.index',_anchor='section1') }}" class="nav-item nav-link active">About</a>
+      <a href="{{ url_for('profile.Myprofile') }}" class="nav-item nav-link">Profile</a>
+      <a href="{{ url_for('upload.upload') }}" class="nav-item nav-link active">Upload</a>
+      {%if g.user['admin'] == "Y"%}
+      <a href="{{ url_for('admin.admin') }}" class="nav-item nav-link active">Admin</a>
+      {%endif%}
+    </div>
+    <form class="form-inline" method="post" enctype="multipart/form-data">
+      <div class="input-group">                    
+        <input type="text" class="form-control" placeholder="Search" name="Search">
+        <div class="input-group-append">
+          <button type="submit" class="btn btn-secondary" name="action" value="search"><i class="fa fa-search" style="color: white"></i></button>
+        </div>
+      </div>
+    </form>
+    <div class="navbar-nav">
       {% if g.user %}
-      <li class="nav-item"><span style="color: #ffffff; font-size: 15pt;"><a href="{{ url_for('profile.profile') }}">welcome&nbsp;{{ g.user['username'] }}</a>&nbsp;&nbsp;&nbsp;</span>
-      <a href="{{ url_for('login_app.logout') }}">Log Out</a></li>
+      <a href="{{ url_for('login_app.logout') }}" class="nav-item nav-link">{{ g.user['username'] }} Logout</a>
       {% else %}
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('login_app.login') }}">Login</a>
-      </li>
+      <a href="{{ url_for('login_app.login') }}" class="nav-item nav-link">Login</a>
       {% endif %}
-    </ul>
-  </div>
-
-
-
+    </div>
   </div>
 </nav>
 
 
-  <div class="login-page">
+<div class="login-page" style="margin-top: 70px">
   <div class="form">
-
-
-
     <form class="register-form" method="post">
+      <div id="register" class="col-12">
+        <form class="col s12">
+          <div class="form-container">
+            <h4 id="Web_name">Sign UP</h4>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-dismissible alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+
+            {% endif %}
+            {% endwith %}
+            <div class="form-group row">
+              <div class="col-md-6">
+                <input type="text" class="form-control" name="first_name" placeholder="First Name" required minlength="2" maxlength="10">
+              </div>
+
+              <div class="col-md-6">
+                <input type="text" class="form-control" name="last_name"  placeholder="Last Name" required minlength="2" maxlength="15">
+              </div>
+
+            </div>
 
 
-  <div id="register" class="col s12">
-    <form class="col s12">
-      <div class="form-container">
-        <h4 id="Web_name">Sign UP</h4>
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-          <div class="alert alert-dismissible alert-{{ category }}">{{ message }}</div>
-          {% endfor %}
+            <div class="form-group">
+              <label class="col-form-label" for="inputDefault">User Name</label>
+              <input type="text" class="form-control" name="username_signup" required minlength="5" maxlength="16">
+            </div>
 
-  {% endif %}
-{% endwith %}
-<div class="form-group row">
-<div class="col-md-6">
-  <input type="text" class="form-control" name="first_name" placeholder="First Name" required minlength="2" maxlength="10">
-</div>
-
-<div class="col-md-6">
-  <input type="text" class="form-control" name="last_name"  placeholder="Last Name" required minlength="2" maxlength="15">
-</div>
-
-</div>
-
-
-<div class="form-group">
-  <label class="col-form-label" for="inputDefault">User Name</label>
-  <input type="text" class="form-control" name="username_signup" required minlength="5" maxlength="16">
-</div>
-
-<div class="form-group">
-  <label class="col-form-label" for="inputDefault">Email</label>
-  <input type="email" class="form-control" name="email" required minlength="7" maxlength="40" >
-</div>
+            <div class="form-group">
+              <label class="col-form-label" for="inputDefault">Email</label>
+              <input type="email" class="form-control" name="email" required minlength="7" maxlength="40" >
+            </div>
 
 
 
-<div class="form-group">
-  <label class="col-form-label" for="inputDefault">Password</label>
-  <input type="password" class="form-control" name="password_signup" required minlength="5" maxlength="16">
-</div>
+            <div class="form-group">
+              <label class="col-form-label" for="inputDefault">Password</label>
+              <input type="password" class="form-control" name="password_signup" required minlength="5" maxlength="16">
+            </div>
 
-<div class="form-group">
-  <label class="col-form-label" for="inputDefault">Password Confirmation</label>
-  <input type="password" class="form-control" name="password_confirm" required minlength="5" maxlength="16">
-</div>
+            <div class="form-group">
+              <label class="col-form-label" for="inputDefault">Password Confirmation</label>
+              <input type="password" class="form-control" name="password_confirm" required minlength="5" maxlength="16">
+            </div>
 
 
-        <center>
-          <button class="btn waves-effect waves-light teal" type="submit" name="action" value="register">Submit</button>
-          <p class="message">Already registered? <a href="#">Sign In</a></p>
-        </center>
+            <center>
+              <button class="btn waves-effect waves-light teal" type="submit" name="action" value="register">Submit</button>
+              <p class="message">Already registered? <a href="#">Sign In</a></p>
+            </center>
+          </div>
+        </form>
       </div>
-    </form>
-  </div>
 
     </form>
 
     <form class="login-form" method="post">
 
-  <div id="login" class="col s12">
-    <form class="col s12">
-      <div class="form-container">
-        <h4 id="Web_name">Nonamela</h4>
-          {% for message in get_flashed_messages() %}
+      <div id="login" class="col s12">
+        <form class="col s12">
+          <div class="form-container">
+            <h4 id="Web_name">Nonamela</h4>
+            {% for message in get_flashed_messages() %}
             <div class="flash alert alert-warning">{{ message }}</div>
-          {% endfor %}
+            {% endfor %}
 
 
-<div class="form-group">
-  <label class="col-form-label" for="inputDefault">User Name</label>
-  <input type="text" class="form-control" name="username_login" required minlength="5" maxlength="16">
-</div>
+            <div class="form-group">
+              <label class="col-form-label" for="inputDefault">User Name</label>
+              <input type="text" class="form-control" name="username_login" required minlength="5" maxlength="16">
+            </div>
 
 
-<div class="form-group">
-  <label class="col-form-label" for="inputDefault">Password</label>
-  <input type="password" class="form-control" name="password_login" required minlength="5" maxlength="16">
-</div>
+            <div class="form-group">
+              <label class="col-form-label" for="inputDefault">Password</label>
+              <input type="password" class="form-control" name="password_login" required minlength="5" maxlength="16">
+            </div>
 
 
 
 
+          </div>
+          <br>
+          <center>
+            <button class="btn btn-outline-secondary" type="submit" name="action" value="login">Connect</button>
+
+            <br>
+            <br>
+            <p class="message">Not registered? <a href="#">Create an account</a></p>
+          </center>
         </div>
-        <br>
-        <center>
-          <button class="btn btn-outline-secondary" type="submit" name="action" value="login">Connect</button>
-
-          <br>
-          <br>
-          <p class="message">Not registered? <a href="#">Create an account</a></p>
-        </center>
-      </div>
-    </form>
-  </div>
-    </form>
+      </form>
+    </div>
+  </form>
 
 
 
 
-  </div>
+</div>
 </div>
 
 
 
-  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-  <script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js'></script>
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js'></script>
 
 
 
-  <script type="text/javascript" src="{{ url_for('static', filename='login.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='login.js') }}"></script>
 
 
 

@@ -30,9 +30,10 @@ $(function(){
 </script>
 {% endblock %}
 {% block contentA %}
+
 <div class="container">
 
-<div class="row justify-content-center" style="margin-top: 50px">
+<div class="row justify-content-center" style="margin-top: 100px">
 
 <div class="col-md-9">
 <div class="jumbotron">
@@ -126,6 +127,7 @@ $(function(){
 
 </div></form>
 
+
 <table class="table table-hover">
   <thead>
     <tr>
@@ -138,7 +140,7 @@ $(function(){
   <tbody>
 {%for i in range(len(AD))%}
     <tr {%if i%2 == 0 %}class="table-info"{%else%}class="table-light"{%endif%}>
-      <th scope="row"><img src="data:image/png;base64, {{AD[i]['picture']}}" alt="user_icon" style="margin: auto ;max-height: 28px;"></th>
+      <th scope="row"><img src="data:image/png;base64, {{AD[i]['picture']}}" alt="user_icon" style="margin: auto ;max-height: 15px;"></th>
       <td>{{AD[i]['title']}}</td>
       <td>{{AD[i]['caption']}}</td>
       <td><a href="{{ url_for('admin.del_AD',id = AD[i]['ID']) }}">
@@ -149,8 +151,8 @@ $(function(){
 
   </tbody>
 </table>
-
-  </div>
+</div>
+  
 
 
 
@@ -169,17 +171,20 @@ $(function(){
       <th scope="col">Post</th>
       <th scope="col">Reason</th>
       <th scope="col">Details</th>
-     <th scope="col"></th>
+     <th scope="col">Delelte</th>
     </tr>
   </thead>
   <tbody>
 {%for i in range(len(report))%}
     <tr {%if i%2 == 0 %}class="table-info"{%else%}class="table-light"{%endif%}>
-      <th scope="row"><a href="{{url_for('show.show',id=report[i]['post_ID'])}}">{{report[i]['post_ID']}}</th>
+      <td scope="row"><a href="{{url_for('show.show',id=report[i]['post_ID'])}}">{{report[i]['post_ID']}}</td>
       <td>{{report[i]['reason']}}</td>
-      <td>{{report[i]['Details']}}</td>
-      <td><a href="{{ url_for('admin.del_post',id = report[i]['post_ID']) }}">
-        <button type="button"  class="btn btn-outline-primary btn-sm">Delelte</button></a></td>
+
+
+
+      <td >{{report[i]['Details']}}</td>
+      <td ><a href="{{ url_for('admin.del_post',id = report[i]['post_ID']) }}">
+        <button type="button"  class="btn btn-outline-primary btn-sm">Del</button></a></td>
     </tr>
 {%endfor%}
 

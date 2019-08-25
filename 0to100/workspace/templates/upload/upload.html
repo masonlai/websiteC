@@ -44,7 +44,7 @@
 {%endif%}
 
       <div class="clearfix"></div>
-      <div class="col-md-4">
+      <div class="col-md-4" style="margin-top: 20px;">
         <div class="card border-primary mb-3" >
           <div class="card-header">{{g.profile_info['nick_name'] }}</div>
           <div class="card-body">
@@ -60,7 +60,7 @@
     </div>
 
 
-<div class="order-first col-md-12">
+<div class="order-first col-md-12" style="margin-top: 70px;">
   <div class="form-group row"> <h1>Tittle:</h1>
     <div class="col-md-3">
       <input class="form-control form-control-lg" type="text" value="{%if edit == 'edit'%}{{show_info['title']}}{%endif%}" id="inputLarge" name="title">
@@ -75,19 +75,19 @@
 {%if not edit %}
   <label for="uploadFile" class="btn btn-primary">Upload Image</label>
 {%endif%}
-        <div class="col-md-12 row">
-          <div class="col-md-5">
+        <div class="row">
+          <div class="col-6">
 
-            <div style="float: none;margin: 0 auto;" class="col-md-10"><img class="like" src="{{ url_for('static', filename='icons8-in-love-48.png') }}">like
+            <div class="pc_position mobile_left" ><img class="like" src="{{ url_for('static', filename='icons8-in-love-48.png') }}">like
 
 
             </div>
           </div>
-          <div class="col-md-5">
+          <div class="col-6">
 
 
 
-            <div style="float: none;margin: 0 auto;" class="col-md-10"><img src="{{ url_for('static', filename='icons8-star-48.png') }}">collect
+            <div class="pc_position mobile_right"><img src="{{ url_for('static', filename='icons8-star-48.png') }}">collect
 
             </div>
           </div></div>

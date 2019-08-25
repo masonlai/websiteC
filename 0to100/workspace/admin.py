@@ -20,21 +20,36 @@ bp = Blueprint('admin', __name__,url_prefix='/admin')
 @login_required
 @admin_required
 def admin(page):
+    if request.method == 'POST' and request.form['action'] == "search":
+        search = request.form['Search']
+        return redirect(url_for('main_index.search_page',search=search))
     connect = Database()
     connect.Connect_to_db()
-    AD = connect.select_funcALL("""SELECT * FROM `AD` ORDER BY`timestamp` DESC""")
-    report = connect.select_funcALL("""SELECT * FROM `report` ORDER BY post_ID""")
-    comment = connect.select_funcALL("""SELECT report_comment.comment_ID, comments.user_ID,\
+
+    sql = """SELECT * FROM `AD` ORDER BY`timestamp` DESC"""
+    AD = connect.select_funcALL(sql)
+
+    sql = """SELECT * FROM `report` ORDER BY post_ID"""
+    report = connect.select_funcALL(sql)
+
+    sql = """SELECT report_comment.comment_ID, comments.user_ID,\
         comments.pic_ID,comments.comments,COUNT(report_comment.comment_ID)FROM \
         report_comment,comments WHERE report_comment.comment_ID=comments.ID\
-         and report_comment.status='exist' GROUP BY report_comment.comment_ID""")
+         and report_comment.status='exist' GROUP BY report_comment.comment_ID"""
 
-    count_post_report = connect.select_funcALL("""SELECT picture.auth_ID,COUNT(*) FROM \
-        `report`,picture WHERE picture.ID=report.post_ID GROUP BY picture.auth_ID""")
+    comment = connect.select_funcALL(sql)
 
-    count_comment_report = connect.select_funcALL("""SELECT comments.user_ID ,COUNT(*) FROM \
-        report_comment,comments WHERE report_comment.comment_ID=comments.ID GROUP BY comments.user_ID""")
-    ban_user=connect.select_funcALL("""SELECT ID FROM `user` WHERE `admin` = 'b'""")
+    sql = """SELECT picture.auth_ID,COUNT(*) FROM \
+        `report`,picture WHERE picture.ID=report.post_ID GROUP BY picture.auth_ID"""
+    count_post_report = connect.select_funcALL(sql)
+
+    sql = """SELECT comments.user_ID ,COUNT(*) FROM \
+        report_comment,comments WHERE report_comment.comment_ID=comments.ID GROUP BY comments.user_ID"""
+    count_comment_report = connect.select_funcALL(sql)
+
+    sql = """SELECT ID FROM `user` WHERE `admin` = 'b'"""
+    ban_user=connect.select_funcALL(sql)
+
     for i in range(len(count_post_report)):
         for a in range(len(count_comment_report)):
             if count_post_report[i]['auth_ID'] == count_comment_report[a]['user_ID']:
@@ -68,8 +83,9 @@ def admin(page):
         base64_pic = image_to_base64(f)
         picture = bytes.decode(base64_pic)
 
-        run = connect.Non_select("""INSERT INTO `AD` ( `picture`, \
-            `title`, `caption`) VALUES ( '%s', '%s', '%s')"""%(picture,request.form['title'],request.form['caption']))
+        sql = """INSERT INTO `AD` ( `picture`, \
+            `title`, `caption`) VALUES ( %s, %s, %s)"""
+        run = connect.Non_select(sql,picture,request.form['title'],request.form['caption'])
         flash('Upload successful','success')
         return redirect(url_for('admin.admin'))
 
@@ -83,7 +99,8 @@ def admin(page):
 def del_AD(id):
     connect = Database()
     connect.Connect_to_db()
-    run = connect.Non_select("""DELETE FROM `AD` WHERE `AD`.`ID` = %s"""%id)
+    sql = """DELETE FROM `AD` WHERE `AD`.`ID` = %s"""
+    run = connect.Non_select(sql,id)
     flash('Delete success','warning')
     return redirect(url_for('admin.admin'))
 
@@ -93,9 +110,12 @@ def del_AD(id):
 def del_post(id):
     connect = Database()
     connect.Connect_to_db()
-    run = connect.Non_select("""DELETE FROM `picture` WHERE `picture`.`ID` = %s"""%id)
-    run2 = connect.Non_select("""DELETE FROM `report` WHERE `report`.`post_ID` = %s """%id)
-    run3 = connect.Non_select("""DELETE FROM `comments` WHERE `comments`.`pic_ID` = %s """%id)
+    sql = """DELETE FROM `picture` WHERE `picture`.`ID` = %s"""
+    run = connect.Non_select(sql,id)
+    sql = """DELETE FROM `report` WHERE `report`.`post_ID` = %s """
+    run2 = connect.Non_select(sql,id)
+    sql = """DELETE FROM `comments` WHERE `comments`.`pic_ID` = %s """
+    run3 = connect.Non_select(sql,id)
     flash('Delete success','warning')
     return redirect(url_for('admin.admin',_anchor='post'))
 
@@ -105,9 +125,11 @@ def del_post(id):
 def del_comment(id):
     connect = Database()
     connect.Connect_to_db()
-    run = connect.Non_select("""DELETE FROM `comments` WHERE `comments`.`ID` = %s"""%id)
-    run2 = connect.Non_select("""UPDATE `report_comment` SET `status` = \
-        'ban' WHERE `report_comment`.`comment_ID` = %s """%id)
+    sql = """DELETE FROM `comments` WHERE `comments`.`ID` = %s"""
+    run = connect.Non_select(sql,id)
+    sql = """UPDATE `report_comment` SET `status` = \
+        'ban' WHERE `report_comment`.`comment_ID` = %s """
+    run2 = connect.Non_select(sql,id)
     flash('Delete success','warning')
     return redirect(url_for('admin.admin',_anchor='comment'))
 
@@ -117,7 +139,8 @@ def del_comment(id):
 def ban_user(id):
     connect = Database()
     connect.Connect_to_db()
-    run = connect.Non_select("""UPDATE `user` SET `admin` = 'b' WHERE `user`.`ID` = %s"""%id)
+    sql = """UPDATE `user` SET `admin` = 'b' WHERE `user`.`ID` = %s"""
+    run = connect.Non_select(sql,id)
     flash('User was banned' ,'warning')
     return redirect(url_for('admin.admin',_anchor='ban'))
 
@@ -127,6 +150,7 @@ def ban_user(id):
 def unban_user(id):
     connect = Database()
     connect.Connect_to_db()
-    run = connect.Non_select("""UPDATE `user` SET `admin` = 'N' WHERE `user`.`ID` = %s"""%id)
+    sql = """UPDATE `user` SET `admin` = 'N' WHERE `user`.`ID` = %s"""
+    run = connect.Non_select(sql,id)
     flash('User was unbanned' ,'success')
     return redirect(url_for('admin.admin',_anchor='unban'))

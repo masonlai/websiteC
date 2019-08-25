@@ -1,0 +1,3 @@
+    if request.method == 'POST' and request.form['action'] == "search":
+        search = request.form['Search']
+        return render_template('main_index/search_page.html', search=search)

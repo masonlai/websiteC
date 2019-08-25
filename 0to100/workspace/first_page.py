@@ -4,6 +4,9 @@ from flask import (
 )
 bp = Blueprint('login', __name__)
 
-@bp.route('/')
+@bp.route('/',methods=('GET', 'POST'))
 def index():
+    if request.method == 'POST' and request.form['action'] == "search":
+        search = request.form['Search']
+        return redirect(url_for('main_index.search_page',search=search))
     return render_template('index.html')

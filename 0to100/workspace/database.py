@@ -25,25 +25,25 @@ class Database:
         cursor = self.connection.cursor()
         return cursor
 
-    def select_funcOne(self,sql):
+    def select_funcOne(self,sql,*args):
 
         cursor = self.Connect_to_db()
-        cursor.execute(sql)
+        cursor.execute(sql,(args))
         resList = cursor.fetchone()
         self.connection.close()
         return resList
 
-    def select_funcALL(self,sql):
+    def select_funcALL(self,sql,*args):
 
         cursor = self.Connect_to_db()
-        cursor.execute(sql)
+        cursor.execute(sql,(args))
         resList = cursor.fetchall()
         self.connection.close()
         return resList
 
-    def Non_select(self,sql):
+    def Non_select(self,sql,*args):
         cursor = self.Connect_to_db()
-        cursor.execute(sql)
+        cursor.execute(sql,(args))
         self.connection.commit()
         self.connection.close()
 

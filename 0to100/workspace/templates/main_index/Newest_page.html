@@ -6,7 +6,7 @@
 {% endblock %}
 {% block contentA %}
 <div class="container">
-<div class="col-md-11">
+<div class="col-md-11" style="margin-top: 55px;">
 <div class="row justify-content-center">
 <div class="jumbotron">
   <h1 class="display-3">THE NEWEST POST!!!</h1>
@@ -14,48 +14,36 @@
   <hr class="my-4">
 
 {%for a in range(len(paginate[page-1]))%}
-<div class="row justify-content-center">
+<div class="row ">
 {%for i in range(len(paginate[page-1][a]))%}
-<div class="col-md-2">
+<div class="col-md-3">
+
+  <div class="col-12 col-md-12">
   <a href="{{ url_for('show.show',id=paginate[page-1][a][i]['ID']) }}">
 <img src="data:image/png;base64, {{paginate[page-1][a][i]['picture']}}" alt="user_icon" style=" height: auto;width: auto; max-height: 100%; max-width: 100%;"/></a>
 </div>
 
-{%endfor%}
-</div>
-
-<div class="row justify-content-center">
-{%for i in range(len(paginate[page-1][a]))%}
-<div class="col-md-2 " style="text-align: center;">
+<div class="col-12 col-md-12" style="text-align: center;">
 <a href="{{ url_for('show.show',id=paginate[page-1][a][i]['ID']) }}">
 {{paginate[page-1][a][i]['title']}}
 </a>
 </div>
 
-{%endfor%}
-</div>
 
-<div class="row justify-content-center">
-{%for i in range(len(paginate[page-1][a]))%}
 
-<div class="col-md-2 " style="text-align: center;">{{paginate[page-1][a][i]['like']}}
-<img src="{{ url_for('static', filename='icons8-in-love-48.png') }}" style="width:24px;height: 24px">
-<img src="{{ url_for('static', filename='icons8-star-48.png') }}" style="width:24px;height: 24px">{{paginate[page-1][a][i]['collection']}}
-</div>
+  <div class="col-12 col-md-12" style="text-align: center;">
+    {{paginate[page-1][a][i]['like']}}
+<img src="{{ url_for('static', filename='icons8-in-love-48.png') }}" style="width:14px;height: 14px">
+<img src="{{ url_for('static', filename='icons8-star-48.png') }}" style="width:14px;height: 14px">{{paginate[page-1][a][i]['collection']}}
+  </div>
 
-{%endfor%}
-</div>
 
-<div class="row justify-content-center">
-{%for i in range(len(paginate[page-1][a]))%}
-
-<div class="col-md-2 " style="text-align: center;">
-{{paginate[page-1][a][i]['timestamp']}}
 </div>
 
 {%endfor%}
 </div>
 
+  
 {%endfor%}
 
 <div style="float: none;margin: 0 auto;">

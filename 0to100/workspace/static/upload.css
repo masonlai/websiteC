@@ -36,3 +36,24 @@
   max-height: 100%;
   max-width: 100%;
 }
+
+@media screen and (min-width: 541px){
+  .pc_position{
+    float: none;
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 540px){
+  .mobile_left{
+    margin-left: 8%;
+  }
+}
+
+
+@media screen and (max-width: 540px){
+  .mobile_right{
+    margin-right: 8%;
+    float: right;
+  }
+}

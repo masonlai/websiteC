@@ -36,9 +36,13 @@ bp = Blueprint('profile', __name__,url_prefix='/profile')
 @bp.route('/profile/<int:id>/<menu>',defaults={'cl':1,'order':'A'}, methods=('GET', 'POST'))
 @bp.route('/profile/<int:id>/<menu><int:cl><order>', methods=('GET', 'POST'))
 def profile(id,cl,menu,order):
+    if request.method == 'POST' and request.form['action'] == "search":
+        search = request.form['Search']
+        return redirect(url_for('main_index.search_page',search=search))
     connect = Database()
     connect.Connect_to_db()
-    profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` ='%s'"""%id)
+    sql = """SELECT * FROM `Profile` WHERE `ID` =%s"""
+    profile_info = connect.select_funcOne(sql, id)
     user_icon = profile_info['icon']
 
 
@@ -48,15 +52,17 @@ def profile(id,cl,menu,order):
     row = []
     if menu == 'collection':
         if order == 'B':
-            collection =  connect.select_funcALL("""SELECT collection.`picture_ID` , \
+            sql = """SELECT collection.`picture_ID` , \
                 collection.timestamp , picture.picture ,picture.title FROM \
                 `collection` JOIN picture ON collection.`picture_ID` = picture.ID WHERE\
-                 collection.`collecter_ID`=%s ORDER BY collection.timestamp """%id)
+                 collection.`collecter_ID`= %s ORDER BY collection.timestamp """
+            collection =  connect.select_funcALL(sql, id)
         else:
-            collection =  connect.select_funcALL("""SELECT collection.`picture_ID` , \
+            sql = """SELECT collection.`picture_ID` , \
                 collection.timestamp , picture.picture ,picture.title FROM \
                 `collection` JOIN picture ON collection.`picture_ID` = picture.ID WHERE\
-                 collection.`collecter_ID`=%s ORDER BY collection.timestamp DESC"""%id)
+                 collection.`collecter_ID`=%s ORDER BY collection.timestamp DESC"""
+            collection =  connect.select_funcALL(sql, id)
         count = len(collection)
 
         for i in range(0,len(collection),3):
@@ -70,11 +76,13 @@ def profile(id,cl,menu,order):
 
 
         if order == 'B':
-            Gallery =  connect.select_funcALL("""SELECT `ID`,`title`,`picture`,\
-                `timestamp`FROM `picture` WHERE `auth_ID`='%s' ORDER BY timestamp """%id)
+            sql = """SELECT `ID`,`title`,`picture`,\
+                `timestamp`FROM `picture` WHERE `auth_ID`= %s ORDER BY timestamp """
+            Gallery =  connect.select_funcALL(sql, id)
         else:
-            Gallery =  connect.select_funcALL("""SELECT `ID`,`title`,`picture`,\
-                `timestamp`FROM `picture` WHERE `auth_ID`='%s' ORDER BY timestamp DESC"""%id)
+            sql = """SELECT `ID`,`title`,`picture`,\
+                `timestamp`FROM `picture` WHERE `auth_ID`= %s ORDER BY timestamp DESC"""
+            Gallery =  connect.select_funcALL(sql, id)
 
         count = len(Gallery)
 
@@ -87,14 +95,19 @@ def profile(id,cl,menu,order):
 
     elif menu == 'Follow':
         if order == 'B':
-            following =  connect.select_funcALL("""select * from follow where follower = %s ORDER BY timestamp"""%id)
+            sql = """select * from follow where follower = %s ORDER BY timestamp"""
+            following =  connect.select_funcALL(sql, id)
         else:
-            following =  connect.select_funcALL("""select * from follow where follower = %s ORDER BY timestamp DESC"""%id)
+            sql = """select * from follow where follower = %s ORDER BY timestamp DESC"""
+            following =  connect.select_funcALL(sql, id)
         count = len(following)
         for i in range(len(following)):
-            Gallery = connect.select_funcOne("""select COUNT(*) from picture where auth_ID = %s"""%following[i]['following'])
-            follower = connect.select_funcOne("""select COUNT(*) from follow where following = %s"""%following[i]['following'])
-            follow_name = connect.select_funcOne("""select nick_name from Profile where ID = %s"""%following[i]['following'])
+            sql = """select COUNT(*) from picture where auth_ID = %s"""
+            Gallery = connect.select_funcOne(sql, following[i]['following'])
+            sql = """select COUNT(*) from follow where following = %s"""
+            follower = connect.select_funcOne(sql, following[i]['following'])
+            sql = """select nick_name from Profile where ID = %s"""
+            follow_name = connect.select_funcOne(sql, following[i]['following'])
             following[i]['gallery'] = Gallery['COUNT(*)']
             following[i]['followers'] = follower['COUNT(*)']
             following[i]['name'] = follow_name['nick_name']
@@ -110,7 +123,8 @@ def profile(id,cl,menu,order):
 
     check_follow='N'
     if not not g.user:
-        follow = connect.select_funcOne("""select *from follow where following = %s and follower = %s"""%(id,g.user['ID']))
+        sql = """select *from follow where following = %s and follower = %s"""
+        follow = connect.select_funcOne(sql, id, g.user['ID'])
         if not follow:
             check_follow='N'
         else:
@@ -119,9 +133,11 @@ def profile(id,cl,menu,order):
 
     if request.method == 'POST':
         backgroud = request.form['background']
-        run = connect.Non_select("""UPDATE `Profile` SET `background` = '%s'
-            WHERE `Profile`.`ID` = %s"""%(backgroud, g.user['ID']))
-        profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` = %s"""%id)
+        sql = """UPDATE `Profile` SET `background` = '%s'
+            WHERE `Profile`.`ID` = %s"""
+        run = connect.Non_select(sql,backgroud, g.user['ID'])
+        sql = """SELECT * FROM `Profile` WHERE `ID` = %s"""
+        profile_info = connect.select_funcOne(sql, id)
         user_icon = profile_info['icon']
     joined = str(profile_info['joined_date'])[0:10]
     changed = str(profile_info['changed_date'])
@@ -135,6 +151,9 @@ def profile(id,cl,menu,order):
 @bp.route('/profile_edit', methods=('GET', 'POST'))
 @login_required
 def profile_edit():
+    if request.method == 'POST' and request.form['action'] == "search":
+        search = request.form['Search']
+        return redirect(url_for('main_index.search_page',search=search))
     connect = Database()
     connect.Connect_to_db()
     global nick_name, country, company, time_zone, status, gender, icon
@@ -159,9 +178,11 @@ def profile_edit():
         if not status:
             status = 'No_show'
 
-        run = connect.Non_select("""UPDATE `Profile` SET `nick_name` = '%s', `gender` = '%s', `country` = '%s', 
-            `company` = '%s', `time_zone` = '%s', `status` = '%s', 
-            `icon` = '%s' WHERE `Profile`.`ID` = %s"""%(nick_name,gender,country,company,time_zone,status,icon,g.user['ID']))
+
+        sql = """UPDATE `Profile` SET `nick_name` = %s, `gender` = %s, `country` = %s, 
+            `company` = %s, `time_zone` = %s, `status` = %s, 
+            `icon` = %s WHERE `Profile`.`ID` = %s"""
+        run = connect.Non_select(sql, nick_name,gender,country,company,time_zone,status,icon,g.user['ID'])
         return redirect(url_for('profile.profile',id=g.user['ID']))
 
     elif request.method == 'POST' and request.form['action'] == "crop":
@@ -171,13 +192,17 @@ def profile_edit():
         return redirect(url_for('profile.crop'))
 
     else:
-        profile_info = connect.select_funcOne("""SELECT * FROM `Profile` WHERE `ID` = %s"""%g.user['ID'])
+        sql = """SELECT * FROM `Profile` WHERE `ID` = %s"""
+        profile_info = connect.select_funcOne(sql, g.user['ID'])
         user_icon = profile_info['icon']
         return render_template('profile/profile_edit.html',url_l=request.args.get('url_l'),crop=request.args.get('crop'),user_icon=user_icon,profile_info=profile_info)
 
 @bp.route('/crop', methods=['GET', 'POST'])
 @login_required
 def crop():
+    if request.method == 'POST' and request.form['action'] == "search":
+        search = request.form['Search']
+        return redirect(url_for('main_index.search_page',search=search))
     if request.method == 'POST':
         x = request.form.get('x')
         y = request.form.get('y')
@@ -206,17 +231,24 @@ def Myprofile():
 @bp.route('/follow/<int:id>/<menu><int:cl><order>/<check_follow>', methods=('GET', 'POST'))
 @login_required
 def follow(id,check_follow,menu,cl,order):
+    if request.method == 'POST' and request.form['action'] == "search":
+        search = request.form['Search']
+        return redirect(url_for('main_index.search_page',search=search))
     connect = Database()
     connect.Connect_to_db()
     if check_follow == 'N':
-        run = connect.Non_select("""INSERT INTO `follow` (`following`, `follower`,\
-         `timestamp`) VALUES ('%s', '%s', CURRENT_TIMESTAMP)"""%(id,g.user['ID']))
+        sql = """INSERT INTO `follow` (`following`, `follower`,\
+         `timestamp`) VALUES (%s, %s, CURRENT_TIMESTAMP)"""
+        run = connect.Non_select(sql, id,g.user['ID'])
         flash('Follow successful','success')
     elif check_follow =='F':
-        run = connect.Non_select("""DELETE FROM `follow` where `following`=%s and `follower`=%s"""%(id,g.user['ID']))
+        sql = """DELETE FROM `follow` where `following`=%s and `follower`=%s"""
+        run = connect.Non_select(sql, id,g.user['ID'])
         flash('Unfollow successful','warning')
         return redirect(url_for('profile.profile',id=g.user["ID"],menu='Follow',cl=cl,order=order))
     else:
-        run = connect.Non_select("""DELETE FROM `follow` where `following`=%s and `follower`=%s"""%(id,g.user['ID']))
+        sql = """DELETE FROM `follow` where `following`=%s and `follower`=%s"""
+        run = connect.Non_select(sql, id,g.user['ID'])
         flash('Unfollow successful','warning')
     return redirect(url_for('profile.profile',id = id))
+

@@ -23,41 +23,76 @@ html, html {
   border-bottom: 1px solid #E1e1e1;
 }
 
+@media screen and (min-width: 541px){
 .cover-photo {
-  width: 980px;
+  width: 90%;
   height: 250px;
   margin: 0 auto;
   background-color: #f5f5f5;
   position: relative;
   z-index: 1;
-}
+}}
 
+@media screen and (min-width: 541px){
 .body {
-  width: 980px;
+  width: 90%;
   margin: 0 auto;
   z-index: 4;
   position: relative;
-}
+}}
 
+@media screen and (max-width: 540px){
+.cover-photo {
+  width: 100%;
+  height: 250px;
+  margin: 0 auto;
+  background-color: #f5f5f5;
+  position: relative;
+  z-index: 1;
+}}
+
+@media screen and (max-width: 540px){
+.body {
+  width: 100%;
+  margin: 0 auto;
+  z-index: 4;
+  position: relative;
+}}
+
+@media screen and (min-width: 541px){
 .left-col, .right-col {
   width: 226px;
   float: left;
   min-height: 400px;
   position: relative;
 }
+}
 
+@media screen and (min-width: 541px){
 .left-col {
   margin-right: 24px;
   position: relative;
   top: -150px;
   left: 8px;
 }
+}
 
+@media screen and (min-width: 541px){
 .center-col {
   float: left;
-  width: 480px;
+  width: 70%;
   margin-right: 24px;
   min-height: 400px;
+}
+}
+
+@media screen and (max-width: 540px){
+  .center-col {
+  float: left;
+  width: 100%;
+  margin-right: 24px;
+  min-height: 400px;
+}
 }
 
 
@@ -84,23 +119,92 @@ html, html {
   padding-right: 2px;
 }
 
+@media screen and (min-width: 541px){
+  .hidden_for_pc{
+    display:block;font-size:0;line-height:0;text-indent:-9999px;
+
+    }}
+
+@media screen and (max-width: 540px){
+  .hidden_for_mobile{
+    display:block;font-size:0;line-height:0;text-indent:-9999px;
+
+    }}
+
+  .hidden{
+    display:block;font-size:0;line-height:0;text-indent:-9999px;
+
+    }
+
+@media screen and (max-width: 540px){
+  .mobile_float{
+    text-align: right;
+  }
+}
+
+@media screen and (min-width: 541px){
+  .pc_position{
+    position: absolute;
+    left: 0px;
+  }
+}
+
+
+
+
+@media screen and (max-width: 540px){
 .profile-avatar {
+  width: 90%;
+  height: 90%;
+  border: 1px solid #e1e1e1;
+  background-color: #fff;
+  right: 0;
+  margin-left: 5%;
+  margin-top: -40%;
+}
+}
+
+@media screen and (max-width: 540px){
+.profile-avatar .inner {
+  width: 90%;
+  height: 90%;
+  margin: 5%;
+}
+}
+
+@media screen and (max-width: 540px){
+.inner img{width: 90% ;
+        height:90%;
+        margin-left: 5%;
+
+}
+}
+
+@media screen and (min-width: 541px){
+  .profile-avatar {
   width: 218px;
   height: 218px;
   border: 1px solid #e1e1e1;
   background-color: #fff;
   right: 0;
 }
+}
+
+@media screen and (min-width: 541px){
 .profile-avatar .inner {
   width: 206px;
   height: 206px;
   margin: 5px;
 }
+}
 
+@media screen and (min-width: 541px){
 .inner img{width: 206px ;
         height:206;
 
 }
+}
+
 
 /* CENTER */
 .image-grid {
@@ -159,3 +263,5 @@ html, html {
 .content .unit .more a {
   color: #777;
 }
+
+

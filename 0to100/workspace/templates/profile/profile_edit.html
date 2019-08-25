@@ -13,9 +13,11 @@
 {% endblock %}
 {% block contentA %}
 <div class="container" style="padding-top: 60px;">
+    <div class="mobile-position col-12">
   <h1 class="page-header">Edit Profile</h1>
+  </div>
   <div class="row">
-    <div class="col-md-4 col-sm-6 col-xs-12">
+    <div class="col-md-4 col-sm-6 col-xs-12 col-12">
         <form method="post" enctype="multipart/form-data" >
       <div class="text-center user_icon">
         {% if crop =='done' %}
@@ -26,8 +28,8 @@
             <img src="{{ avatars.default() }}" >
         {%endif%}
         <h6>Upload your icon</h6>
-        <input type="file" class="text-center center-block well well-sm" name="file" accept="image/jpg,image/jpeg,image/png" />
-        <button class="btn btn-primary btn-lg btn-block" type="submit" name="action" value="crop">Crop</button>
+        <input type="file" class="text-right right-block well well-sm" name="file" accept="image/jpg,image/jpeg,image/png" />
+        <button class="btn btn-primary btn-lg btn-block" type="submit" name="action" value="crop" style="margin-top: 10px;">Crop</button>
 
       </div>
     </div>
@@ -335,7 +337,7 @@
           <label class="col-lg-3 control-label">Company:</label>
           <div class="col-lg-8">
             {%if profile_info['company'] != 'No_show'%}
-            <input class="form-control" type="text" name="Company" value="{{profile_info['company']}}" minlength="3" maxlength="25">
+            <input class="form-control" type="text" name="Company" value="{{profile_info['company']}}" minlength="3" maxlength="15">
             {%else%}
             <input class="form-control" type="text" name="Company" minlength="3" maxlength="25">
             {%endif%}
@@ -460,7 +462,7 @@
 
             <input class="btn btn-primary" value="SaveChanges" type="submit" name="action">
             <span></span>
-            <input class="btn btn-default" value="Cancel" type="reset">
+            <input class="btn btn-default float-right" value="Cancel" type="reset">
           </div>
         </div>
 
